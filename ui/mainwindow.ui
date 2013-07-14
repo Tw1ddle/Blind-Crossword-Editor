@@ -45,6 +45,7 @@
     </property>
     <addaction name="actionFAQ"/>
     <addaction name="actionFAQ_2"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>

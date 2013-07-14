@@ -17,7 +17,8 @@
 #include <QApplication>
 
 #include <QStringList>
-#include <QRegExp>
+#include <QTranslator>
+#include <QLibraryInfo>
 
 #include "mainwindow.h"
 #include "appinfo.h"
@@ -31,11 +32,16 @@ int main(int argc, char *argv[])
 {
     // Create the application
     QApplication app(argc, argv);
+
+    // Set up translations
+    QTranslator translator;
+    translator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&translator);
+
+    // Set app metadata
     app.setApplicationName(AppInfo::getAppName());
     app.setApplicationDisplayName(AppInfo::getAppName());
     app.setApplicationVersion(AppInfo::getVersionNumber());
-
-    Editor::MainWindow mainWindow;
 
     // Get application arguments
     const QStringList arguments = app.arguments();
@@ -51,6 +57,8 @@ int main(int argc, char *argv[])
     }
     #endif
     */
+
+    Editor::MainWindow mainWindow;
 
     // Pass arguments to main window for handling
     for (int i = 1; i < arguments.size(); i++)

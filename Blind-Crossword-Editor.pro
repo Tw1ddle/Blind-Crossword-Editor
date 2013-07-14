@@ -1,11 +1,18 @@
 TEMPLATE = app
 
+QT += core gui widgets printsupport
+
+CONFIG += x86 x86_64
+
 # Define application metadata
 VERSION = 0.1.0
 QMAKE_TARGET_PRODUCT = "Blind Crossword Editor"
 QMAKE_TARGET_DESCRIPTION = "An accessible 2D and 3D crossword editor"
 QMAKE_TARGET_COMPANY = "3D Crosswords Limited"
 QMAKE_TARGET_COPYRIGHT = "Copyright 2013"
+
+# Additional languages
+TRANSLATIONS += blind-crossword-editor_de.ts
 
 # Pass macros to the main program with application metadata
 DEFINES += \
@@ -14,10 +21,6 @@ DEFINES += \
     APP_DESCRIPTION=\"\\\"$$QMAKE_TARGET_DESCRIPTION\\\"\" \
     APP_ORGANIZATION=\"\\\"$$QMAKE_TARGET_COMPANY\\\"\" \
     APP_COPYRIGHT=\"\\\"$$QMAKE_TARGET_COPYRIGHT\\\"\"
-
-QT += core gui widgets printsupport
-
-CONFIG += x86 x86_64
 
 HEADERS += \
     src/crosswordstate.h \
@@ -34,7 +37,8 @@ HEADERS += \
     src/crosswordformatsupportlocator.h \
     src/xwcloader.h \
     src/xwcsaver.h \
-    src/crosswordformat.h
+    src/crosswordformat.h \
+    src/gridsquare.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -51,6 +55,7 @@ SOURCES += \
     src/xwcloader.cpp \
     src/xwcsaver.cpp \
     src/crosswordformat.cpp \
+    src/gridsquare.cpp
 
 FORMS += \
     ui/mainwindow.ui \
