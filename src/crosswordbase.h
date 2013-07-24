@@ -19,7 +19,7 @@ public:
     bool isValid() const;
 
     // Replaces the current crossword state with a new default one
-    void defaultState();
+    void resetState();
 
     CrosswordState& getState();
     const CrosswordState& getState() const;

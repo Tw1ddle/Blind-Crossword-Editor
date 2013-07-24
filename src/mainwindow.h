@@ -6,6 +6,9 @@
 #include "appsettings.h"
 #include "crosswordbase.h"
 #include "crosswordformatsupportlocator.h"
+
+#include "recentfilemanager.h"
+
 #include "ui_mainwindow.h"
 
 namespace Editor
@@ -19,11 +22,17 @@ public:
 
     void handleArgument(const QString& arg); // Handle argument, probably passed by the main method
 
+protected:
+    // Exit
+    void closeEvent(QCloseEvent* event);
+
 private:
 
 public slots:
     // On file menu, but may also be called if an associated puzzle is double clicked
     void loadCrossword(const QString& filepath);
+    // Open from a "recent files" submenu
+    void loadRecentCrossword();
     
 private slots:
     // File menu
@@ -46,8 +55,9 @@ signals:
 
 private:
     std::unique_ptr<Ui::MainWindow> m_Ui;
-
+    std::unique_ptr<AppInfo::RecentFileManager> m_RecentFiles; // To set up and update recently opened file paths
     AppInfo::AppSettings m_Settings;
+
     Crossword::Formats::CrosswordFormatSupportLocator m_FormatSupport;
 
     Crossword::CrosswordBase m_Crossword;

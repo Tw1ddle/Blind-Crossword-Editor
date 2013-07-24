@@ -1,6 +1,11 @@
 #include "mainwindow.h"
 
 #include <QMessageBox>
+#include <QSettings>
+#include <QCloseEvent>
+#include <memory>
+
+#include "assert.h"
 
 using namespace Editor;
 
@@ -11,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(QIcon(":/icons/icon.ico"));
 
     m_Ui->setupUi(this);
+
+    const int maxRecentFiles = 10;
+    m_RecentFiles = std::unique_ptr<AppInfo::RecentFileManager>(new AppInfo::RecentFileManager(this, m_Ui.get(), maxRecentFiles));
 }
 
 // Invocation arguments
@@ -40,6 +48,17 @@ void MainWindow::newCrossword()
 
 }
 
+void MainWindow::loadRecentCrossword()
+{
+    const QAction* action = qobject_cast<QAction*>(sender());
+    assert(action);
+
+    if(action)
+    {
+        loadCrossword(action->data().toString());
+    }
+}
+
 void MainWindow::loadCrossword(const QString& filepath)
 {
     auto loader = m_FormatSupport.locateLoader(filepath);
@@ -61,6 +80,9 @@ void MainWindow::loadCrossword(const QString& filepath)
     }
 
     Q_ASSERT(m_Crossword.isValid());
+
+    // TODO If the file doesn't load successfully we shouldn't add it to the recent files list
+    m_RecentFiles->addFile(filepath);
 }
 
 void MainWindow::saveCrossword()
@@ -110,4 +132,11 @@ void MainWindow::showAbout()
 void MainWindow::showLicense()
 {
 
+}
+
+// Exiting the application
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    event->accept();
 }

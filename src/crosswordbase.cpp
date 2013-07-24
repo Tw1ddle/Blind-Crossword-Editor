@@ -15,7 +15,7 @@ bool CrosswordBase::isValid() const
     return true;
 }
 
-void CrosswordBase::defaultState()
+void CrosswordBase::resetState()
 {
     m_State.swap(std::unique_ptr<CrosswordState>(new CrosswordState));
 }

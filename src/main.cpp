@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     app.setApplicationName(AppInfo::getAppName());
     app.setApplicationDisplayName(AppInfo::getAppName());
     app.setApplicationVersion(AppInfo::getVersionNumber());
+    app.setOrganizationName(AppInfo::getOrganizationName()); // This must be set in order to use native QSettings storage
 
     // Get application arguments
     const QStringList arguments = app.arguments();
