@@ -11,6 +11,9 @@ class GridView : public QGraphicsView
     Q_OBJECT
 public:
     explicit GridView(QWidget *parent = 0);
+
+protected:
+    void wheelEvent(QWheelEvent* event);
     
 signals:
     
