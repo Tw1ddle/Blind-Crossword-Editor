@@ -6,6 +6,9 @@
 namespace Crossword
 {
 
+namespace Formats
+{
+
 class XWCSaver : public CrosswordSaver
 {
 public:
@@ -13,6 +16,8 @@ public:
 
     virtual bool save(const QString& filepath, const CrosswordState& state) const override;
 };
+
+}
 
 }
 

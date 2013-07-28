@@ -1,6 +1,7 @@
 #include "xwcsaver.h"
 
 using namespace Crossword;
+using namespace Crossword::Formats;
 
 XWCSaver::XWCSaver() : CrosswordSaver()
 {

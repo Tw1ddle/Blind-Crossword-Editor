@@ -82,7 +82,7 @@ const QString CrosswordFormatSupportLocator::getExtension(const QString& filepat
     return info.suffix();
 }
 
-const QString CrosswordFormatSupportLocator::getSupportedLoadingFormatFilter() const
+const QStringList CrosswordFormatSupportLocator::getSupportedLoadingExtensions() const
 {
     QStringList extensions;
     for(auto format : m_Loaders.keys())
@@ -90,24 +90,19 @@ const QString CrosswordFormatSupportLocator::getSupportedLoadingFormatFilter() c
         extensions.append(format->getExtension());
     }
 
-    QString filter;
-    // TODO
-
-    return filter;
+    return extensions;
 }
 
-const QString CrosswordFormatSupportLocator::getSupportedSavingFormatFilter() const
+const QStringList CrosswordFormatSupportLocator::getSupportedSavingExtensions() const
 {
+    // This may need refactoring if we need to be able to save to specific versions of a format
     QStringList extensions;
     for(auto format : m_Savers.keys())
     {
         extensions.append(format->getExtension());
     }
 
-    QString filter;
-    // TODO
-
-    return filter;
+    return extensions;
 }
 
 void CrosswordFormatSupportLocator::registerFormats()

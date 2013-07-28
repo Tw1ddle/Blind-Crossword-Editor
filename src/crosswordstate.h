@@ -7,12 +7,14 @@
 #include <vector>
 
 #include "crosswordclue.h"
+#include "crossworditem.h"
 #include "vectormath.h"
 
 namespace Crossword
 {
 
-// Encapsulates the state of a crossword puzzle
+// Models the state of a crossword puzzle
+// TODO make the state friends with the loaders/savers and add getters/setters to the CrosswordBase wherever else necessary
 class CrosswordState
 {
 public:
@@ -45,18 +47,19 @@ public:
     struct GridState
     {
         VectorMath::Vec3i m_Dimensions;
-        //std::unique_ptr<GridData> m_Grid;
+        std::vector<std::pair<VectorMath::Vec3i, CrosswordItem>> m_Grid;
     };
     GridState m_GridState;
 
-    // Clues inside the grid
-    // Background images and picture clues
+    // Clues in the crossword
     struct ClueState
     {
         std::vector<std::unique_ptr<CrosswordClue>> m_Clues;
-        //std::vector<std::unique_ptr<Image>> m_Images;
     };
     ClueState m_ClueState;
+
+    // Background images and picture clues
+    //std::vector<std::unique_ptr<Image>> m_Images;
 };
 }
 

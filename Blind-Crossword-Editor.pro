@@ -42,7 +42,11 @@ HEADERS += \
     src/recentfilemanager.h \
     src/crosswordclue.h \
     src/utilities.h \
-    src/xwccommon.h
+    src/xwccommon.h \
+    src/xwc3dloader.h \
+    src/xwc3dsaver.h \
+    src/xwc3dcommon.h \
+    src/crossworditem.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -63,7 +67,11 @@ SOURCES += \
     src/recentfilemanager.cpp \
     src/crosswordclue.cpp \
     src/utilities.cpp \
-    src/xwccommon.cpp
+    src/xwccommon.cpp \
+    src/xwc3dloader.cpp \
+    src/xwc3dsaver.cpp \
+    src/xwc3dcommon.cpp \
+    src/crossworditem.cpp
 
 FORMS += \
     ui/mainwindow.ui \

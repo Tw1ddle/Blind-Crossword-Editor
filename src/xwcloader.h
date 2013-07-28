@@ -3,8 +3,12 @@
 
 #include "crosswordloader.h"
 #include "crosswordformat.h"
+#include "crosswordclue.h"
 
 namespace Crossword
+{
+
+namespace Formats
 {
 
 // Loads Spoonbill Crossword Compiler (.xwc) puzzle format files
@@ -20,8 +24,12 @@ private:
     bool loadGrid(CrosswordState& puzzle, QStringList& lines) const;
     bool loadClues(CrosswordState& puzzle, QStringList& lines) const;
     bool loadSolveGrid(CrosswordState& puzzle, QStringList& lines) const;
+
+    bool readGrid(CrosswordState& puzzle, QStringList& lines) const; // loadGrid helper method
+    bool loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, Crossword::CrosswordClue::Direction direction) const; // loadClues helper method
 };
 
+}
 }
 
 #endif // XWCLOADER_H

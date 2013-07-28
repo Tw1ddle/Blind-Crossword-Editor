@@ -29,6 +29,9 @@ public:
     inline Vector3 operator*(T) const;
     inline Vector3 operator/(T) const;
 
+    inline Vector3 operator+(const Vector3<T>&) const;
+    inline Vector3 operator-(const Vector3<T>&) const;
+
     inline T x() const;
     inline T y() const;
     inline T z() const;
@@ -45,60 +48,70 @@ template<class T> Vector3<T>::Vector3() {}
 
 template<class T> Vector3<T>::Vector3(T x, T y, T z)
 {
-    v[0] = x;
-    v[1] = y;
-    v[2] = z;
+    m_Vec[0] = x;
+    m_Vec[1] = y;
+    m_Vec[2] = z;
 }
 
 template<class T> Vector3<T>::Vector3(T x)
 {
-    v[0] = x;
-    v[1] = x;
-    v[2] = x;
+    m_Vec[0] = x;
+    m_Vec[1] = x;
+    m_Vec[2] = x;
 }
 
 template<class T> Vector3<T>& Vector3<T>::operator=(const T* u)
 {
-    v[0] = u[0];
-    v[1] = u[1];
-    v[2] = u[2];
+    m_Vec[0] = u[0];
+    m_Vec[1] = u[1];
+    m_Vec[2] = u[2];
 }
 
 template<class T> void Vector3<T>::set(T x, T y, T z)
 {
-    v[0] = x;
-    v[1] = y;
-    v[2] = z;
+    m_Vec[0] = x;
+    m_Vec[1] = y;
+    m_Vec[2] = z;
 }
 
 template<class T> bool Vector3<T>::operator==(const Vector3<T>& u) const
 {
-    return (v[0] == u.v[0] && v[1] == u.v[1] && v[2] == u.v[2]);
+    return (m_Vec[0] == u.m_Vec[0] && m_Vec[1] == u.m_Vec[1] && m_Vec[2] == u.m_Vec[2]);
 }
 
 template<class T> bool Vector3<T>::operator!=(const Vector3<T>& u) const
 {
-    return (v[0] != u.v[0] || v[1] != u.v[1] || v[2] != u.v[2]);
+    return (m_Vec[0] != u.m_Vec[0] || m_Vec[1] != u.m_Vec[1] || m_Vec[2] != u.m_Vec[2]);
 }
 
 template<class T> void Vector3<T>::operator+=(const Vector3<T>& u)
 {
-    v = v + u;
+    m_Vec = m_Vec + u;
 }
 
 template<class T> void Vector3<T>::operator-=(const Vector3<T>& u)
 {
-    v = v - u;
+    m_Vec = m_Vec - u;
 }
 
 template<class T> void Vector3<T>::operator*=(T s)
 {
-    v = v * s;
+    m_Vec = m_Vec * s;
 }
 
 template<class T> void Vector3<T>::operator/=(T s)
 {
-    v = v / s;
+    m_Vec = m_Vec / s;
+}
+
+template<class T> Vector3<T> Vector3<T>::operator+(const Vector3<T>& u) const
+{
+    return Vector3<T>(m_Vec[0] + u.m_Vec[0], m_Vec[1] + u.m_Vec[1], m_Vec[2] + u.m_Vec[2]);
+}
+
+template<class T> Vector3<T> Vector3<T>::operator-(const Vector3<T>& u) const
+{
+    return Vector3<T>(m_Vec[0] - u.m_Vec[0], m_Vec[1] - u.m_Vec[1], m_Vec[2] - u.m_Vec[2]);
 }
 
 template<class T> Vector3<T> Vector3<T>::operator+() const
@@ -108,17 +121,17 @@ template<class T> Vector3<T> Vector3<T>::operator+() const
 
 template<class T> Vector3<T> Vector3<T>::operator-() const
 {
-    return Vector3<T>(-v[0], -v[1], -v[2]);
+    return Vector3<T>(-m_Vec[0], -m_Vec[1], -m_Vec[2]);
 }
 
 template<class T> Vector3<T> Vector3<T>::operator*(T s) const
 {
-    return Vector3<T>(v[0]*s, v[1]*s, v[2]*s);
+    return Vector3<T>(m_Vec[0]*s, m_Vec[1]*s, m_Vec[2]*s);
 }
 
 template<class T> Vector3<T> Vector3<T>::operator/(T s) const
 {
-    return Vector3<T>(v[0]/s, v[1]/s, v[2]/s);
+    return Vector3<T>(m_Vec[0]/s, m_Vec[1]/s, m_Vec[2]/s);
 }
 
 template<class T> T Vector3<T>::x() const

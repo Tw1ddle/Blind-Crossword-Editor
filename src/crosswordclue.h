@@ -34,7 +34,7 @@ public:
         NONE // If the clues in this type of puzzle really don't have any direction
     };
 
-    CrosswordClue(const QString& id, const QString& guess, const QString& solution, const QString& clue, Direction direction, const std::vector<VectorMath::Vec3i>& letterPositions);
+    CrosswordClue(const QString& number, const QString& guess, const QString& solution, const QString& clue, Direction direction, const std::vector<VectorMath::Vec3i>& letterPositions);
 
     // TODO
     // ClueDirection getDirection() const;
@@ -42,7 +42,7 @@ public:
     // QString getClue() const; // The actual clue phrase
 
 private:
-    QString m_Id;
+    QString m_Number;
     QString m_Guess;
     QString m_Solution;
     QString m_Clue;

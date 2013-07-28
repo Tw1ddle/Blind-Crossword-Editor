@@ -3,8 +3,13 @@
 namespace Crossword
 {
 
+namespace Formats
+{
+
 CrosswordSaver::CrosswordSaver()
 {
+}
+
 }
 
 }

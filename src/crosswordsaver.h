@@ -6,6 +6,9 @@
 namespace Crossword
 {
 
+namespace Formats
+{
+
 // Base class for saving crosswords.
 class CrosswordSaver
 {
@@ -17,6 +20,9 @@ public:
     // Takes a full filepath to save to and a crossword state to read from
     virtual bool save(const QString& filepath, const CrosswordState& state) const = 0;
 };
+
+}
+
 }
 
 #endif // CROSSWORDSAVER_H
