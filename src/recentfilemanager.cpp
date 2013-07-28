@@ -5,6 +5,8 @@
 #include <assert.h>
 
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "appsettings.h"
 
 using namespace AppInfo;
 
@@ -29,17 +31,17 @@ void RecentFileManager::createActions(Editor::MainWindow* window, Ui::MainWindow
         action->setVisible(false);
         m_RecentActions.push_back(std::move(action));
         connect(m_RecentActions[i].get(), SIGNAL(triggered()), window, SLOT(loadRecentCrossword()));
-        ui->menuOpen->addAction(m_RecentActions[i].get());
+        ui->menuRecent_Files->addAction(m_RecentActions[i].get());
     }
 }
 
 void RecentFileManager::addFile(const QString& filepath)
 {
     QSettings settings;
+    QStringList files = settings.value(SettingsKeys::recentCrosswordFiles).toStringList();
 
-    QStringList files = settings.value("recentFileList").toStringList();
+    files.removeAll(filepath); // Remove duplicates
 
-    files.removeAll(filepath);
     files.prepend(filepath);
 
     while(files.size() > m_MaxFiles)
@@ -47,7 +49,7 @@ void RecentFileManager::addFile(const QString& filepath)
         files.removeLast();
     }
 
-    settings.setValue("recentFileList", files);
+    settings.setValue(SettingsKeys::recentCrosswordFiles, files);
 
     updateActions();
 }
@@ -56,8 +58,7 @@ void RecentFileManager::clearFiles()
 {
     QSettings settings;
 
-    settings.setValue("recentFileList", QStringList());
-    settings.sync();
+    settings.remove(SettingsKeys::recentCrosswordFiles);
 
     updateActions();
 }
@@ -65,18 +66,18 @@ void RecentFileManager::clearFiles()
 void RecentFileManager::updateActions()
 {
     QSettings settings;
+    QStringList files = settings.value(SettingsKeys::recentCrosswordFiles).toStringList();
 
-    QStringList files = settings.value("recentFileList").toStringList();
-
+    // Set up and show recently loaded files
     int numRecentFiles = qMin(files.size(), m_MaxFiles);
-
     for(int i = 0; i < numRecentFiles; i++)
     {
-        QString text = tr("&%1 %2").arg(i + 1).arg(files[i]);
+        QString text = files[i];
         m_RecentActions[i]->setText(text);
         m_RecentActions[i]->setData(files[i]);
         m_RecentActions[i]->setVisible(true);
     }
+    // Hide the empty actions
     for (int j = numRecentFiles; j < m_MaxFiles; j++)
     {
         m_RecentActions[j]->setVisible(false);

@@ -49,6 +49,13 @@ public:
     // Returns all characters after but not including the last '.'
     const QString getExtension(const QString& filepath) const;
 
+
+    // Get a regex describing the supported loading file formats
+    // Use case could be to only show files that have loading support in a file dialog
+    const QString getSupportedLoadingFormatFilter() const;
+    // Get a regex describing the supported saving file formats
+    const QString getSupportedSavingFormatFilter() const;
+
 private:
     // Generalization for loader/saver calls
     // Just a "find" method

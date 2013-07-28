@@ -6,7 +6,10 @@
 #include <QAction>
 #include <memory>
 
-#include "ui_mainwindow.h"
+namespace Ui
+{
+    class MainWindow;
+}
 
 namespace Editor
 {

@@ -7,9 +7,15 @@
 #include "crosswordbase.h"
 #include "crosswordformatsupportlocator.h"
 
-#include "recentfilemanager.h"
+namespace Ui
+{
+    class MainWindow;
+}
 
-#include "ui_mainwindow.h"
+namespace AppInfo
+{
+    class RecentFileManager;
+}
 
 namespace Editor
 {
@@ -19,6 +25,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
+    virtual ~MainWindow();
 
     void handleArgument(const QString& arg); // Handle argument, probably passed by the main method
 
@@ -36,6 +43,9 @@ public slots:
     
 private slots:
     // File menu
+    void loadCrosswordDialog();
+    void saveCrosswordDialog();
+
     void newCrossword();
     void saveCrossword();
     void printCrossword();

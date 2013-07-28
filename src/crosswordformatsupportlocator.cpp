@@ -5,6 +5,7 @@
 
 #include <QtAlgorithms>
 #include <QFileInfo>
+#include <QStringList>
 
 using namespace Crossword;
 using namespace Crossword::Formats;
@@ -81,11 +82,39 @@ const QString CrosswordFormatSupportLocator::getExtension(const QString& filepat
     return info.suffix();
 }
 
+const QString CrosswordFormatSupportLocator::getSupportedLoadingFormatFilter() const
+{
+    QStringList extensions;
+    for(auto format : m_Loaders.keys())
+    {
+        extensions.append(format->getExtension());
+    }
+
+    QString filter;
+    // TODO
+
+    return filter;
+}
+
+const QString CrosswordFormatSupportLocator::getSupportedSavingFormatFilter() const
+{
+    QStringList extensions;
+    for(auto format : m_Savers.keys())
+    {
+        extensions.append(format->getExtension());
+    }
+
+    QString filter;
+    // TODO
+
+    return filter;
+}
+
 void CrosswordFormatSupportLocator::registerFormats()
 {
     // Load and save XWC files (v1.01)
     registerLoader(new CrosswordFormat(XWC101), new XWCLoader());
     registerSaver(new CrosswordFormat(XWC101), new XWCSaver());
 
-    // More file support... could scan a directory for .dlls or something
+    // TODO More file support... could scan a directory for .dlls or something
 }

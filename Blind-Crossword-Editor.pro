@@ -39,7 +39,10 @@ HEADERS += \
     src/xwcsaver.h \
     src/crosswordformat.h \
     src/gridsquare.h \
-    src/recentfilemanager.h
+    src/recentfilemanager.h \
+    src/crosswordclue.h \
+    src/utilities.h \
+    src/xwccommon.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -57,7 +60,10 @@ SOURCES += \
     src/xwcsaver.cpp \
     src/crosswordformat.cpp \
     src/gridsquare.cpp \
-    src/recentfilemanager.cpp
+    src/recentfilemanager.cpp \
+    src/crosswordclue.cpp \
+    src/utilities.cpp \
+    src/xwccommon.cpp
 
 FORMS += \
     ui/mainwindow.ui \

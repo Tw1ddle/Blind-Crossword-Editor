@@ -3,7 +3,11 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QCloseEvent>
+#include <QFileDialog>
 #include <memory>
+
+#include "ui_mainwindow.h"
+#include "recentfilemanager.h"
 
 #include "assert.h"
 
@@ -19,6 +23,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     const int maxRecentFiles = 10;
     m_RecentFiles = std::unique_ptr<AppInfo::RecentFileManager>(new AppInfo::RecentFileManager(this, m_Ui.get(), maxRecentFiles));
+
+    connect(m_Ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadCrosswordDialog()));
+}
+
+MainWindow::~MainWindow()
+{
+    // Destructor required due to unique_ptr members needing it for destructors that throw
 }
 
 // Invocation arguments
@@ -45,7 +56,9 @@ void MainWindow::handleArgument(const QString& arg)
 
 void MainWindow::newCrossword()
 {
+    // TODO confirmations here
 
+    m_Crossword.resetState();
 }
 
 void MainWindow::loadRecentCrossword()
@@ -57,6 +70,22 @@ void MainWindow::loadRecentCrossword()
     {
         loadCrossword(action->data().toString());
     }
+}
+
+void MainWindow::loadCrosswordDialog()
+{
+    // TODO Set a name filter for supported formats
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Crossword File"));
+
+    if(!fileName.isNull())
+    {
+        loadCrossword(fileName);
+    }
+}
+
+void MainWindow::saveCrosswordDialog()
+{
+    // TODO Set a name filter for all supported formats
 }
 
 void MainWindow::loadCrossword(const QString& filepath)
@@ -72,6 +101,11 @@ void MainWindow::loadCrossword(const QString& filepath)
             // The loader failed
             QMessageBox::information(this, tr("Load failed"), tr("Failed to load crossword file: %1").arg(filepath));
         }
+        else
+        {
+            // Only add the file to the recent files list if it loads successfully
+            m_RecentFiles->addFile(filepath);
+        }
     }
     else
     {
@@ -80,9 +114,6 @@ void MainWindow::loadCrossword(const QString& filepath)
     }
 
     Q_ASSERT(m_Crossword.isValid());
-
-    // TODO If the file doesn't load successfully we shouldn't add it to the recent files list
-    m_RecentFiles->addFile(filepath);
 }
 
 void MainWindow::saveCrossword()

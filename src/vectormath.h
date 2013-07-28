@@ -29,6 +29,14 @@ public:
     inline Vector3 operator*(T) const;
     inline Vector3 operator/(T) const;
 
+    inline T x() const;
+    inline T y() const;
+    inline T z() const;
+
+    inline void x(T x);
+    inline void y(T y);
+    inline void z(T z);
+
 private:
     T m_Vec[3];
 };
@@ -111,6 +119,36 @@ template<class T> Vector3<T> Vector3<T>::operator*(T s) const
 template<class T> Vector3<T> Vector3<T>::operator/(T s) const
 {
     return Vector3<T>(v[0]/s, v[1]/s, v[2]/s);
+}
+
+template<class T> T Vector3<T>::x() const
+{
+    return m_Vec[0];
+}
+
+template<class T> T Vector3<T>::y() const
+{
+    return m_Vec[1];
+}
+
+template<class T> T Vector3<T>::z() const
+{
+    return m_Vec[2];
+}
+
+template<class T> void Vector3<T>::x(T x)
+{
+    m_Vec[0] = x;
+}
+
+template<class T> void Vector3<T>::y(T y)
+{
+    m_Vec[1] = y;
+}
+
+template<class T> void Vector3<T>::z(T z)
+{
+    m_Vec[2] = z;
 }
 
 typedef Vector3<float> Vec3f;
