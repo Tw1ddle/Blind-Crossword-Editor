@@ -19,6 +19,7 @@ class CrosswordState
 {
 public:
     CrosswordState();
+    CrosswordState(const CrosswordState& state);
 
     // Technical metadata
     // File format
@@ -29,12 +30,6 @@ public:
     };
     FileFormat m_FileFormat;
 
-    // User metadata
-    QString m_Title;
-    QString m_Authors;
-    QString m_Type; // Normal, cryptic etc
-    QString m_Notes; // Any additional information
-
     // Data paths
     struct DataSources
     {
@@ -42,6 +37,16 @@ public:
         QString m_BackgroundImagePath; // Path to the background image loaded for this puzzle
     };
     DataSources m_DataSources;
+
+    // User metadata
+    struct Metadata
+    {
+        QString m_Title;
+        QString m_Authors;
+        QString m_Type; // Normal, cryptic etc
+        QString m_Notes; // Any additional information
+    };
+    Metadata m_Metadata;
 
     // State of the grids
     struct GridState
@@ -54,7 +59,7 @@ public:
     // Clues in the crossword
     struct ClueState
     {
-        std::vector<std::unique_ptr<CrosswordClue>> m_Clues;
+        std::vector<CrosswordClue> m_Clues;
     };
     ClueState m_ClueState;
 

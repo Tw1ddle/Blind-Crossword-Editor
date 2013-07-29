@@ -6,6 +6,7 @@
 namespace Grid
 {
 
+// Base class for scenes that display the crossword grids
 class GridScene : public QGraphicsScene
 {
     Q_OBJECT

@@ -9,8 +9,6 @@
 #include "ui_mainwindow.h"
 #include "recentfilemanager.h"
 
-#include "assert.h"
-
 using namespace Editor;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -21,7 +19,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_Ui->setupUi(this);
 
-    const int maxRecentFiles = 10;
+    QSettings settings;
+    bool ok;
+    const int maxRecentFiles = settings.value(AppInfo::SettingsKeys::maxRecentCrosswordFiles, 10).toInt(&ok);
+    Q_ASSERT(ok);
+
     m_RecentFiles = std::unique_ptr<AppInfo::RecentFileManager>(new AppInfo::RecentFileManager(this, m_Ui.get(), maxRecentFiles));
 
     connect(m_Ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadCrosswordDialog()));
@@ -64,7 +66,7 @@ void MainWindow::newCrossword()
 void MainWindow::loadRecentCrossword()
 {
     const QAction* action = qobject_cast<QAction*>(sender());
-    assert(action);
+    Q_ASSERT(action);
 
     if(action)
     {
@@ -75,11 +77,15 @@ void MainWindow::loadRecentCrossword()
 void MainWindow::loadCrosswordDialog()
 {
     // TODO Set a name filter for supported formats
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Crossword File"));
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open Crossword File"));
 
-    if(!fileName.isNull())
+    if(!filePath.isNull())
     {
-        loadCrossword(fileName);
+        // Convert the file path to use native directory separators
+        // This gives consistency in directions of slashes e.g. on recent file list
+        QString nativeFilePath = QDir::toNativeSeparators(filePath);
+
+        loadCrossword(nativeFilePath);
     }
 }
 

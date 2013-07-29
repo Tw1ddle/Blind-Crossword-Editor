@@ -57,10 +57,10 @@ bool XWCLoader::loadMetadata(CrosswordState& puzzle, QStringList& lines) const
     puzzle.m_FileFormat.m_Version = Crossword::Formats::VERSION_UNKNOWN;
 
     // Line 1: Version number followed by Author name
-    puzzle.m_Authors = lines.takeFirst();
+    puzzle.m_Metadata.m_Authors = lines.takeFirst();
 
     // Line 2: Crossword Title
-    puzzle.m_Title = lines.takeFirst();
+    puzzle.m_Metadata.m_Title = lines.takeFirst();
 
     // Line 3: Crossword Mode
     auto validModes = XWC::Common::getModes();
@@ -71,9 +71,9 @@ bool XWCLoader::loadMetadata(CrosswordState& puzzle, QStringList& lines) const
         return false;
     }
 
-    puzzle.m_Type = mode;
+    puzzle.m_Metadata.m_Type = mode;
 
-    if(puzzle.m_Authors.isNull() || puzzle.m_Title.isNull() || puzzle.m_Type.isNull())
+    if(puzzle.m_Metadata.m_Authors.isNull() || puzzle.m_Metadata.m_Title.isNull() || puzzle.m_Metadata.m_Type.isNull())
     {
         return false;
     }
@@ -103,7 +103,7 @@ bool XWCLoader::loadGrid(CrosswordState& puzzle, QStringList& lines) const
     // If all the words have not yet been entered, there will be a '0' (zero) for each empty white square.
     // This depends on the Mode.
     auto modes = XWC::Common::getModes();
-    auto mode = modes.find(puzzle.m_Type).value();
+    auto mode = modes.find(puzzle.m_Metadata.m_Type).value();
 
     readGrid(puzzle, lines);
 
@@ -239,7 +239,7 @@ bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines
         }
 
         // Add the clue to the puzzle
-        puzzle.m_ClueState.m_Clues.push_back(std::unique_ptr<CrosswordClue>(new CrosswordClue(clueNumber, "", solution, clueWords, direction, letterPositions)));
+        puzzle.m_ClueState.m_Clues.push_back(CrosswordClue(clueNumber, "", solution, clueWords, direction, letterPositions));
     }
 
     return true;
@@ -271,7 +271,7 @@ bool XWCLoader::loadSolveGrid(CrosswordState &puzzle, QStringList &lines) const
     Q_UNUSED(puzzle);
 
     auto modes = XWC::Common::getModes();
-    auto mode = modes.find(puzzle.m_Type).value();
+    auto mode = modes.find(puzzle.m_Metadata.m_Type).value();
 
     // If the Mode is Solve, the grid will look the same as for Clue mode, but there will be an additional Solve grid at the end of the file.
     if(XWC::Modes::SOLVE == mode)

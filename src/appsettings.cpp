@@ -20,12 +20,20 @@ AppSettings::~AppSettings()
 
 void AppSettings::loadSettings()
 {
+    QSettings settings;
 
+    settings;
+
+    // TODO
 }
 
 void AppSettings::saveSettings()
 {
+    QSettings settings;
 
+    settings;
+
+    // TODO
 }
 
 }

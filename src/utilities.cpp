@@ -2,8 +2,6 @@
 
 #include <QTextStream>
 
-#include <assert.h>
-
 namespace Utilities
 {
 

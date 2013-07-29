@@ -8,6 +8,16 @@
 namespace AppInfo
 {
 
+namespace SettingsKeys
+{
+// Keys for use with QSettings - these need to be unique
+// Don't make identical keys except for case
+// Don't use slashes in names except for hierarchical keys
+const QString recentCrosswordFiles = "recentcrosswordfiles";
+const QString maxRecentCrosswordFiles = "maxrecentcrosswordfiles";
+
+}
+
 // Persistent platform-independent application settings
 class AppSettings
 {

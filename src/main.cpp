@@ -25,7 +25,6 @@
 
 #ifdef QT_DEBUG
 #include <QMessageBox>
-#include <assert.h>
 #endif
 
 int main(int argc, char *argv[])

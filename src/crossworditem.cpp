@@ -7,7 +7,7 @@ CrosswordItem::CrosswordItem(const QString& text, const QColor& colour) : m_Text
 {
 }
 
-const QString CrosswordItem::getText()
+const QString& CrosswordItem::getText()
 {
     return m_Text;
 }

@@ -2,8 +2,6 @@
 
 #include "utilities.h"
 
-#include <assert.h>
-
 namespace Crossword
 {
 
@@ -20,7 +18,7 @@ QStringList CrosswordLoader::readFile(const QString& filepath, CrosswordState& s
     bool success = Utilities::readFile(filepath, data);
 
     // Read failed
-    assert(success);
+    Q_ASSERT(success);
 
     // Set the puzzle file location
     state.m_DataSources.m_PuzzleFilePath = filepath;

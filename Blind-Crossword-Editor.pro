@@ -46,7 +46,10 @@ HEADERS += \
     src/xwc3dloader.h \
     src/xwc3dsaver.h \
     src/xwc3dcommon.h \
-    src/crossworditem.h
+    src/crossworditem.h \
+    src/gridscene2d.h \
+    src/gridscene3d.h \
+    src/gridscenecombinationlock.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -71,11 +74,15 @@ SOURCES += \
     src/xwc3dloader.cpp \
     src/xwc3dsaver.cpp \
     src/xwc3dcommon.cpp \
-    src/crossworditem.cpp
+    src/crossworditem.cpp \
+    src/gridscene2d.cpp \
+    src/gridscene3d.cpp \
+    src/gridscenecombinationlock.cpp
 
 FORMS += \
     ui/mainwindow.ui \
-    ui/newcrosswordform.ui
+    ui/newcrosswordform.ui \
+    ui/griditempropertiesform.ui
 
 RESOURCES += \
     res/resources.qrc

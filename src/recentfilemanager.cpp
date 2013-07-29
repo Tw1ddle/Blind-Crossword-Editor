@@ -2,7 +2,6 @@
 
 #include <QSettings>
 #include <QApplication>
-#include <assert.h>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -13,7 +12,7 @@ using namespace AppInfo;
 RecentFileManager::RecentFileManager(Editor::MainWindow* window, Ui::MainWindow* ui, int maxFiles) :
     m_MaxFiles(maxFiles)
 {
-    assert(maxFiles >= 0);
+    Q_ASSERT(maxFiles >= 0);
 
     createActions(window, ui);
     updateActions();
@@ -35,6 +34,7 @@ void RecentFileManager::createActions(Editor::MainWindow* window, Ui::MainWindow
     }
 }
 
+// TODO Check for a bug that can occur - filepaths can be implementation/OS dependent e.g. separators
 void RecentFileManager::addFile(const QString& filepath)
 {
     QSettings settings;

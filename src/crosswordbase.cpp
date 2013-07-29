@@ -1,5 +1,7 @@
 #include "crosswordbase.h"
 
+#include <QGraphicsView>
+
 namespace Crossword
 {
 
@@ -20,6 +22,12 @@ void CrosswordBase::resetState()
     m_State.swap(std::unique_ptr<CrosswordState>(new CrosswordState));
 }
 
+void CrosswordBase::setScene(QGraphicsView* view)
+{
+    Q_UNUSED(view);
+    // TODO Find an appropriate scene to set
+}
+
 CrosswordState& CrosswordBase::getState()
 {
     return *(m_State.get());
@@ -29,5 +37,4 @@ const CrosswordState& CrosswordBase::getState() const
 {
     return *(m_State.get());
 }
-
 }
