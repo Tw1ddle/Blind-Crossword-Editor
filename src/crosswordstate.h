@@ -19,13 +19,12 @@ class CrosswordState
 {
 public:
     CrosswordState();
-    CrosswordState(const CrosswordState& state);
 
     // Technical metadata
     // File format
     struct FileFormat
     {
-        QString m_Name; // Name of the file format
+        QString m_Extension; // Name of the file format
         QString m_Version; // Which revision of the format
     };
     FileFormat m_FileFormat;

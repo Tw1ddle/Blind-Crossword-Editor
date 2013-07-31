@@ -53,7 +53,7 @@ bool XWCLoader::load(const QString& filepath, CrosswordState& puzzle) const
 bool XWCLoader::loadMetadata(CrosswordState& puzzle, QStringList& lines) const
 {
     // Format version and name
-    puzzle.m_FileFormat.m_Name = Crossword::Formats::XWC101.first;
+    puzzle.m_FileFormat.m_Extension = Crossword::Formats::XWC101.first;
     puzzle.m_FileFormat.m_Version = Crossword::Formats::VERSION_UNKNOWN;
 
     // Line 1: Version number followed by Author name
@@ -140,6 +140,7 @@ bool XWCLoader::readGrid(CrosswordState& puzzle, QStringList& lines) const
         for(int x = 0; x < gridX; x++)
         {
             QChar currentCharacter = currentLine.at(x);
+            Q_ASSERT(currentCharacter.isLetterOrNumber());
 
             // Lower case letters are used for the solution words, with a '1' for each black square.
             if(currentCharacter == XWC::Common::blackSquare)

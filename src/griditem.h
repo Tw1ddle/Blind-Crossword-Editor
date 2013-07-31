@@ -12,8 +12,11 @@ namespace Grid
 class GridItem : public QGraphicsItem
 {
 public:
-    explicit GridItem(QGraphicsItem *parent = 0);
-    
+    explicit GridItem(QGraphicsItem* parent = 0);
+
+    virtual QRectF boundingRect() const = 0;
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) = 0;
+
 private:
 
 signals:

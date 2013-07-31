@@ -2,7 +2,7 @@
 
 using namespace Grid;
 
-GridItem::GridItem(QGraphicsItem *parent) :
+GridItem::GridItem(QGraphicsItem* parent) :
     QGraphicsItem(parent)
 {
 }

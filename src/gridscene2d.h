@@ -2,6 +2,7 @@
 #define GRIDSCENE2D_H
 
 #include "gridscene.h"
+#include "gridsquare.h"
 
 namespace Grid
 {
@@ -10,7 +11,10 @@ namespace Grid
 class GridScene2D : public Grid::GridScene
 {
 public:
-    GridScene2D();
+    GridScene2D(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
+
+private:
+    virtual void addGrid();
 };
 
 }

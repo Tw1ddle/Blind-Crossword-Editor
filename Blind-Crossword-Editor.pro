@@ -49,7 +49,10 @@ HEADERS += \
     src/crossworditem.h \
     src/gridscene2d.h \
     src/gridscene3d.h \
-    src/gridscenecombinationlock.h
+    src/gridscenecombinationlock.h \
+    src/gridscenerectangularlayers.h \
+    src/internalinterfaces.h \
+    src/logginghandler.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -77,7 +80,9 @@ SOURCES += \
     src/crossworditem.cpp \
     src/gridscene2d.cpp \
     src/gridscene3d.cpp \
-    src/gridscenecombinationlock.cpp
+    src/gridscenecombinationlock.cpp \
+    src/gridscenerectangularlayers.cpp \
+    src/logginghandler.cpp
 
 FORMS += \
     ui/mainwindow.ui \

@@ -20,8 +20,11 @@ QStringList CrosswordLoader::readFile(const QString& filepath, CrosswordState& s
     // Read failed
     Q_ASSERT(success);
 
-    // Set the puzzle file location
-    state.m_DataSources.m_PuzzleFilePath = filepath;
+    if(success)
+    {
+        // Set the puzzle file location
+        state.m_DataSources.m_PuzzleFilePath = filepath;
+    }
 
     return data;
 }

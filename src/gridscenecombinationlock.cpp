@@ -3,7 +3,7 @@
 namespace Grid
 {
 
-GridSceneCombinationLock::GridSceneCombinationLock()
+GridSceneCombinationLock::GridSceneCombinationLock(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState) : GridScene3D(parent, crosswordState)
 {
 }
 

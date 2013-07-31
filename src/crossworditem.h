@@ -13,7 +13,7 @@ class CrosswordItem
 public:
     CrosswordItem(const QString& text, const QColor& colour);
 
-    const QString& getText();
+    const QString& getText() const;
 
 private:
     QString m_Text;

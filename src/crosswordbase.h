@@ -5,13 +5,15 @@
 
 #include <memory>
 
+#include "internalinterfaces.h"
+
 class QGraphicsView;
 
 namespace Crossword
 {
 
 // Exposes parts of a crossword puzzle state to the main application.
-class CrosswordBase
+class CrosswordBase : public InternalInterface::CrosswordStateToGridScene
 {
 public:
     CrosswordBase();
@@ -25,6 +27,10 @@ public:
     CrosswordState& getState();
     const CrosswordState& getState() const;
 
+    // What grid scenes should see of the crossword state
+    virtual CrosswordState::ClueState& getClues();
+    virtual CrosswordState::GridState& getGrid();
+
 protected:
 
 public slots:
@@ -33,7 +39,8 @@ public slots:
 
     // Set a scene appropriate to the crossword state i.e. file format loaded
     virtual void setScene(QGraphicsView* view);
-    // virtual void setMetadataEditor(); // TODO Set an appropriate metadata editor for the crossword state i.e. file format loaded
+    // virtual void setMetadataEditor(); // TODO Set an appropriate metadata editor for the crossword state
+    // i.e. the file format loaded... and for other dialogs too...
 
 private:
     std::unique_ptr<CrosswordState> m_State;

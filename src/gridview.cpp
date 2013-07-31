@@ -2,14 +2,12 @@
 
 #include <QWheelEvent>
 
-#include "gridscene.h"
-
 using namespace Grid;
 
-GridView::GridView(QWidget *parent) :
+GridView::GridView(QWidget* parent) :
     QGraphicsView(parent)
 {
-    setScene(new GridScene(this));
+    setScene(new QGraphicsScene()); // Start with an empty scene
 }
 
 void GridView::wheelEvent(QWheelEvent* event)

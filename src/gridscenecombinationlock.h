@@ -9,7 +9,7 @@ namespace Grid
 class GridSceneCombinationLock : public Grid::GridScene3D
 {
 public:
-    GridSceneCombinationLock();
+    GridSceneCombinationLock(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
 };
 
 }

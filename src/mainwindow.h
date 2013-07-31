@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 
-#include "appsettings.h"
 #include "crosswordbase.h"
 #include "crosswordformatsupportlocator.h"
 
@@ -29,17 +28,28 @@ public:
 
     void handleArgument(const QString& arg); // Handle argument, probably passed by the main method
 
-protected:
-    // Exit
-    void closeEvent(QCloseEvent* event);
-
-private:
-
 public slots:
     // On file menu, but may also be called if an associated puzzle is double clicked
     void loadCrossword(const QString& filepath);
     // Open from a "recent files" submenu
     void loadRecentCrossword();
+
+protected:
+    // Drag-and-drop
+    bool eventFilter(QObject* object, QEvent* event);
+    void dropEvent(QDropEvent* ev);
+    void dragEnterEvent(QDragEnterEvent* ev);
+
+    // Exit
+    void closeEvent(QCloseEvent* event);
+
+private:
+    // Try to load any old file; helper for drag-and-drops
+    void loadFile(const QString& filepath);
+
+    // Helper methods for loading crosswords
+    std::unique_ptr<Crossword::CrosswordBase> loadCrosswordHelper(const QString& filepath);
+    std::unique_ptr<Crossword::CrosswordBase> loadRecentCrosswordHelper();
     
 private slots:
     // File menu
@@ -61,16 +71,12 @@ private slots:
     void showAbout();
     void showLicense();
 
-signals:
-
 private:
     std::unique_ptr<Ui::MainWindow> m_Ui;
     std::unique_ptr<AppInfo::RecentFileManager> m_RecentFiles; // To set up and update recently opened file paths
-    AppInfo::AppSettings m_Settings;
 
+    std::unique_ptr<Crossword::CrosswordBase> m_Crossword;
     Crossword::Formats::CrosswordFormatSupportLocator m_FormatSupport;
-
-    Crossword::CrosswordBase m_Crossword;
 };
 
 }

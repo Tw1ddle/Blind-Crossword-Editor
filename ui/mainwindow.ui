@@ -16,15 +16,24 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="Grid::GridView" name="graphicsView">
+        <property name="acceptDrops">
+         <bool>false</bool>
+        </property>
         <property name="verticalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
@@ -98,7 +107,11 @@
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
+  </widget>
   <action name="actionNew">
    <property name="text">
     <string>New</string>

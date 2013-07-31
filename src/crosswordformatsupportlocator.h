@@ -45,11 +45,6 @@ public:
     void registerLoader(Formats::CrosswordFormat* format, CrosswordLoader* loader);
     void registerSaver(Formats::CrosswordFormat* format, CrosswordSaver* saver);
 
-    // Extract the file extension from a file path
-    // Returns all characters after but not including the last '.'
-    const QString getExtension(const QString& filepath) const;
-
-
     // Get a list of the supported loading file formats
     // Use case could be to only show files that have loading support in a file dialog
     const QStringList getSupportedLoadingExtensions() const;
@@ -72,6 +67,10 @@ private:
     // Disregards the version number of the format
     template<class T, class V>
     const V* const locate(const QMap<const T*, const V*>& map, const QString& filepath) const;
+
+    // Extract the file extension from a file path
+    // Returns all characters after but not including the last '.'
+    const QString getExtension(const QString& filepath) const;
 
     // Called on construction, just registers all the supported loaders and savers
     // Might change this later if format support can be extended externally (.dlls etc)

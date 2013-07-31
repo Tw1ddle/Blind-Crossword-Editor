@@ -19,9 +19,11 @@
 #include <QStringList>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QtGlobal>
 
 #include "mainwindow.h"
 #include "appinfo.h"
+#include "logginghandler.h"
 
 #ifdef QT_DEBUG
 #include <QMessageBox>
@@ -31,6 +33,9 @@ int main(int argc, char *argv[])
 {
     // Create the application
     QApplication app(argc, argv);
+
+    // Set up message handler
+    qInstallMessageHandler(Logging::debugConsoleOutputHandler);
 
     // Set up translations
     QTranslator translator;

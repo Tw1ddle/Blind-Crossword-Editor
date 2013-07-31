@@ -2,6 +2,9 @@
 #define GRIDSCENE_H
 
 #include <QGraphicsScene>
+#include <QDebug>
+
+#include "internalinterfaces.h"
 
 namespace Grid
 {
@@ -11,12 +14,14 @@ class GridScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    explicit GridScene(QObject *parent = 0);
-    
-signals:
-    
-public slots:
-    
+    explicit GridScene(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
+    virtual ~GridScene();
+
+protected:
+    InternalInterface::CrosswordStateToGridScene* const getCrosswordState();
+
+private:
+    InternalInterface::CrosswordStateToGridScene* const m_CrosswordState;
 };
 
 }
