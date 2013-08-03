@@ -25,22 +25,22 @@ CrosswordFormatSupportLocator::~CrosswordFormatSupportLocator()
     m_Savers.clear();
 }
 
-const CrosswordLoader* const CrosswordFormatSupportLocator::locateLoader(const CrosswordFormat& format) const
+const CrosswordLoader* CrosswordFormatSupportLocator::locateLoader(const CrosswordFormat& format) const
 {
     return locate(m_Loaders, format);
 }
 
-const CrosswordSaver* const CrosswordFormatSupportLocator::locateSaver(const CrosswordFormat& format) const
+const CrosswordSaver* CrosswordFormatSupportLocator::locateSaver(const CrosswordFormat& format) const
 {
     return locate(m_Savers, format);
 }
 
-const CrosswordLoader* const CrosswordFormatSupportLocator::locateLoader(const QString& filepath) const
+const CrosswordLoader* CrosswordFormatSupportLocator::locateLoader(const QString& filepath) const
 {
     return locate(m_Loaders, filepath);
 }
 
-const CrosswordSaver* const CrosswordFormatSupportLocator::locateSaver(const QString& filepath) const
+const CrosswordSaver* CrosswordFormatSupportLocator::locateSaver(const QString& filepath) const
 {
     return locate(m_Savers, filepath);
 }

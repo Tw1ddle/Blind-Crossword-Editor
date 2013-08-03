@@ -17,7 +17,7 @@ GridScene::~GridScene()
 {
 }
 
-InternalInterface::CrosswordStateToGridScene* const GridScene::getCrosswordState()
+InternalInterface::CrosswordStateToGridScene* GridScene::getCrosswordState()
 {
     return m_CrosswordState;
 }

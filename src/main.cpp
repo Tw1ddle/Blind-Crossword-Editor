@@ -1,16 +1,9 @@
 /*!
  * \section LICENSE
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 3 of
- * the License, or (at your option) any later version.
+ * Copyright 2013 Samuel Twidale
  *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details at
- * http://www.gnu.org/copyleft/gpl.html
+ *
  *
  */
 
@@ -44,7 +37,7 @@ int main(int argc, char *argv[])
 
     // Set app metadata
     app.setApplicationName(AppInfo::getAppName());
-    app.setApplicationDisplayName(AppInfo::getAppName());
+    app.setApplicationDisplayName(AppInfo::getAppName() + " " + AppInfo::getVersionNumber());
     app.setApplicationVersion(AppInfo::getVersionNumber());
     app.setOrganizationName(AppInfo::getOrganizationName()); // This must be set in order to use native QSettings storage
 

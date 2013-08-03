@@ -10,6 +10,10 @@ CrosswordSaver::CrosswordSaver()
 {
 }
 
+CrosswordSaver::~CrosswordSaver()
+{
+}
+
 }
 
 }

@@ -36,7 +36,9 @@ CrosswordState::GridState& CrosswordBase::getGrid()
 
 void CrosswordBase::resetState()
 {
-    m_State.swap(std::unique_ptr<CrosswordState>(new CrosswordState));
+    auto blankState = std::unique_ptr<CrosswordState>(new CrosswordState);
+
+    m_State.swap(blankState);
 }
 
 void CrosswordBase::setScene(QGraphicsView* view)
@@ -71,14 +73,12 @@ void CrosswordBase::setScene(QGraphicsView* view)
         scene = new Grid::GridScene2D(view, this);
     }
 
-    Q_ASSERT(scene != nullptr);
-
     if(view->scene() != nullptr)
     {
         delete view->scene();
-
-        view->setScene(scene);
     }
+
+    view->setScene(scene);
 }
 
 CrosswordState& CrosswordBase::getState()

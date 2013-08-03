@@ -18,10 +18,10 @@ public:
     virtual ~GridScene();
 
 protected:
-    InternalInterface::CrosswordStateToGridScene* const getCrosswordState();
+    InternalInterface::CrosswordStateToGridScene* getCrosswordState();
 
 private:
-    InternalInterface::CrosswordStateToGridScene* const m_CrosswordState;
+    InternalInterface::CrosswordStateToGridScene* m_CrosswordState;
 };
 
 }

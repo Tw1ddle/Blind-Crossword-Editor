@@ -27,6 +27,7 @@ public:
     RecentFileManager(Editor::MainWindow* window, Ui::MainWindow* ui, int maxFiles);
     
     void addFile(const QString& filepath); // Parameters are the actual file path and then the name that is displayed to the user
+    void removeFile(const QString& filepath); // Useful for removing files that no longer exist
 
 public slots:
     void updateActions();

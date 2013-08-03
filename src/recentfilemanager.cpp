@@ -54,6 +54,18 @@ void RecentFileManager::addFile(const QString& filepath)
     updateActions();
 }
 
+void RecentFileManager::removeFile(const QString& filepath)
+{
+    QSettings settings;
+    QStringList files = settings.value(SettingsKeys::recentCrosswordFiles).toStringList();
+
+    files.removeAll(filepath);
+
+    settings.setValue(SettingsKeys::recentCrosswordFiles, files);
+
+    updateActions();
+}
+
 void RecentFileManager::clearFiles()
 {
     QSettings settings;

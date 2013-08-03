@@ -14,6 +14,10 @@
 #include "ui_mainwindow.h"
 #include "recentfilemanager.h"
 #include "appsettings.h"
+#include "utilities.h"
+#include "aboutpage.h"
+#include "gridview.h"
+#include "appinfo.h"
 
 using namespace Editor;
 using namespace Crossword;
@@ -107,10 +111,18 @@ void MainWindow::loadRecentCrossword()
 {
     const QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
+    Q_ASSERT(!action->data().toString().isEmpty());
 
     if(action)
     {
-        loadCrossword(action->data().toString());
+        QString filepath = action->data().toString();
+
+        bool success = loadCrossword(filepath);
+
+        if(!success)
+        {
+            m_RecentFiles->removeFile(filepath);
+        }
     }
 }
 
@@ -135,24 +147,35 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* ev)
     ev->accept();
 }
 
-void MainWindow::loadCrossword(const QString& filepath)
+bool MainWindow::loadCrossword(const QString& filepath)
 {
     auto newCrossword = loadCrosswordHelper(filepath);
-
-    if(newCrossword != nullptr)
+    if(newCrossword == nullptr)
     {
-        m_Crossword.swap(newCrossword);
-
-        // Loading successful so do the setup
-        m_RecentFiles->addFile(filepath);
-        m_Crossword->setScene(m_Ui->graphicsView);
+        return false;
     }
+
+    // Loading successful so do the setup
+    m_Crossword.swap(newCrossword);
+    m_RecentFiles->addFile(filepath);
+    m_Crossword->setScene(m_Ui->graphicsView);
+
+    return true;
 }
 
 // Helper method
 // Returns nullptr on failure
 std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& filepath)
 {
+    // Check the file actually exists
+    bool exists = Utilities::existsFile(filepath);
+
+    if(!exists)
+    {
+        QMessageBox::information(this, tr("Could not find file"), tr("Could not find file: %1").arg(filepath));
+        return nullptr;
+    }
+
     auto crossword = std::unique_ptr<CrosswordBase>(new CrosswordBase());
     auto loader = m_FormatSupport.locateLoader(filepath);
 
@@ -242,7 +265,9 @@ void MainWindow::showHelp()
 
 void MainWindow::showAbout()
 {
+    AppInfo::AboutPage aboutPage;
 
+    aboutPage.exec();
 }
 
 void MainWindow::showLicense()

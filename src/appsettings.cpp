@@ -22,7 +22,7 @@ void AppSettings::loadSettings()
 {
     QSettings settings;
 
-    settings;
+    Q_UNUSED(settings);
 
     // TODO
 }
@@ -31,7 +31,7 @@ void AppSettings::saveSettings()
 {
     QSettings settings;
 
-    settings;
+    Q_UNUSED(settings);
 
     // TODO
 }

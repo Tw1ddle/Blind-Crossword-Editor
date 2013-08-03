@@ -16,6 +16,7 @@ class CrosswordLoader
 {
 public:
     CrosswordLoader();
+    virtual ~CrosswordLoader();
 
     // Importers implement functionality for loading the crossword file
     // An importer should not make any changes to the crossword state if there is a failure

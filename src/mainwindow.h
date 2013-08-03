@@ -30,7 +30,7 @@ public:
 
 public slots:
     // On file menu, but may also be called if an associated puzzle is double clicked
-    void loadCrossword(const QString& filepath);
+    bool loadCrossword(const QString& filepath);
     // Open from a "recent files" submenu
     void loadRecentCrossword();
 

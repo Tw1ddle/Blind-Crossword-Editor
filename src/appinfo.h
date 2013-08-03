@@ -8,10 +8,7 @@
 namespace AppInfo
 {
 
-inline QString getVersionNumber()
-{
-    return QString(APP_VERSION);
-}
+// Name and app description
 
 inline QString getAppName()
 {
@@ -31,6 +28,45 @@ inline QString getAppDescription()
 inline QString getCopyrightNotice()
 {
     return QT_TR_NOOP(QString(APP_COPYRIGHT));
+}
+
+inline QString getLicenseText()
+{
+    return QT_TR_NOOP("TODO license goes here");
+}
+
+// Credits
+
+inline QString getProgrammers()
+{
+    return QString("Samuel Twidale");
+}
+
+inline QString getTranslators()
+{
+    return QString("Samuel Twidale");
+}
+
+inline QString getArtists()
+{
+    return QString("Samuel Twidale");
+}
+
+// Build information
+
+inline QString getVersionNumber()
+{
+    return QString(APP_VERSION);
+}
+
+inline QString getCompilerName()
+{
+    return QString(APP_COMPILER_NAME);
+}
+
+inline QString getQtVersion()
+{
+    return QString(QT_VERSION_STR);
 }
 
 }

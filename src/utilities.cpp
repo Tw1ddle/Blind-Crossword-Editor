@@ -49,4 +49,11 @@ bool writeFile(QFile& file, const QStringList& text)
     return false;
 }
 
+bool existsFile(const QString& path)
+{
+    QFile file(path);
+
+    return file.exists();
+}
+
 }

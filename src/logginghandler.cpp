@@ -36,7 +36,7 @@ void debugConsoleOutputHandler(QtMsgType type, const QMessageLogContext& context
 
     #ifdef Q_OS_WIN32
     OutputDebugString(reinterpret_cast<const wchar_t*>(output.utf16()));
-    #endif;
+    #endif
 }
 
 }

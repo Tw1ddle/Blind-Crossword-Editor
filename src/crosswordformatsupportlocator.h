@@ -26,8 +26,8 @@ public:
 
     // If these return nullptr then the format support isn't there
     // Once loaders/savers do more complicated work it may be necessary to get rid of the constness
-    const CrosswordLoader* const locateLoader(const Formats::CrosswordFormat& format) const;
-    const CrosswordSaver* const locateSaver(const Formats::CrosswordFormat& format) const;
+    const CrosswordLoader* locateLoader(const Formats::CrosswordFormat& format) const;
+    const CrosswordSaver* locateSaver(const Formats::CrosswordFormat& format) const;
 
     // Checks whether the format can be loaded or saved
     bool isLoaderSupported(const Formats::CrosswordFormat& format) const;
@@ -35,8 +35,8 @@ public:
 
     // Whether the format extension is supported (takes any kind of filename or path so long)
     // Note this does not check to see if the specific format version is supported
-    const CrosswordLoader* const locateLoader(const QString& filepath) const;
-    const CrosswordSaver* const locateSaver(const QString& filepath) const;
+    const CrosswordLoader* locateLoader(const QString& filepath) const;
+    const CrosswordSaver* locateSaver(const QString& filepath) const;
 
     bool isLoaderSupported(const QString& filepath) const;
     bool isSaverSupported(const QString& filepath) const;
@@ -60,13 +60,13 @@ private:
     // Generalization for locate loader/saver calls
     // Another "find" method that returns a supported loader for a format
     template<class T, class V>
-    const V* const locate(const QMap<const T*, const V*>& map, const T& format) const;
+    const V* locate(const QMap<const T*, const V*>& map, const T& format) const;
 
     // Weaker generalization for locate loader/saver calls
     // Has a weaker precondition - returns a loader (which depends on QMap implementation) for which an extension is supported
     // Disregards the version number of the format
     template<class T, class V>
-    const V* const locate(const QMap<const T*, const V*>& map, const QString& filepath) const;
+    const V* locate(const QMap<const T*, const V*>& map, const QString& filepath) const;
 
     // Extract the file extension from a file path
     // Returns all characters after but not including the last '.'
@@ -82,7 +82,7 @@ private:
 };
 
 template<class T, class V>
-const V* const CrosswordFormatSupportLocator::locate(const QMap<const T*, const V*>& map, const T& format) const
+const V* CrosswordFormatSupportLocator::locate(const QMap<const T*, const V*>& map, const T& format) const
 {
     QList<const T*> keys = map.keys();
 
@@ -98,7 +98,7 @@ const V* const CrosswordFormatSupportLocator::locate(const QMap<const T*, const 
 }
 
 template<class T, class V>
-const V* const CrosswordFormatSupportLocator::locate(const QMap<const T*, const V*>& map, const QString& filepath) const
+const V* CrosswordFormatSupportLocator::locate(const QMap<const T*, const V*>& map, const QString& filepath) const
 {
     QList<const T*> keys = map.keys();
 

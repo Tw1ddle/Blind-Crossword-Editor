@@ -12,13 +12,14 @@ CrosswordLoader::CrosswordLoader()
 {
 }
 
+CrosswordLoader::~CrosswordLoader()
+{
+}
+
 QStringList CrosswordLoader::readFile(const QString& filepath, CrosswordState& state) const
 {
     QStringList data;
     bool success = Utilities::readFile(filepath, data);
-
-    // Read failed
-    Q_ASSERT(success);
 
     if(success)
     {

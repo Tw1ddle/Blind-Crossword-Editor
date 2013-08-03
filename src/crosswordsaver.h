@@ -14,6 +14,7 @@ class CrosswordSaver
 {
 public:
     CrosswordSaver();
+    virtual ~CrosswordSaver();
 
     // Exporters implement functionality for saving the crossword file
     // An exporter should clean up after itself if there is a failure while writing
