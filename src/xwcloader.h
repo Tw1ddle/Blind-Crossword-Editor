@@ -3,7 +3,7 @@
 
 #include "crosswordloader.h"
 #include "crosswordformat.h"
-#include "crosswordclue.h"
+#include "formatscommon.h"
 
 namespace Crossword
 {
@@ -26,7 +26,7 @@ private:
     bool loadSolveGrid(CrosswordState& puzzle, QStringList& lines) const;
 
     bool readGrid(CrosswordState& puzzle, QStringList& lines) const; // loadGrid helper method
-    bool loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, Crossword::CrosswordClue::Direction direction) const; // loadClues helper method
+    bool loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, Crossword::Formats::Directions direction) const; // loadClues helper method
 };
 
 }

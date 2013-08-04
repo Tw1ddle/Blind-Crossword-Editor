@@ -2,6 +2,8 @@
 
 #include "xwcloader.h"
 #include "xwcsaver.h"
+#include "xwc3dloader.h"
+#include "xwc3dsaver.h"
 
 #include <QtAlgorithms>
 #include <QFileInfo>
@@ -107,9 +109,13 @@ const QStringList CrosswordFormatSupportLocator::getSupportedSavingExtensions() 
 
 void CrosswordFormatSupportLocator::registerFormats()
 {
-    // Load and save XWC files (v1.01)
+    // Load and save XWC files (v1.0.1)
     registerLoader(new CrosswordFormat(XWC101), new XWCLoader());
     registerSaver(new CrosswordFormat(XWC101), new XWCSaver());
+
+    // Load and save XWC3D files (v1.0.0)
+    registerLoader(new CrosswordFormat(XWC3D100), new XWC3DLoader());
+    registerSaver(new CrosswordFormat(XWC3D100), new XWC3DSaver());
 
     // TODO More file support... could scan a directory for .dlls or something
 }

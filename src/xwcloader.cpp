@@ -1,6 +1,8 @@
 #include "xwcloader.h"
 #include "xwccommon.h"
+#include "formatscommon.h"
 
+#include "crosswordclue.h"
 #include "crossworditem.h"
 #include <QColor>
 
@@ -158,7 +160,7 @@ bool XWCLoader::readGrid(CrosswordState& puzzle, QStringList& lines) const
     return true;
 }
 
-bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, CrosswordClue::Direction direction) const
+bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, Crossword::Formats::Directions direction) const
 {
     bool ok;
     int numClues = lines.takeFirst().toInt(&ok);
@@ -224,23 +226,31 @@ bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines
         VectorMath::Vec3i startingPosition(row, column, 0);
         std::vector<VectorMath::Vec3i> letterPositions;
 
-        if(CrosswordClue::Direction::ACROSS == direction)
+        if(Formats::Directions::ACROSS == direction)
         {
             for(int i = 0; i < solutionLength; i++)
             {
                 letterPositions.push_back(startingPosition + VectorMath::Vec3i(i, 0, 0));
             }
         }
-        else if(CrosswordClue::Direction::DOWN == direction)
+        else if(Formats::Directions::DOWN == direction)
         {
             for(int i = 0; i < solutionLength; i++)
             {
                 letterPositions.push_back(startingPosition + VectorMath::Vec3i(0, i, 0));
             }
         }
+        else
+        {
+            return false;
+        }
+
+        // Convert the direction enum to a string
+        auto directions = Formats::Common::getDirections();
+        QString directionString = directions.key(direction);
 
         // Add the clue to the puzzle
-        puzzle.m_ClueState.m_Clues.push_back(CrosswordClue(clueNumber, "", solution, clueWords, direction, letterPositions));
+        puzzle.m_ClueState.m_Clues.push_back(CrosswordClue(clueNumber, "", solution, clueWords, directionString, letterPositions));
     }
 
     return true;
@@ -250,14 +260,14 @@ bool XWCLoader::loadClues(CrosswordState& puzzle, QStringList& lines) const
 {
     // The first line after the solution grid contains the number of Across clues.
     // This means that the next lines contain a number of Across clues, one per line.
-    if(!loadCluesForDirection(puzzle, lines, CrosswordClue::Direction::ACROSS))
+    if(!loadCluesForDirection(puzzle, lines, Formats::Directions::ACROSS))
     {
         return false;
     }
 
     // Immediately following the Across clues is the number of Down clues.
     // Each clue line has a format identical to that of the Across clues.
-    if(!loadCluesForDirection(puzzle, lines, CrosswordClue::Direction::DOWN))
+    if(!loadCluesForDirection(puzzle, lines, Formats::Directions::DOWN))
     {
         return false;
     }

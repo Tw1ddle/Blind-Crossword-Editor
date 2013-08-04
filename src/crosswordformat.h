@@ -28,8 +28,14 @@ private:
     const QString m_Version;
 };
 
-// A 2D puzzle grid format used in Blind Gamer's Crossword Puzzle by Spoonbill Games (v1.0.1)
-const std::pair<QString, QString> XWC101 = std::make_pair("xwc", "1.0.1");
+// A 2D puzzle grid format used in Blind Gamer's Crossword Puzzle by Spoonbill Games (v1.0.0)
+const std::pair<QString, QString> XWC101 = std::make_pair("xwc", "1.0.0");
+
+// 3D puzzle grid format used in Blind Crossword 3D for Blind Crosswords Limited (v1.0.0)
+// Rectangular/square grids and combination lock grids
+// Original format shared the same file extension but has a different format header
+const std::pair<QString, QString> XWC3D100 = std::make_pair("xwc3d", "1.0.0");
+const std::pair<QString, QString> XWC3DR100 = std::make_pair("xwc3dr", "1.0.0");
 
 // 3D puzzle grid format used in Blind Crossword 3D for Blind Crosswords Limited (v1.0.1)
 // Rectangular/square grids

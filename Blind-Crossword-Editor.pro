@@ -90,7 +90,8 @@ HEADERS += \
     src/crosswordstatisticspage.h \
     src/autoupdater.h \
     ui/contributorspage.h \
-    src/contributorspage.h
+    src/contributorspage.h \
+    src/formatscommon.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -125,7 +126,8 @@ SOURCES += \
     src/licensepage.cpp \
     src/crosswordstatisticspage.cpp \
     src/autoupdater.cpp \
-    src/contributorspage.cpp
+    src/contributorspage.cpp \
+    src/formatscommon.cpp
 
 FORMS += \
     ui/mainwindow.ui \
