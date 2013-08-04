@@ -1,6 +1,8 @@
 #include "utilities.h"
 
 #include <QTextStream>
+#include <QDesktopServices>
+#include <QUrl>
 
 namespace Utilities
 {
@@ -54,6 +56,33 @@ bool existsFile(const QString& path)
     QFile file(path);
 
     return file.exists();
+}
+
+bool openUrl(const QUrl& url)
+{
+    return QDesktopServices::openUrl(url);
+}
+
+int toInt(const QString& str)
+{
+    bool ok;
+
+    int value = str.toInt(&ok);
+
+    Q_ASSERT(ok);
+
+    return value;
+}
+
+unsigned int toUInt(const QString& str)
+{
+    bool ok;
+
+    int value = str.toUInt(&ok);
+
+    Q_ASSERT(ok);
+
+    return value;
 }
 
 }

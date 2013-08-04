@@ -3,6 +3,7 @@
 
 #include <QStringList>
 #include <QFile>
+#include <QUrl>
 
 namespace Utilities
 {
@@ -10,6 +11,11 @@ namespace Utilities
     bool readFile(const QString& path, QStringList& text);
     bool writeFile(QFile& file, const QStringList& text);
     bool existsFile(const QString& path);
+    bool openUrl(const QUrl& url);
+
+    // QString checked conversions
+    int toInt(const QString& str);
+    unsigned int toUInt(const QString& str);
 }
 
 #endif // UTILITIES_H
