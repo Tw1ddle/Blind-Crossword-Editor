@@ -68,8 +68,8 @@ private slots:
 
     // About
     void showHelp();
+    void showHomepage();
     void showAbout();
-    void showLicense();
 
 private:
     std::unique_ptr<Ui::MainWindow> m_Ui;

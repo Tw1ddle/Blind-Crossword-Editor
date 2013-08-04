@@ -263,16 +263,18 @@ void MainWindow::showHelp()
 
 }
 
+void MainWindow::showHomepage()
+{
+    bool success = Utilities::openUrl(AppInfo::getHomepage());
+
+    Q_ASSERT(success);
+}
+
 void MainWindow::showAbout()
 {
     AppInfo::AboutPage aboutPage;
 
     aboutPage.exec();
-}
-
-void MainWindow::showLicense()
-{
-
 }
 
 // Exiting the application

@@ -91,7 +91,7 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionHomePage"/>
+    <addaction name="actionHomepage"/>
     <addaction name="actionCheck_for_Updates"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
@@ -127,7 +127,7 @@
     <string>Fit All</string>
    </property>
   </action>
-  <action name="actionHomePage">
+  <action name="actionHomepage">
    <property name="text">
     <string>Home Page</string>
    </property>
@@ -210,8 +210,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionHomepage</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showHomepage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showAbout()</slot>
+  <slot>showHomepage()</slot>
  </slots>
 </ui>

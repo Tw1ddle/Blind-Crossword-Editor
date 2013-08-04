@@ -2,6 +2,7 @@
 #define APPINFO_H
 
 #include <QString>
+#include <QUrl>
 
 // Wrapper around informational macros defined in the qmake .pro
 // Application name, version, organization etc
@@ -32,7 +33,10 @@ inline QString getCopyrightNotice()
 
 inline QString getLicenseText()
 {
-    return QT_TR_NOOP("TODO license goes here");
+    // TODO
+    QString license = "This software is provided as-is, without any express or implied warranty.";
+
+    return license;
 }
 
 // Credits
@@ -50,6 +54,11 @@ inline QString getTranslators()
 inline QString getArtists()
 {
     return QString("Samuel Twidale");
+}
+
+inline QUrl getHomepage()
+{
+    return QUrl("http://www.calendarpuzzles.co.uk/");
 }
 
 // Build information
