@@ -10,6 +10,9 @@ class GridSceneRectangularLayers : public Grid::GridScene3D
 {
 public:
     GridSceneRectangularLayers(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
+
+private:
+    virtual void addGrid(int gridNumber);
 };
 
 }
