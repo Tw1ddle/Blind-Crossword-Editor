@@ -3,6 +3,8 @@
 #include "gridscene.h"
 #include "gridsquare.h"
 
+#include <QGraphicsSimpleTextItem>
+
 namespace Grid
 {
 
@@ -26,6 +28,18 @@ void GridSceneRectangularLayers::addGrid(int gridNumber)
     auto dimensions = gridModel.m_Dimensions;
     auto baseIndex = dimensions.x() * dimensions.y() * gridNumber; // Start of grid
     auto lastIndex = dimensions.x() * dimensions.y() * (gridNumber + 1); // End of grid
+
+    // Add a tag indicating the grid #
+    // TODO fix the grouping code - probably doing something wrong or unnecessary here
+    QString gridNumberString = QString::number(gridNumber);
+    QString gridStringTag = tr("Grid %1").arg(gridNumberString);
+    QGraphicsSimpleTextItem* gridTag = new QGraphicsSimpleTextItem(gridStringTag);
+    auto coordinate = gridModel.m_Grid.at(baseIndex).first;
+
+    // TODO get item spacing and grid tag offset
+    gridTag->setPos(coordinate.x() * 100 - 30, coordinate.y() * 100 + gridNumber * 700);
+    gridTag->setParentItem(gridItem);
+    addItem(gridTag);
 
     for(int i = baseIndex; i < lastIndex; i++)
     {
