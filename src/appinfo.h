@@ -4,7 +4,8 @@
 #include <QString>
 #include <QUrl>
 
-// Wrapper around informational macros defined in the qmake .pro
+// Settings that do not change between releases
+// Also a wrapper around informational macros defined in the qmake .pro
 // Application name, version, organization etc
 namespace AppInfo
 {

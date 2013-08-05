@@ -91,8 +91,12 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionHomepage"/>
     <addaction name="actionCheck_for_Updates"/>
+    <addaction name="actionRelease_Notes"/>
+    <addaction name="separator"/>
+    <addaction name="actionHomepage"/>
+    <addaction name="actionFAQ"/>
+    <addaction name="actionEmail_Support"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
@@ -129,7 +133,7 @@
   </action>
   <action name="actionHomepage">
    <property name="text">
-    <string>Home Page</string>
+    <string>Homepage</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -139,7 +143,7 @@
   </action>
   <action name="actionQuit">
    <property name="text">
-    <string>Exit</string>
+    <string>Quit</string>
    </property>
   </action>
   <action name="actionUndo">
@@ -154,7 +158,7 @@
   </action>
   <action name="actionCheck_for_Updates">
    <property name="text">
-    <string>Check for Updates</string>
+    <string>Check For Updates</string>
    </property>
   </action>
   <action name="actionRedo">
@@ -189,6 +193,26 @@
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Contents</string>
+   </property>
+  </action>
+  <action name="actionFAQ">
+   <property name="text">
+    <string>Frequently Asked Questions</string>
+   </property>
+  </action>
+  <action name="actionRelease_Notes">
+   <property name="text">
+    <string>Release Notes</string>
+   </property>
+  </action>
+  <action name="actionEmail_Support">
+   <property name="text">
+    <string>Email Support</string>
    </property>
   </action>
  </widget>
@@ -226,9 +250,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showQuitConfirmation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showAbout()</slot>
   <slot>showHomepage()</slot>
+  <slot>showQuitConfirmation()</slot>
  </slots>
 </ui>

@@ -10,6 +10,9 @@ class GridSceneCombinationLock : public Grid::GridScene3D
 {
 public:
     GridSceneCombinationLock(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
+
+private:
+    virtual void addGrid();
 };
 
 }

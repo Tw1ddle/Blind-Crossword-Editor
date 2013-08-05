@@ -15,6 +15,19 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QLabel" name="logoImage">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../res/resources.qrc">:/icons/icons/icon.ico</pixmap>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="appName">
      <property name="font">
       <font>
@@ -43,19 +56,6 @@
     <widget class="QLabel" name="copyrightMessage">
      <property name="text">
       <string>Copyright Message</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="logoImage">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="../res/resources.qrc">:/icons/icons/icon.ico</pixmap>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

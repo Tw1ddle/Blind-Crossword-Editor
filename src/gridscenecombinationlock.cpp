@@ -7,4 +7,9 @@ GridSceneCombinationLock::GridSceneCombinationLock(QObject* parent, InternalInte
 {
 }
 
+void GridSceneCombinationLock::addGrid()
+{
+    // TODO
+}
+
 }

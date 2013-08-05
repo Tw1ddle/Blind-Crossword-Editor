@@ -96,6 +96,8 @@ void MainWindow::loadCrosswordDialog()
     }
     nameFilter.append(")");
 
+    // TODO try to get a default directory (in settings?) and set that e.g. a Crosswords folder
+
     QString filepath = QFileDialog::getOpenFileName(this, tr("Open Crossword File"), QString(), nameFilter);
     if(!filepath.isNull())
     {
@@ -241,12 +243,17 @@ void MainWindow::emailCrossword()
 
 void MainWindow::showCrosswordProperties()
 {
-    // Open a messagebox with the properties?
+    // TODO Open a messagebox with the properties?
 }
 
 void MainWindow::showQuitConfirmation()
 {
-    // Show message box with warning (you need to save your stuff?) and option to quit or not
+    auto response = QMessageBox::question(this, tr("Quit confirmation"), tr("Are you sure you want to quit?"));
+
+    if(QMessageBox::Yes == response)
+    {
+        MainWindow::close();
+    }
 }
 
 // Options menu implementations
@@ -283,6 +290,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
 {
     event->accept();
 }
+
+// Event interception
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
