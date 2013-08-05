@@ -248,6 +248,8 @@ void MainWindow::showCrosswordProperties()
 
 void MainWindow::showQuitConfirmation()
 {
+    // TODO only show this if the puzzle has been touched after the last save
+
     auto response = QMessageBox::question(this, tr("Quit confirmation"), tr("Are you sure you want to quit?"));
 
     if(QMessageBox::Yes == response)
