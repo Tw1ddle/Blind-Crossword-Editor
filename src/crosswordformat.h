@@ -54,6 +54,12 @@ const std::pair<QString, QString> CROSSWORD_COMPILER_LEGACY = std::make_pair("cc
 // Crossword Compiler version 4.0-5.1
 const std::pair<QString, QString> CROSSWORD_COMPILER_40_51 = std::make_pair("CC4", "4-5.1");
 
+// Plain text file
+const std::pair<QString, QString> PLAINTEXT100 = std::make_pair("txt", "1.0.0");
+
+// Rich text
+const std::pair<QString, QString> RICHTEXT100 = std::make_pair("rtf", "1.0.0");
+
 // More supported formats go here...
 
 // Known crossword formats

@@ -3,6 +3,8 @@
 
 #include "crosswordstate.h"
 
+#include <QFile>
+
 namespace Crossword
 {
 

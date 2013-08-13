@@ -17,6 +17,7 @@
 #include "mainwindow.h"
 #include "appinfo.h"
 #include "logginghandler.h"
+#include "testrunner.h"
 
 #ifdef QT_DEBUG
 #include <QMessageBox>
@@ -26,6 +27,12 @@ int main(int argc, char *argv[])
 {
     // Create the application
     QApplication app(argc, argv);
+
+    // Run unit tests
+    // Note that test data needs placing at appropriate paths for tests to run correctly
+    #ifdef QT_DEBUG
+    Tests::TestRunner testRunner;
+    #endif
 
     // Set up message handler
     qInstallMessageHandler(Logging::debugConsoleOutputHandler);

@@ -7,3 +7,33 @@ CrosswordClue::CrosswordClue(const QString& number, const QString& guess, const 
 {
 
 }
+
+const QString& CrosswordClue::getNumber() const
+{
+    return m_Number;
+}
+
+const QString& CrosswordClue::getGuess() const
+{
+    return m_Guess;
+}
+
+const QString& CrosswordClue::getSolution() const
+{
+    return m_Solution;
+}
+
+const QString& CrosswordClue::getClue() const
+{
+    return m_Clue;
+}
+
+const QString& CrosswordClue::getDirection() const
+{
+    return m_Direction;
+}
+
+const std::vector<VectorMath::Vec3i>& CrosswordClue::getLetterPositions() const
+{
+    return m_LetterPositions;
+}

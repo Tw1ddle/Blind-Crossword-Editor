@@ -14,10 +14,12 @@ class CrosswordClue
 public:
     CrosswordClue(const QString& number, const QString& guess, const QString& solution, const QString& clue, const QString& direction, const std::vector<VectorMath::Vec3i>& letterPositions);
 
-    // TODO
-    // QString getDirection() const;
-    // QString getIdentifier() const; // Unique identifier for the clue
-    // QString getClue() const; // The actual clue phrase
+    const QString& getNumber() const;
+    const QString& getGuess() const;
+    const QString& getSolution() const;
+    const QString& getClue() const;
+    const QString& getDirection() const;
+    const std::vector<VectorMath::Vec3i>& getLetterPositions() const;
 
 private:
     QString m_Number;

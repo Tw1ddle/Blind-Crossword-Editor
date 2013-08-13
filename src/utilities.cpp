@@ -3,12 +3,15 @@
 #include <QTextStream>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QCoreApplication>
 
 namespace Utilities
 {
 
 bool readFile(const QString& path, QStringList& text)
 {
+    // Note that QFile expects the file separator to be '/' regardless of operating system.
+
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -83,6 +86,41 @@ unsigned int toUInt(const QString& str)
     Q_ASSERT(ok);
 
     return value;
+}
+
+QString getApplicationDirPath()
+{
+    return QCoreApplication::applicationDirPath();
+}
+
+QStringList getFilenamesInDirectory(const QDir& directory)
+{
+    auto fileNames = directory.entryList(QDir::NoDotAndDotDot | QDir::Files);
+
+    return fileNames;
+}
+
+const QStringList filterByExtension(const QStringList& filenames, const QString& extension)
+{
+    auto filteredList = filenames.filter(QString("*.").append(extension));
+
+    return filteredList;
+}
+
+const QString createNameFilter(const QString& title, const QStringList& permittedFormats)
+{
+    QString nameFilter;
+
+    nameFilter.append(title);
+
+    nameFilter.append(" (");
+    for(auto format : permittedFormats)
+    {
+        nameFilter.append("*.").append(format).append(" ");
+    }
+    nameFilter.append(")");
+
+    return nameFilter;
 }
 
 }

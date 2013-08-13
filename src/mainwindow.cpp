@@ -56,7 +56,7 @@ MainWindow::~MainWindow()
 void MainWindow::handleArgument(const QString& arg)
 {
     // Attempts to load the first (and only the first) file with a valid crossword extension (if any)
-    // If the arguments end with a file format extension, try to load it
+    // If the arguments end with a file format extension,  try to load it
     if(m_FormatSupport.isLoaderSupported(arg))
     {
         loadCrossword(arg);
@@ -86,15 +86,7 @@ void MainWindow::loadCrosswordDialog()
 {
     // Construct a name filter for supported formats
     QStringList formats = m_FormatSupport.getSupportedLoadingExtensions();
-    QString nameFilter;
-    nameFilter.append(tr("Crossword files"));
-
-    nameFilter.append(" (");
-    for(auto format : formats)
-    {
-        nameFilter.append("*.").append(format).append(" ");
-    }
-    nameFilter.append(")");
+    QString nameFilter = Utilities::createNameFilter(tr("Crossword Files"), formats);
 
     // TODO try to get a default directory (in settings?) and set that e.g. a Crosswords folder
 
@@ -178,7 +170,6 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
         return nullptr;
     }
 
-    auto crossword = std::unique_ptr<CrosswordBase>(new CrosswordBase());
     auto loader = m_FormatSupport.locateLoader(filepath);
 
     if(!loader)
@@ -188,6 +179,7 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
         return nullptr;
     }
 
+    auto crossword = std::unique_ptr<CrosswordBase>(new CrosswordBase());
     bool success = loader->load(filepath, crossword->getState());
 
     if(!success)
@@ -210,6 +202,10 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
 
 void MainWindow::saveCrosswordDialog()
 {
+    // Construct a name filter for supported formats
+    QStringList formats = m_FormatSupport.getSupportedSavingExtensions();
+    QString nameFilter = Utilities::createNameFilter(tr("Crossword Files"), formats);
+
     // TODO Set a name filter for all supported formats
 }
 
