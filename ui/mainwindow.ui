@@ -74,7 +74,7 @@
     <addaction name="menuRecent_Files"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
-    <addaction name="actionStatistics"/>
+    <addaction name="actionProperties"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -151,9 +151,9 @@
     <string>Undo</string>
    </property>
   </action>
-  <action name="actionStatistics">
+  <action name="actionProperties">
    <property name="text">
-    <string>Statistics</string>
+    <string>Properties</string>
    </property>
   </action>
   <action name="actionCheck_for_Updates">
@@ -266,10 +266,95 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSave</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveCrosswordDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionOpen</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>loadCrosswordDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPreferences</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showPreferences()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionProperties</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showCrosswordProperties()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNew</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>newCrossword()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showAbout()</slot>
   <slot>showHomepage()</slot>
   <slot>showQuitConfirmation()</slot>
+  <slot>saveCrosswordDialog()</slot>
+  <slot>loadCrosswordDialog()</slot>
+  <slot>showPreferences()</slot>
+  <slot>showCrosswordProperties()</slot>
+  <slot>newCrossword()</slot>
  </slots>
 </ui>

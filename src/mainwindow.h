@@ -57,13 +57,16 @@ private slots:
     void saveCrosswordDialog();
 
     void newCrossword();
-    void saveCrossword();
+    void saveCrossword(const QString& filepath);
     void printCrossword();
     void emailCrossword();
     void showCrosswordProperties();
     void showQuitConfirmation();
 
-    // Options
+    // Edit
+    void showPreferences();
+
+    // View
     void fitGridsInView();
 
     // About

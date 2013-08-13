@@ -39,6 +39,11 @@ bool readFile(const QString& path, QStringList& text)
 
 bool writeFile(QFile& file, const QStringList& text)
 {
+    if(!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+    {
+        return false;
+    }
+
     QTextStream out(&file);
 
     for(QString line : text)

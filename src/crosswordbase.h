@@ -22,6 +22,10 @@ public:
     // then it may be loaded or saved to disk
     bool isValid() const;
 
+    // Whether the crossword is in a state that allows it to be saved to disk
+    // Difference from isValid is that this might have a stronger precondition
+    bool isSaveable() const;
+
     // Only use non-const accessor for loading/saving states
     // TODO make loaders/savers friends of CrosswordBase instances or find a workaround
     CrosswordState& getState();

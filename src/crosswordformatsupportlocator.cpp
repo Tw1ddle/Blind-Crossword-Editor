@@ -4,6 +4,7 @@
 #include "xwcsaver.h"
 #include "xwc3dloader.h"
 #include "xwc3dsaver.h"
+#include "plaintextsaver.h"
 
 #include <QtAlgorithms>
 #include <QFileInfo>
@@ -116,6 +117,9 @@ void CrosswordFormatSupportLocator::registerFormats()
     // Load and save XWC3D files (v1.0.0)
     registerLoader(new CrosswordFormat(XWC3D100), new XWC3DLoader());
     registerSaver(new CrosswordFormat(XWC3D100), new XWC3DSaver());
+
+    // Save to plain text
+    registerSaver(new CrosswordFormat(PLAINTEXT100), new PlainTextSaver());
 
     // TODO More file support... could scan a directory for .dlls or something
 }

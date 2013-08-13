@@ -21,6 +21,11 @@ void CrosswordSavingTest::saveToSupportedFormats()
     // TODO
 }
 
+void CrosswordSavingTest::overwriteFile()
+{
+    // TODO
+}
+
 void CrosswordSavingTest::loadFile(const QString& filepath)
 {
     Q_UNUSED(filepath);

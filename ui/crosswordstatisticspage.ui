@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>439</width>
-    <height>621</height>
+    <height>398</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Properties</string>
   </property>
  </widget>
  <resources/>

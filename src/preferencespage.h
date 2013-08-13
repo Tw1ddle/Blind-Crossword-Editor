@@ -3,9 +3,13 @@
 
 #include <QDialog>
 
-namespace Ui {
-class PreferencesPage;
+namespace Ui
+{
+    class PreferencesPage;
 }
+
+namespace Editor
+{
 
 class PreferencesPage : public QDialog
 {
@@ -18,5 +22,7 @@ public:
 private:
     Ui::PreferencesPage *ui;
 };
+
+}
 
 #endif // PREFERENCESPAGE_H

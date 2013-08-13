@@ -60,14 +60,14 @@ include(src/src.pro)
 
 FORMS += \
     ui/mainwindow.ui \
-    ui/newcrosswordform.ui \
     ui/griditempropertiesform.ui \
     ui/aboutpage.ui \
     ui/licensepage.ui \
     ui/crosswordstatisticspage.ui \
     ui/contributorspage.ui \
     ui/preferencespage.ui \
-    ui/pluginspage.ui
+    ui/pluginspage.ui \
+    ui/newcrosswordpage.ui
 
 RESOURCES += \
     res/resources.qrc

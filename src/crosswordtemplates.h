@@ -1,7 +1,7 @@
 #ifndef CROSSWORDTEMPLATES_H
 #define CROSSWORDTEMPLATES_H
 
-#include "xwccommon.h"
+#include "crosswordstate.h"
 
 namespace Editor
 {
@@ -9,14 +9,11 @@ namespace Editor
 namespace CrosswordTemplates
 {
 
-namespace XWC
+namespace Empty
 {
-
-void buildEmptyTemplate(int x, int y)
-{
-
-}
-
+    Crossword::CrosswordState make2DGrid(int x, int y);
+    Crossword::CrosswordState make3DGrid(int x, int y, int z);
+    Crossword::CrosswordState make3DCombinationLock(int radius, int segments, int depth);
 }
 
 }

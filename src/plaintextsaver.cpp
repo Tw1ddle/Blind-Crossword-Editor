@@ -16,11 +16,6 @@ bool PlainTextSaver::save(const QString& filepath, const CrosswordState& state) 
 {
     QFile file(filepath);
 
-    if(!file.isReadable() || !file.isWritable())
-    {
-        return false;
-    }
-
     QStringList lines;
 
     // Metadata

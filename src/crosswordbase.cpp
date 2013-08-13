@@ -24,6 +24,11 @@ bool CrosswordBase::isValid() const
     return true;
 }
 
+bool CrosswordBase::isSaveable() const
+{
+    return isValid();
+}
+
 CrosswordState::ClueState& CrosswordBase::getClues()
 {
     return m_State->m_ClueState;

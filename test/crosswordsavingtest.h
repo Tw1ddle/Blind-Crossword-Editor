@@ -22,6 +22,9 @@ private slots:
     // Saves a crossword state to all the supported save formats
     void saveToSupportedFormats();
 
+    // Overrwrite an existing crossword file
+    void overwriteFile();
+
     void cleanupTestCase();
 
     // Helper methods
