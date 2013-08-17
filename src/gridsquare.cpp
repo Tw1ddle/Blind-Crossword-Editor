@@ -6,7 +6,7 @@
 namespace Grid
 {
 
-GridSquare::GridSquare(const Crossword::CrosswordItem& item, float width, float height) : m_Item(item), m_Width(width), m_Height(height)
+GridSquare::GridSquare(Crossword::CrosswordItem& item, float width, float height) : m_Item(item), m_Width(width), m_Height(height)
 {
 }
 
@@ -15,9 +15,7 @@ void GridSquare::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    QPen pen;
-    pen.setWidth(1);
-    painter->setPen(pen);
+    painter->setPen(getPen());
 
     painter->drawRect(0, 0, m_Width, m_Height);
 
@@ -34,6 +32,25 @@ void GridSquare::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
         painter->setFont(font);
         painter->drawText(boundingRect(), Qt::AlignCenter, text);
     }
+}
+
+void GridSquare::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    GridItem::mousePressEvent(event);
+}
+
+void GridSquare::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+{
+    getPen().setColor(QColor(Qt::red));
+
+    GridItem::hoverEnterEvent(event);
+}
+
+void GridSquare::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
+{
+    getPen().setColor(QColor(Qt::blue));
+
+    GridItem::hoverLeaveEvent(event);
 }
 
 QRectF GridSquare::boundingRect() const

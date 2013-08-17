@@ -20,6 +20,8 @@ public:
 protected:
     InternalInterface::CrosswordStateToGridScene* getCrosswordState();
 
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+
 private:
     InternalInterface::CrosswordStateToGridScene* m_CrosswordState;
 };

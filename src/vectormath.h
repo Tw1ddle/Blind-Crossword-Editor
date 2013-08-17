@@ -44,7 +44,12 @@ private:
     T m_Vec[3];
 };
 
-template<class T> Vector3<T>::Vector3() {}
+template<class T> Vector3<T>::Vector3()
+{
+    m_Vec[0] = 0;
+    m_Vec[1] = 0;
+    m_Vec[2] = 0;
+}
 
 template<class T> Vector3<T>::Vector3(T x, T y, T z)
 {

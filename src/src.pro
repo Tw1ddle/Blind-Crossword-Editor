@@ -41,7 +41,9 @@ HEADERS += \
     src/preferencespage.h \
     src/plaintextsaver.h \
     src/crosswordtemplates.h \
-    src/newcrosswordpage.h
+    src/newcrosswordpage.h \
+    src/crosswordstatistics.h \
+    src/newcrosswordcluepage.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -81,4 +83,6 @@ SOURCES += \
     src/preferencespage.cpp \
     src/plaintextsaver.cpp \
     src/crosswordtemplates.cpp \
-    src/newcrosswordpage.cpp
+    src/newcrosswordpage.cpp \
+    src/crosswordstatistics.cpp \
+    src/newcrosswordcluepage.cpp

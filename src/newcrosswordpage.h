@@ -20,6 +20,8 @@ public:
     
 private:
     Ui::NewCrosswordPage* ui;
+
+    void setupContent();
 };
 
 }

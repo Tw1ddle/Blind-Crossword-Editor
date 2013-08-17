@@ -77,13 +77,13 @@ void MainWindow::handleArgument(const QString& arg)
 
 void MainWindow::newCrossword()
 {
-    NewCrosswordPage newCrosswordPage;
+    NewCrosswordPage newCrosswordPage(this);
 
     newCrosswordPage.exec();
 
-    // Bring up a dialog with crossword templates
+    // TODO Bring up a dialog with crossword templates
 
-    m_Crossword->resetState();
+    // m_Crossword->resetState();
 }
 
 void MainWindow::loadCrosswordDialog()
@@ -221,6 +221,8 @@ void MainWindow::saveCrosswordDialog()
 
         saveCrossword(nativeFilepath);
     }
+
+    // TODO after a "save as" event add the new file to recent files
 }
 
 void MainWindow::saveCrossword(const QString& filepath)
@@ -280,7 +282,7 @@ void MainWindow::emailCrossword()
 
 void MainWindow::showCrosswordProperties()
 {
-    Editor::CrosswordStatisticsPage crosswordStatisticsPage;
+    Editor::CrosswordStatisticsPage crosswordStatisticsPage(this, m_Crossword->getState());
 
     crosswordStatisticsPage.exec();
 }
@@ -289,7 +291,7 @@ void MainWindow::showCrosswordProperties()
 
 void MainWindow::showPreferences()
 {
-    Editor::PreferencesPage preferencesPage;
+    Editor::PreferencesPage preferencesPage(this);
 
     preferencesPage.exec();
 }
@@ -317,7 +319,7 @@ void MainWindow::showHomepage()
 
 void MainWindow::showAbout()
 {
-    AppInfo::AboutPage aboutPage;
+    AppInfo::AboutPage aboutPage(this);
 
     aboutPage.exec();
 }
@@ -343,7 +345,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 
 // Event interception
 
-bool MainWindow::eventFilter(QObject *object, QEvent *event)
+bool MainWindow::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object);
 

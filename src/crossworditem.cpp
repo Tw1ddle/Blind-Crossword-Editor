@@ -12,4 +12,9 @@ const QString& CrosswordItem::getText() const
     return m_Text;
 }
 
+void CrosswordItem::setText(const QString& text)
+{
+    m_Text = text;
+}
+
 }

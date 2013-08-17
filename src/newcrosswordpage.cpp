@@ -17,4 +17,9 @@ NewCrosswordPage::~NewCrosswordPage()
     delete ui;
 }
 
+void NewCrosswordPage::setupContent()
+{
+    
+}
+
 }

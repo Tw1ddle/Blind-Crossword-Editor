@@ -14,6 +14,7 @@ public:
     CrosswordItem(const QString& text, const QColor& colour);
 
     const QString& getText() const;
+    void setText(const QString& text);
 
 private:
     QString m_Text;

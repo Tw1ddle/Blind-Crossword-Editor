@@ -3,6 +3,11 @@
 
 #include <QDialog>
 
+namespace Crossword
+{
+    class CrosswordState;
+}
+
 namespace Ui
 {
 class CrosswordStatisticsPage;
@@ -16,11 +21,13 @@ class CrosswordStatisticsPage : public QDialog
     Q_OBJECT
     
 public:
-    explicit CrosswordStatisticsPage(QWidget *parent = 0);
+    explicit CrosswordStatisticsPage(QWidget *parent, const Crossword::CrosswordState& state);
     ~CrosswordStatisticsPage();
     
 private:
     Ui::CrosswordStatisticsPage *ui;
+
+    void setupContent(const Crossword::CrosswordState& state);
 };
 
 }

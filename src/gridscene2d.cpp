@@ -10,14 +10,14 @@ GridScene2D::GridScene2D(QObject* parent, InternalInterface::CrosswordStateToGri
 
 void GridScene2D::addGrid()
 {
-    const Crossword::CrosswordState::GridState& gridModel = getCrosswordState()->getGrid();
+    Crossword::CrosswordState::GridState& gridModel = getCrosswordState()->getGrid();
 
     QGraphicsItemGroup* gridItem = new QGraphicsItemGroup();
 
     for(unsigned int i = 0; i < gridModel.m_Grid.size(); i++)
     {
         auto coordinate = gridModel.m_Grid.at(i).first;
-        const Crossword::CrosswordItem& letter = gridModel.m_Grid.at(i).second;
+        Crossword::CrosswordItem& letter = gridModel.m_Grid.at(i).second;
 
         // TODO get size setting
         Grid::GridSquare* square = new Grid::GridSquare(letter, 100, 100);
@@ -27,7 +27,6 @@ void GridScene2D::addGrid()
 
         square->setParentItem(gridItem);
         addItem(square);
-        gridItem->addToGroup(square);
     }
 
     addItem(gridItem);

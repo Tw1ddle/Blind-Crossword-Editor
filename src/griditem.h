@@ -2,6 +2,7 @@
 #define GRIDITEM_H
 
 #include <QGraphicsItem>
+#include <QPen>
 
 #include "vectormath.h"
 
@@ -17,12 +18,16 @@ public:
     virtual QRectF boundingRect() const = 0;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) = 0;
 
-private:
+protected:
+    QPen& getPen();
 
-signals:
-    
-public slots:
-    
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;
+
+private:
+    QPen m_Pen;
 };
 
 }
