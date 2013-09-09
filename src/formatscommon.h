@@ -4,13 +4,15 @@
 #include <QMap>
 #include <QString>
 
+#include "crosswordclue.h"
+
 namespace Crossword
 {
 
 namespace Formats
 {
 
-enum class Directions
+enum class Direction
 {
     // 2D puzzles
     ACROSS, // Left to right
@@ -28,15 +30,17 @@ enum class Directions
 
     // All of the above
     SNAKING, // Each letter could be anywhere, turn corners etc
-    UNKNOWN, // If the puzzle does not define a direction or it is something different
-    NONE // If the clues in this type of puzzle really don't have any direction
+    UNKNOWN // If the puzzle does not define a direction or it is something different
 };
 
 class Common
 {
 public:
-    static const QMap<QString, Directions> getDirections();
+    static const QMap<QString, Direction> getDirections();
 };
+
+Direction getDirection(std::vector<VectorMath::Vec3i> letterPositions);
+Direction getDirection(const QString& direction);
 
 }
 }

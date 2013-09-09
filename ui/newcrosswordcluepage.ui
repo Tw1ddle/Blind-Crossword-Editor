@@ -27,31 +27,31 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="clueIdentifierText">
        <property name="text">
         <string>ClueIdentifier</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="directionLabel">
+      <widget class="QLabel" name="numberLabel">
        <property name="text">
         <string>Number</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="comboBox_4"/>
+      <widget class="QComboBox" name="clueNumberComboBox"/>
      </item>
      <item row="3" column="0">
-      <widget class="QLabel" name="directionLabel_2">
+      <widget class="QLabel" name="directionLabel">
        <property name="text">
         <string>Direction</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="clueDirectionText">
        <property name="text">
         <string>ClueDirection</string>
        </property>
@@ -68,14 +68,14 @@
       <widget class="QLineEdit" name="clueTextLineEdit"/>
      </item>
      <item row="5" column="0">
-      <widget class="QLabel" name="letterCoordinatesLabel">
+      <widget class="QLabel" name="coordinatesLabel">
        <property name="text">
         <string>Letter Coordinates</string>
        </property>
       </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="clueCoordinatesText">
        <property name="text">
         <string>ClueLetterCoordinates</string>
        </property>
@@ -86,16 +86,16 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="addButton">
        <property name="text">
-        <string>Cancel</string>
+        <string>Add</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>Add</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
@@ -104,5 +104,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>cancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>NewCrosswordCluePage</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>296</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addButton</sender>
+   <signal>clicked()</signal>
+   <receiver>NewCrosswordCluePage</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>103</x>
+     <y>278</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

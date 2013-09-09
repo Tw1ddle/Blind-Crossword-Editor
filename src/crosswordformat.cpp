@@ -31,6 +31,7 @@ const QMap<QString, FormatEnum> get2DFormats()
     map.insert("puz", FormatEnum::PUZ);
     map.insert("ccw", FormatEnum::CCW);
     map.insert("cc4", FormatEnum::CC4);
+    map.insert("txt", FormatEnum::TXT);
 
     return map;
 }

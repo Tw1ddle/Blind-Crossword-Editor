@@ -13,8 +13,22 @@ class GridScene2D : public Grid::GridScene
 public:
     GridScene2D(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
 
+protected:
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void keyReleaseEvent(QKeyEvent* event) override;
+
 private:
     virtual void addGrid();
+    virtual bool advance() override;
+
+    enum UserTypingDirection
+    {
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN
+    };
+    UserTypingDirection m_TypingDirection;
 };
 
 }

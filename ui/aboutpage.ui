@@ -89,6 +89,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="aboutQt">
+       <property name="text">
+        <string>About Qt</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="closeButton">
        <property name="text">
         <string>Close</string>
@@ -151,9 +158,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>aboutQt</sender>
+   <signal>clicked()</signal>
+   <receiver>AboutPage</receiver>
+   <slot>showAboutQt()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>209</x>
+     <y>264</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>168</x>
+     <y>145</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showLicensePage()</slot>
   <slot>showContributorsPage()</slot>
+  <slot>showAboutQt()</slot>
  </slots>
 </ui>

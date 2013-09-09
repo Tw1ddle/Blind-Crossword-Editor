@@ -13,6 +13,7 @@
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QtGlobal>
+#include <QDebug>
 
 #include "mainwindow.h"
 #include "appinfo.h"
@@ -23,10 +24,38 @@
 #include <QMessageBox>
 #endif
 
+namespace Editor
+{
+
+class CrosswordApplication : public QApplication
+{
+public:
+    CrosswordApplication(int argc, char *argv[]) : QApplication(argc, argv)
+    {
+    }
+
+    // Log all thrown exceptions
+    virtual bool notify(QObject* receiver, QEvent* event)
+    {
+        try
+        {
+            return QApplication::notify(receiver, event);
+        }
+        catch(std::exception& e)
+        {
+            qDebug() << "Exception thrown: " << e.what();
+        }
+
+        return false;
+    }
+};
+
+}
+
 int main(int argc, char *argv[])
 {
     // Create the application
-    QApplication app(argc, argv);
+    Editor::CrosswordApplication app(argc, argv);
 
     // Run unit tests
     // Note that test data needs placing at appropriate paths for tests to run correctly
@@ -73,5 +102,5 @@ int main(int argc, char *argv[])
 
     mainWindow.show();
 
-    return app.exec();
+    app.exec();
 }

@@ -25,6 +25,9 @@ bool XWCLoader::load(const QString& filepath, CrosswordState& puzzle) const
         return false;
     }
 
+    // Datasources
+    puzzle.m_DataSources.m_PuzzleFilePath = filepath;
+
     success = loadMetadata(puzzle, data);
     if(!success)
     {
@@ -147,12 +150,12 @@ bool XWCLoader::readGrid(CrosswordState& puzzle, QStringList& lines) const
             // Lower case letters are used for the solution words, with a '1' for each black square.
             if(currentCharacter == XWC::Common::blackSquare)
             {
-                puzzle.m_GridState.m_Grid.push_back(std::make_pair(Vec3i(x, y, 0), CrosswordItem(QString(""), QColor(Qt::black))));
+                puzzle.m_GridState.m_Grid.push_back(std::make_tuple(Vec3i(x, y, 0), CrosswordItem(QString(""), QColor(Qt::black))));
             }
             // If all the words have not yet been entered, there will be a '0' (zero) for each empty white square.
             else
             {
-                puzzle.m_GridState.m_Grid.push_back(std::make_pair(Vec3i(x, y, 0), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
+                puzzle.m_GridState.m_Grid.push_back(std::make_tuple(Vec3i(x, y, 0), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
             }
         }
     }
@@ -160,7 +163,7 @@ bool XWCLoader::readGrid(CrosswordState& puzzle, QStringList& lines) const
     return true;
 }
 
-bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, Crossword::Formats::Directions direction) const
+bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, Crossword::Formats::Direction direction) const
 {
     bool ok;
     int numClues = lines.takeFirst().toInt(&ok);
@@ -226,14 +229,14 @@ bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines
         VectorMath::Vec3i startingPosition(row, column, 0);
         std::vector<VectorMath::Vec3i> letterPositions;
 
-        if(Formats::Directions::ACROSS == direction)
+        if(Formats::Direction::ACROSS == direction)
         {
             for(int i = 0; i < solutionLength; i++)
             {
                 letterPositions.push_back(startingPosition + VectorMath::Vec3i(i, 0, 0));
             }
         }
-        else if(Formats::Directions::DOWN == direction)
+        else if(Formats::Direction::DOWN == direction)
         {
             for(int i = 0; i < solutionLength; i++)
             {
@@ -249,8 +252,12 @@ bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines
         auto directions = Formats::Common::getDirections();
         QString directionString = directions.key(direction);
 
+        CrosswordClue clue(clueNumber, "", solution, clueWords, directionString, "", letterPositions);
+
+        Q_ASSERT(clue.getDirection() == directionString);
+
         // Add the clue to the puzzle
-        puzzle.m_ClueState.m_Clues.push_back(CrosswordClue(clueNumber, "", solution, clueWords, directionString, letterPositions));
+        puzzle.m_ClueState.m_Clues.push_back(clue);
     }
 
     return true;
@@ -260,14 +267,14 @@ bool XWCLoader::loadClues(CrosswordState& puzzle, QStringList& lines) const
 {
     // The first line after the solution grid contains the number of Across clues.
     // This means that the next lines contain a number of Across clues, one per line.
-    if(!loadCluesForDirection(puzzle, lines, Formats::Directions::ACROSS))
+    if(!loadCluesForDirection(puzzle, lines, Formats::Direction::ACROSS))
     {
         return false;
     }
 
     // Immediately following the Across clues is the number of Down clues.
     // Each clue line has a format identical to that of the Across clues.
-    if(!loadCluesForDirection(puzzle, lines, Formats::Directions::DOWN))
+    if(!loadCluesForDirection(puzzle, lines, Formats::Direction::DOWN))
     {
         return false;
     }
@@ -277,7 +284,6 @@ bool XWCLoader::loadClues(CrosswordState& puzzle, QStringList& lines) const
 
 bool XWCLoader::loadSolveGrid(CrosswordState &puzzle, QStringList &lines) const
 {
-    // Unimplemented since it seems the program should be able to infer all the information the solve grid provides from the other puzzle data
     Q_UNUSED(lines);
     Q_UNUSED(puzzle);
 

@@ -20,7 +20,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <property name="tabsClosable">
       <bool>false</bool>
@@ -44,14 +44,14 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_10">
               <item>
-               <widget class="QLabel" name="label_7">
+               <widget class="QLabel" name="cursorColourLabel">
                 <property name="text">
                  <string>Cursor Colour:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_3">
+               <widget class="QPushButton" name="cursorColourPushButton">
                 <property name="text">
                  <string/>
                 </property>
@@ -82,17 +82,21 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
               <item>
-               <widget class="QLabel" name="label">
+               <widget class="QLabel" name="loadCrosswordFolderLabel">
                 <property name="text">
-                 <string>Crossword Loading Folder:</string>
+                 <string>Crossword Load Folder:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit"/>
+               <widget class="QLineEdit" name="loadCrosswordFolderLineEdit">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="loadCrosswordFolderPushButton">
                 <property name="text">
                  <string>...</string>
                 </property>
@@ -103,17 +107,21 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
               <item>
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="saveCrosswordFolderLabel">
                 <property name="text">
-                 <string>Crossword Saving Folder:</string>
+                 <string>Crossword Save Folder:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_2"/>
+               <widget class="QLineEdit" name="saveCrosswordFolderLineEdit">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_2">
+               <widget class="QPushButton" name="saveCrosswordFolderPushButton">
                 <property name="text">
                  <string>...</string>
                 </property>
@@ -142,14 +150,14 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="itemBackgroundColourLabel">
               <property name="text">
                <string>Item Background Colour</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_4">
+             <widget class="QPushButton" name="itemBackgroundColourPushButton">
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -160,14 +168,14 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="itemForegroundColourLabel">
               <property name="text">
                <string>Item Foreground Colour</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_5">
+             <widget class="QPushButton" name="itemForegroundColourPushButton">
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -178,14 +186,14 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_9">
             <item>
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="wordColourLabel">
               <property name="text">
                <string>Word Colour</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_6">
+             <widget class="QPushButton" name="wordColourPushButton">
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -211,7 +219,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="pluginsLabel">
            <property name="text">
             <string>Plugins </string>
            </property>
@@ -224,7 +232,25 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <widget class="QTableView" name="tableView"/>
+             <widget class="QTableView" name="pluginsTableView"/>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QPushButton" name="rescanPluginsPushButton">
+                <property name="text">
+                 <string>Rescan</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="addPluginPushButton">
+                <property name="text">
+                 <string>Add Plugin</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>

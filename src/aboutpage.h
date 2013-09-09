@@ -22,6 +22,7 @@ public:
 public slots:
     void showLicensePage();
     void showContributorsPage();
+    void showAboutQt();
     
 private:
     Ui::AboutPage *ui;

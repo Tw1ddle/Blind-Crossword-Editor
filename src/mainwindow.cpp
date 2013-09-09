@@ -8,6 +8,8 @@
 #include <QDragEnterEvent>
 #include <QUrl>
 #include <QMimeData>
+#include <QDesktopServices>
+#include <QAbstractButton>
 
 #include <memory>
 
@@ -37,12 +39,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_Ui->setupUi(this);
 
     // Set max number of recent files
-    QSettings settings;
-    bool ok;
-    const int maxRecentFiles = settings.value(AppInfo::SettingsKeys::maxRecentCrosswordFiles, 10).toInt(&ok);
-    Q_ASSERT(ok);
+    Preferences::AppSettings settings;
+    const int maxRecentFiles = settings.getMaxRecentCrosswordFiles();
 
-    m_RecentFiles = std::unique_ptr<AppInfo::RecentFileManager>(new AppInfo::RecentFileManager(this, m_Ui.get(), maxRecentFiles));
+    m_RecentFiles = std::unique_ptr<Editor::RecentFileManager>(new Editor::RecentFileManager(this, m_Ui.get(), maxRecentFiles));
 
     // Capture drag-and-drop events etc
     installEventFilter(this);
@@ -58,7 +58,7 @@ MainWindow::~MainWindow()
 void MainWindow::handleArgument(const QString& arg)
 {
     // Attempts to load the first (and only the first) file with a valid crossword extension (if any)
-    // If the arguments end with a file format extension,  try to load it
+    // If the arguments end with a file format extension, try to load it
     if(m_FormatSupport.isLoaderSupported(arg))
     {
         loadCrossword(arg);
@@ -79,11 +79,10 @@ void MainWindow::newCrossword()
 {
     NewCrosswordPage newCrosswordPage(this);
 
+    // TODO get a chosen template from this
     newCrosswordPage.exec();
 
-    // TODO Bring up a dialog with crossword templates
-
-    // m_Crossword->resetState();
+    // m_Crossword->setState(newCrosswordPage.getState());
 }
 
 void MainWindow::loadCrosswordDialog()
@@ -92,9 +91,16 @@ void MainWindow::loadCrosswordDialog()
     QStringList formats = m_FormatSupport.getSupportedLoadingExtensions();
     QString nameFilter = Utilities::createNameFilter(tr("Crossword Files"), formats);
 
-    // TODO try to get a default directory (in settings?) and set that e.g. a Crosswords folder
+    // Attempt to get the default directory for looking for crosswords in
+    Preferences::AppSettings settings;
+    QString defaultDirectory = settings.getCrosswordLoadPath();
+    QDir dir(defaultDirectory);
+    if(!dir.exists(defaultDirectory))
+    {
+        defaultDirectory = QString();
+    }
 
-    QString filepath = QFileDialog::getOpenFileName(this, tr("Open Crossword File"), QString(), nameFilter);
+    QString filepath = QFileDialog::getOpenFileName(this, tr("Open Crossword File"), defaultDirectory, nameFilter);
     if(!filepath.isNull())
     {
         // Convert the file path to use native directory separators
@@ -204,35 +210,52 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
     return crossword;
 }
 
-void MainWindow::saveCrosswordDialog()
+bool MainWindow::saveCrosswordDialog()
 {
+    // TODO
+    // If the puzzle has been saved under a file path already, then overwrite the file
+    // Otherwise open a dialog with a default name and a list of formats to choose from
+
+    // Attempt to use a default save directory
+    Preferences::AppSettings settings;
+    QString defaultDirectory = settings.getCrosswordSavePath();
+    QDir dir(defaultDirectory);
+    if(!dir.exists(defaultDirectory))
+    {
+        defaultDirectory = QString();
+    }
+
+    QString filepath = QFileDialog::getSaveFileName(this, tr("Save Crossword File"), defaultDirectory, QString());
+    if(filepath.isNull())
+    {
+        return false;
+    }
+
     QStringList formats = m_FormatSupport.getSupportedSavingExtensions();
     QString nameFilter = Utilities::createNameFilter(tr("Crossword Files"), formats);
 
-    // TODO if the puzzle has been saved under a name or has a file path associated with it, then overwrite the file
-    // Otherwise open a dialog with a default name and a list of formats to choose from
-    // Only if the extension given is a valid one should it agree to save the file
+    // Convert the file path to use native directory separators
+    QString nativeFilepath = QDir::toNativeSeparators(filepath);
 
-    QString filepath = QFileDialog::getSaveFileName(this, tr("Save Crossword File"), QString(), QString());
-    if(!filepath.isNull())
+    bool success = saveCrossword(nativeFilepath);
+
+    // After saving successfully, add the saved file to top of recent files list
+    if(success)
     {
-        // Convert the file path to use native directory separators
-        QString nativeFilepath = QDir::toNativeSeparators(filepath);
-
-        saveCrossword(nativeFilepath);
+        m_RecentFiles->addFile(nativeFilepath);
     }
 
-    // TODO after a "save as" event add the new file to recent files
+    return success;
 }
 
-void MainWindow::saveCrossword(const QString& filepath)
+bool MainWindow::saveCrossword(const QString& filepath)
 {
     bool saveable = m_Crossword->isSaveable();
 
     if(!saveable)
     {
         QMessageBox::information(this, tr("Could not save"), tr("This crossword is in an inconsistent state and could not be saved"));
-        return;
+        return false;
     }
 
     auto saver = m_FormatSupport.locateSaver(filepath);
@@ -241,7 +264,7 @@ void MainWindow::saveCrossword(const QString& filepath)
     {
         // It has the wrong extension
         QMessageBox::information(this, tr("Unrecognized file extension"), tr("Could not recognize file save type: %1").arg(filepath));
-        return;
+        return false;
     }
 
     bool success = saver->save(filepath, m_Crossword->getState());
@@ -250,11 +273,26 @@ void MainWindow::saveCrossword(const QString& filepath)
     {
         // The saver failed
         QMessageBox::information(this, tr("Save failed"), tr("Failed to save crossword file: %1").arg(filepath));
-        return;
+        return false;
     }
 
     bool consistent = m_Crossword->isValid();
     Q_ASSERT(consistent);
+
+    return true;
+}
+
+// Save the currently open crossword
+bool MainWindow::saveCurrentCrossword()
+{
+    if(m_Crossword->hasFilepath())
+    {
+        return saveCrossword(m_Crossword->getFilename());
+    }
+    else
+    {
+        return saveCrosswordDialog();
+    }
 }
 
 // Drag-and-drops
@@ -272,12 +310,12 @@ void MainWindow::loadFile(const QString& filepath)
 
 void MainWindow::printCrossword()
 {
-
+    // TODO
 }
 
 void MainWindow::emailCrossword()
 {
-
+    // TODO
 }
 
 void MainWindow::showCrosswordProperties()
@@ -291,7 +329,7 @@ void MainWindow::showCrosswordProperties()
 
 void MainWindow::showPreferences()
 {
-    Editor::PreferencesPage preferencesPage(this);
+    Editor::Preferences::PreferencesPage preferencesPage(this);
 
     preferencesPage.exec();
 }
@@ -300,6 +338,7 @@ void MainWindow::showPreferences()
 
 void MainWindow::fitGridsInView()
 {
+    // TODO
     // Call method on graphics scene/view to do this
 }
 
@@ -307,7 +346,7 @@ void MainWindow::fitGridsInView()
 
 void MainWindow::showHelp()
 {
-
+    // TODO
 }
 
 void MainWindow::showHomepage()
@@ -324,23 +363,55 @@ void MainWindow::showAbout()
     aboutPage.exec();
 }
 
+void MainWindow::showSupportEmail()
+{
+    // TODO internationalize this
+    QDesktopServices::openUrl(QUrl("mailto:sam@silver42.karoo.co.uk?subject=Support Email&body=Please send your support message"));
+}
+
 // Exiting the application
 
-void MainWindow::showQuitConfirmation()
+bool MainWindow::showQuitConfirmation()
 {
-    // TODO only show this if the puzzle has been touched after the last save
+    QMessageBox msgBox(this);
+    msgBox.setText(tr("Do you want to save your changes to %1?").arg(m_Crossword->getFilename()));
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.button(QMessageBox::Discard)->setText(tr("Don't Save"));
+    msgBox.setDefaultButton(QMessageBox::Save);
+    // TODO center the buttons on this messagebox
+    // ...
+    // TODO check this behaviour isn't buggy!
 
-    auto response = QMessageBox::question(this, tr("Quit confirmation"), tr("Are you sure you want to quit?"));
+    auto save = msgBox.exec();
 
-    if(QMessageBox::Yes == response)
+    if(QMessageBox::Yes == save)
     {
-        MainWindow::close();
+        saveCurrentCrossword();
+
+        return true;
     }
+    else if(QMessageBox::No == save)
+    {
+        return true;
+    }
+    else if(QMessageBox::Cancel == save)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    event->accept();
+    if(showQuitConfirmation())
+    {
+        event->accept();
+    }
+    else
+    {
+        event->ignore();
+    }
 }
 
 // Event interception

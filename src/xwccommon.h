@@ -29,6 +29,10 @@ public:
     static const QChar whiteSquare; // White empty squares
     static const QChar blackSquare; // Black filled-in squares
     static const QChar clueAttributeSeparator; // The separator between elements of clues
+
+    static const QString TXWordGridVersionIdentifier; // A version identifier (TODO ask Ian if there are other versions)
+    static const QString TXWordGrid3VersionIdentifier; // A version identifier (TODO ask Ian if there are other versions)
+
 };
 
 }

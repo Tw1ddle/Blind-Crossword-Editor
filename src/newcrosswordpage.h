@@ -22,6 +22,13 @@ private:
     Ui::NewCrosswordPage* ui;
 
     void setupContent();
+
+private slots:
+    // On crossword template selection
+    void quickSelected();
+    void rectangularSelected();
+    void combinationLockSelected();
+    void barredSelected();
 };
 
 }

@@ -43,7 +43,15 @@ HEADERS += \
     src/crosswordtemplates.h \
     src/newcrosswordpage.h \
     src/crosswordstatistics.h \
-    src/newcrosswordcluepage.h
+    src/newcrosswordcluepage.h \
+    src/gridclue.h \
+    src/gridshape.h \
+    src/acrosslitetextloader.h \
+    src/acrosslitetextcommon.h \
+    src/acrosslitetextsaver.h \
+    src/webglsaver.h \
+    src/gridfillalgorithm.h \
+    src/wordlist.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -85,4 +93,12 @@ SOURCES += \
     src/crosswordtemplates.cpp \
     src/newcrosswordpage.cpp \
     src/crosswordstatistics.cpp \
-    src/newcrosswordcluepage.cpp
+    src/newcrosswordcluepage.cpp \
+    src/gridclue.cpp \
+    src/gridshape.cpp \
+    src/acrosslitetextloader.cpp \
+    src/acrosslitetextcommon.cpp \
+    src/acrosslitetextsaver.cpp \
+    src/webglsaver.cpp \
+    src/gridfillalgorithm.cpp \
+    src/wordlist.cpp

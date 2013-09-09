@@ -40,6 +40,14 @@ inline QString getInvalidCrosswordTestPath()
     return path;
 }
 
+// Directory for saving puzzles in during the
+inline QString getSaveTestDirectoryPath()
+{
+    auto path = Utilities::getApplicationDirPath().append("/test/savetests/");
+
+    return path;
+}
+
 }
 
 #endif // TESTCOMMON_H

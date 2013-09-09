@@ -23,6 +23,9 @@ bool Crossword::Formats::XWC3DLoader::load(const QString& filepath, Crossword::C
         return false;
     }
 
+    // Datasources
+    puzzle.m_DataSources.m_PuzzleFilePath = filepath;
+
     success = loadMetadata(puzzle, data);
     if(!success)
     {
@@ -129,7 +132,7 @@ bool XWC3DLoader::loadGridHighlights(CrosswordState& puzzle, QStringList& lines)
             QString colourName = currentHighlight.takeFirst();
 
             // TODO apply the highlights to the grid
-            puzzle.m_GridState;
+            Q_UNUSED(puzzle);
 
             Q_UNUSED(x);
             Q_UNUSED(y);
@@ -192,11 +195,11 @@ bool XWC3DLoader::readGrid(CrosswordState& puzzle, QStringList& lines, std::pair
 
                     if(currentCharacter == XWC3D::Common::blackSquare)
                     {
-                        puzzle.m_GridState.m_Grid.push_back(std::make_pair(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
+                        puzzle.m_GridState.m_Grid.push_back(std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
                     }
                     else
                     {
-                        puzzle.m_GridState.m_Grid.push_back(std::make_pair(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
+                        puzzle.m_GridState.m_Grid.push_back(std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
                     }
                 }
             }
@@ -222,12 +225,12 @@ bool XWC3DLoader::readGrid(CrosswordState& puzzle, QStringList& lines, std::pair
                         if(currentLine.at(0) == XWC3D::Common::blackSquare)
                         {
                             puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_pair(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
+                                        std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
                         }
                         else
                         {
                             puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_pair(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::black))));
+                                        std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::black))));
                         }
                     }
                 }
@@ -240,12 +243,12 @@ bool XWC3DLoader::readGrid(CrosswordState& puzzle, QStringList& lines, std::pair
                         if(currentLine.at(z) == XWC3D::Common::blackSquare)
                         {
                             puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_pair(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
+                                        std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
                         }
                         else
                         {
                             puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_pair(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
+                                        std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
                         }
                     }
                 }
@@ -290,7 +293,7 @@ bool XWC3DLoader::loadClues(CrosswordState& puzzle, QStringList& lines) const
     return true;
 }
 
-bool XWC3DLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, Crossword::Formats::Directions direction) const
+bool XWC3DLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines, Crossword::Formats::Direction direction) const
 {
     // Get the number of clues for the given direction
     bool ok;
@@ -300,7 +303,6 @@ bool XWC3DLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lin
         return false;
     }
 
-    // TODO Fetch the guess for the clue within the grid
     for(int i = 0; i < numClues; i++)
     {
         QStringList currentClue = lines.takeFirst().split(XWC3D::Common::clueAttributeSeparator);
@@ -309,13 +311,14 @@ bool XWC3DLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lin
         QString identifier = currentClue.takeFirst();
         Q_UNUSED(identifier);
 
-        // The clue number as shown to an end user
-        QString number = currentClue.takeFirst();
-
-        // The letter positions of the clue guess
-        std::vector<Vec3i> letterPositions;
-        if(direction != Formats::Directions::SNAKING)
+        if(direction != Formats::Direction::SNAKING)
         {
+            // The clue number as shown to an end user
+            QString number = currentClue.takeFirst();
+
+            // The letter positions of the clue guess
+            std::vector<Vec3i> letterPositions;
+
             // The starting coordinate of the clue
             QStringList startPositionList = currentClue.takeFirst().split(XWC3D::Common::subattributeSeparator);
             int gridX = startPositionList.takeFirst().toInt() - 1;
@@ -323,50 +326,113 @@ bool XWC3DLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lin
             int gridZ = startPositionList.takeFirst().toInt() - 1;
             VectorMath::Vec3i startPosition(gridX, gridY, gridZ);
 
-            letterPositions = loadLetterPositionsForDirection(direction, startPosition);
+            QString length = currentClue.takeFirst();
+
+            letterPositions = loadLetterPositionsForDirection(direction, startPosition, length.toInt());
+
+            QString guessText = currentClue.takeFirst();
+
+            QString clueText = currentClue.takeFirst();
+
+            QString clueComponentLengths = currentClue.takeFirst();
+
+            // Convert the direction enum to a string
+            auto directions = Formats::Common::getDirections();
+            QString directionString = directions.key(direction);
+
+            CrosswordClue clue(number, guessText, "", clueText, directionString, clueComponentLengths, letterPositions);
+
+            Q_ASSERT(clue.getDirection() == directionString);
+
+            puzzle.m_ClueState.m_Clues.push_back(clue);
         }
-        else
+        else if(direction == Formats::Direction::SNAKING)
         {
-            letterPositions = loadLetterPositionsForDirection(direction);
+            // Indices at which clue numbers appear
+            QStringList clueIndices = currentClue.takeFirst().split(XWC3D::Common::subattributeSeparator);
+            // The clue numbers
+            QString numbers = currentClue.takeFirst();
+
+            // Number of letters
+            int length = currentClue.takeFirst().toInt();
+
+            // Coordinates of letters
+            std::vector<Vec3i> letterPositions;
+            for(int i = 0; i < length; i++)
+            {
+                QStringList coordinate = currentClue.takeFirst().split(XWC3D::Common::subattributeSeparator);
+                int gridX = coordinate.takeFirst().toInt() - 1;
+                int gridY = coordinate.takeFirst().toInt() - 1;
+                int gridZ = coordinate.takeFirst().toInt() - 1;
+
+                letterPositions.push_back(Vec3i(gridX, gridY, gridZ));
+            }
+
+            QString guessText = currentClue.takeFirst();
+            QString clueText = currentClue.takeFirst();
+
+            QString clueComponentLengths = currentClue.takeFirst();
+
+            // Convert the direction enum to a string
+            auto directions = Formats::Common::getDirections();
+            QString directionString = directions.key(direction);
+
+            CrosswordClue clue(numbers, guessText, "", clueText, directionString, clueComponentLengths, letterPositions);
+
+            puzzle.m_ClueState.m_Clues.push_back(clue);
         }
-
-        // TODO add assertion
-        QString length = currentClue.takeFirst();
-        Q_UNUSED(length);
-
-        QString guessText = currentClue.takeFirst();
-
-        QString clueText = currentClue.takeFirst();
-
-        // TODO pass this in
-        QString clueComponentLengths = currentClue.takeFirst();
-        Q_UNUSED(clueComponentLengths);
-
-        // Convert the direction enum to a string
-        auto directions = Formats::Common::getDirections();
-        QString directionString = directions.key(direction);
-
-        CrosswordClue clue(number, guessText, "", clueText, directionString, letterPositions);
-
-        puzzle.m_ClueState.m_Clues.push_back(clue);
     }
 
     return true;
 }
 
-
-const std::vector<Vec3i> XWC3DLoader::loadLetterPositionsForDirection(Directions direction, Vec3i startPosition) const
+const std::vector<Vec3i> XWC3DLoader::loadLetterPositionsForDirection(Direction direction, Vec3i startPosition, int solutionLength) const
 {
-    // TODO
-    Q_UNUSED(direction);
-    Q_UNUSED(startPosition);
+    // Get the positions of the letters in the grid
+    std::vector<VectorMath::Vec3i> letterPositions;
 
-    return std::vector<Vec3i>();
-}
+    if(Direction::ACROSS == direction)
+    {
+        for(int i = 0; i < solutionLength; i++)
+        {
+            letterPositions.push_back(startPosition + VectorMath::Vec3i(i, 0, 0));
+        }
+    }
+    else if(Direction::BACKWARDS == direction)
+    {
+        for(int i = 0; i < solutionLength; i++)
+        {
+            letterPositions.push_back(startPosition - VectorMath::Vec3i(i, 0, 0));
+        }
+    }
+    else if(Direction::AWAY == direction)
+    {
+        for(int i = 0; i < solutionLength; i++)
+        {
+            letterPositions.push_back(startPosition + VectorMath::Vec3i(0, i, 0));
+        }
+    }
+    else if(Direction::TOWARDS == direction)
+    {
+        for(int i = 0; i < solutionLength; i++)
+        {
+            letterPositions.push_back(startPosition - VectorMath::Vec3i(0, i, 0));
+        }
+    }
+    else if(Direction::DOWN == direction)
+    {
+        for(int i = 0; i < solutionLength; i++)
+        {
+            letterPositions.push_back(startPosition + VectorMath::Vec3i(0, 0, i));
+        }
+    }
+    else if(Direction::UP == direction)
+    {
+        for(int i = 0; i < solutionLength; i++)
+        {
+            letterPositions.push_back(startPosition - VectorMath::Vec3i(0, 0, i));
+        }
+    }
 
-const std::vector<Vec3i> XWC3DLoader::loadLetterPositionsForDirection(Directions direction) const
-{
-    Q_UNUSED(direction);
-
-    return std::vector<Vec3i>();
+    return letterPositions;
 }

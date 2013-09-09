@@ -1,8 +1,12 @@
 #include "crosswordstatistics.h"
 
+#include "formatscommon.h"
+#include "appsettings.h"
+
 namespace Editor
 {
 
+// TODO solution grid or puzzle grid??
 QString numLettersInGrid(const Crossword::CrosswordState& state)
 {
     auto& grid = state.m_GridState.m_Grid;
@@ -11,7 +15,7 @@ QString numLettersInGrid(const Crossword::CrosswordState& state)
 
     for(auto& item : grid)
     {
-        QString itemText = item.second.getText();
+        QString itemText = std::get<Crossword::CrosswordState::GridState::SOLUTION>(item).getText();
 
         numLetters += itemText.size();
     }
@@ -28,6 +32,7 @@ QString numItemsInGrid(const Crossword::CrosswordState& state)
     return QString::number(numItems);
 }
 
+// TODO solution grid or puzzle grid??
 QString numEmptiesInGrid(const Crossword::CrosswordState& state)
 {
     auto& grid = state.m_GridState.m_Grid;
@@ -36,7 +41,7 @@ QString numEmptiesInGrid(const Crossword::CrosswordState& state)
 
     for(auto& item : grid)
     {
-        QString itemText = item.second.getText();
+        QString itemText = std::get<Crossword::CrosswordState::GridState::SOLUTION>(item).getText();
 
         if(itemText.size() == 0)
         {
@@ -45,6 +50,37 @@ QString numEmptiesInGrid(const Crossword::CrosswordState& state)
     }
 
     return QString::number(numEmpties);
+}
+
+QString numClues(const Crossword::CrosswordState& state)
+{
+    auto size = state.m_ClueState.m_Clues.size();
+
+    return QString::number(size);
+}
+
+QString numCluesForDirection(const Crossword::CrosswordState& state, const QString& direction)
+{
+    auto directions = Crossword::Formats::Common::getDirections();
+
+    // Bad direction
+    if(!directions.contains(direction))
+    {
+        return "0";
+    }
+
+    auto& clues = state.m_ClueState.m_Clues;
+
+    int numClues = 0;
+    for(auto& clue : clues)
+    {
+        if(clue.getDirection() == direction)
+        {
+            numClues++;
+        }
+    }
+
+    return QString::number(numClues);
 }
 
 }

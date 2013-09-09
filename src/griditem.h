@@ -21,7 +21,10 @@ public:
 protected:
     QPen& getPen();
 
+    QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) override;
+
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent* event) override;
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent* event) override;

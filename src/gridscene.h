@@ -9,6 +9,8 @@
 namespace Grid
 {
 
+class GridShape;
+
 // Base class for scenes that display the crossword grids
 class GridScene : public QGraphicsScene
 {
@@ -20,10 +22,37 @@ public:
 protected:
     InternalInterface::CrosswordStateToGridScene* getCrosswordState();
 
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+
+    virtual void keyPressEvent(QKeyEvent* event) override;
+    virtual void keyReleaseEvent(QKeyEvent* event) override;
+
+
+
+    QList<Grid::GridShape*> getSelectedGridShapes();
+
+    virtual void typeInItems(const QString& text, QList<GridShape*>& items);
+
+    // Actions the user is performing on the grid
+    enum UserState
+    {
+        FILLING_GRID,
+        SELECTING_CLUE
+    };
 
 private:
     InternalInterface::CrosswordStateToGridScene* m_CrosswordState;
+
+    void addClue();
+    void createClueFromSelection();
+    virtual bool advance() = 0; // Get the next item in the grid. Assumes puzzles have some concept of order or direction.
+
+    bool m_LeftMouseDown;
+
+    UserState m_State;
 };
 
 }

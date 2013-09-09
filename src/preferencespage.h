@@ -11,6 +11,9 @@ namespace Ui
 namespace Editor
 {
 
+namespace Preferences
+{
+
 class PreferencesPage : public QDialog
 {
     Q_OBJECT
@@ -20,8 +23,12 @@ public:
     ~PreferencesPage();
     
 private:
+    void setupFolders();
+
     Ui::PreferencesPage *ui;
 };
+
+}
 
 }
 

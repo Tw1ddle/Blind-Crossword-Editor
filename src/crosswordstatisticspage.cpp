@@ -33,6 +33,8 @@ void CrosswordStatisticsPage::setupContent(const Crossword::CrosswordState& stat
     ui->numSquares->setText(numItemsInGrid(state));
     ui->numLetters->setText(numLettersInGrid(state));
     ui->numEmpties->setText(numEmptiesInGrid(state));
+
+    ui->numClues->setText(numClues(state));
 }
 
 }

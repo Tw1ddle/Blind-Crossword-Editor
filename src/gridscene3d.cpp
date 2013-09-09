@@ -7,4 +7,10 @@ GridScene3D::GridScene3D(QObject* parent, InternalInterface::CrosswordStateToGri
 {
 }
 
+bool GridScene3D::advance()
+{
+    // TODO
+    return false;
+}
+
 }

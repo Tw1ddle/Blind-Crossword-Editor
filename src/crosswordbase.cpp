@@ -1,6 +1,7 @@
 #include "crosswordbase.h"
 
 #include <QGraphicsView>
+#include <QFileInfo>
 
 #include "gridscene2d.h"
 #include "gridscene3d.h"
@@ -19,7 +20,7 @@ CrosswordBase::CrosswordBase()
 
 bool CrosswordBase::isValid() const
 {
-    // A lot of sanity checking about the state of the puzzle should go here
+    // TODO A lot of sanity checking about the state of the puzzle should go here
 
     return true;
 }
@@ -27,6 +28,27 @@ bool CrosswordBase::isValid() const
 bool CrosswordBase::isSaveable() const
 {
     return isValid();
+}
+
+bool CrosswordBase::hasFilepath() const
+{
+    return !m_State->m_DataSources.m_PuzzleFilePath.isEmpty();
+}
+
+QString CrosswordBase::getFilepath() const
+{
+    Q_ASSERT(hasFilepath());
+
+    return m_State->m_DataSources.m_PuzzleFilePath;
+}
+
+QString CrosswordBase::getFilename() const
+{
+    Q_ASSERT(hasFilepath());
+
+    QFileInfo info(getFilepath());
+
+    return info.fileName();
 }
 
 CrosswordState::ClueState& CrosswordBase::getClues()
@@ -39,11 +61,26 @@ CrosswordState::GridState& CrosswordBase::getGrid()
     return m_State->m_GridState;
 }
 
+void CrosswordBase::addClue(const CrosswordClue& clue)
+{
+    m_State->m_ClueState.m_Clues.push_back(clue);
+}
+
+const CrosswordClue& CrosswordBase::getLastAddedClue() const
+{
+    return m_State->m_ClueState.m_Clues.back();
+}
+
 void CrosswordBase::resetState()
 {
     auto blankState = std::unique_ptr<CrosswordState>(new CrosswordState);
 
     m_State.swap(blankState);
+}
+
+void CrosswordBase::setState(std::unique_ptr<CrosswordState>& nextState)
+{
+    m_State.swap(nextState);
 }
 
 void CrosswordBase::setScene(QGraphicsView* view)
@@ -73,7 +110,7 @@ void CrosswordBase::setScene(QGraphicsView* view)
     else
     {
         // If the format isn't one the program has a native loader for but we've got this far, assume it's a 2D puzzle
-        Q_ASSERT(false); // TODO remove if proper support for plugin loaders/savers is added
+        Q_ASSERT(false); // Remove this failure if proper support for plugin loaders/savers is added
 
         scene = new Grid::GridScene2D(view, this);
     }

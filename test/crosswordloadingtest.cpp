@@ -19,7 +19,7 @@ QStringList CrosswordLoadingTest::getTestDataFilepaths(QString dirPath)
 {
     QDir testDataDir(dirPath);
 
-    auto files = Utilities::getFilenamesInDirectory(testDataDir);
+    auto files = Utilities::getFilepathsInDirectory(testDataDir);
 
     if(files.empty())
     {

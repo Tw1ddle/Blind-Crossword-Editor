@@ -4,6 +4,8 @@
 #include "xwcsaver.h"
 #include "xwc3dloader.h"
 #include "xwc3dsaver.h"
+#include "acrosslitetextloader.h"
+#include "acrosslitetextsaver.h"
 #include "plaintextsaver.h"
 
 #include <QtAlgorithms>
@@ -118,8 +120,9 @@ void CrosswordFormatSupportLocator::registerFormats()
     registerLoader(new CrosswordFormat(XWC3D100), new XWC3DLoader());
     registerSaver(new CrosswordFormat(XWC3D100), new XWC3DSaver());
 
-    // Save to plain text
-    registerSaver(new CrosswordFormat(PLAINTEXT100), new PlainTextSaver());
+    // Across Lite Text support
+    registerLoader(new CrosswordFormat(ACROSSLITETEXT), new AcrossLiteTextLoader());
+    registerSaver(new CrosswordFormat(ACROSSLITETEXT), new AcrossLiteTextSaver());
 
     // TODO More file support... could scan a directory for .dlls or something
 }

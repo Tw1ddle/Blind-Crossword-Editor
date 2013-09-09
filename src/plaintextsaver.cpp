@@ -45,7 +45,7 @@ bool PlainTextSaver::save(const QString& filepath, const CrosswordState& state) 
         // TODO save all the clue details
         clueString.append(clue.getClue());
         clueString.append(clue.getNumber());
-        clueString.append(clue.getSolution());
+        // TODO clueString.append(clue.getSolution());
         clueString.append(clue.getDirection());
 
         auto& letterPositions = clue.getLetterPositions();

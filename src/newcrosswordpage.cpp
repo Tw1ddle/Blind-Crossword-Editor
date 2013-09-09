@@ -9,6 +9,8 @@ NewCrosswordPage::NewCrosswordPage(QWidget* parent) :
     ui(new Ui::NewCrosswordPage)
 {
     ui->setupUi(this);
+
+    setupContent();
 }
 
 
@@ -19,7 +21,22 @@ NewCrosswordPage::~NewCrosswordPage()
 
 void NewCrosswordPage::setupContent()
 {
-    
+}
+
+void NewCrosswordPage::quickSelected()
+{
+}
+
+void NewCrosswordPage::rectangularSelected()
+{
+}
+
+void NewCrosswordPage::combinationLockSelected()
+{
+}
+
+void NewCrosswordPage::barredSelected()
+{
 }
 
 }

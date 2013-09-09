@@ -11,6 +11,9 @@ class GridScene3D : public Grid::GridScene
 {
 public:
     GridScene3D(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
+
+private:
+    virtual bool advance() override;
 };
 
 }

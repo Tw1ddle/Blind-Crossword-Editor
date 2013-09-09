@@ -105,6 +105,19 @@ QStringList getFilenamesInDirectory(const QDir& directory)
     return fileNames;
 }
 
+QStringList getFilepathsInDirectory(const QDir& directory)
+{
+    auto fileNames = directory.entryList(QDir::NoDotAndDotDot | QDir::Files);
+
+    QStringList filepaths;
+    for(auto& file : fileNames)
+    {
+        filepaths.append(directory.absoluteFilePath(file));
+    }
+
+    return filepaths;
+}
+
 const QStringList filterByExtension(const QStringList& filenames, const QString& extension)
 {
     auto filteredList = filenames.filter(QString("*.").append(extension));

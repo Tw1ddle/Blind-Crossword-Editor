@@ -11,7 +11,7 @@ namespace Ui
     class MainWindow;
 }
 
-namespace AppInfo
+namespace Editor
 {
     class RecentFileManager;
 }
@@ -54,14 +54,15 @@ private:
 private slots:
     // File menu
     void loadCrosswordDialog();
-    void saveCrosswordDialog();
+    bool saveCrosswordDialog();
 
     void newCrossword();
-    void saveCrossword(const QString& filepath);
+    bool saveCrossword(const QString& filepath);
+    bool saveCurrentCrossword();
     void printCrossword();
     void emailCrossword();
     void showCrosswordProperties();
-    void showQuitConfirmation();
+    bool showQuitConfirmation();
 
     // Edit
     void showPreferences();
@@ -73,10 +74,11 @@ private slots:
     void showHelp();
     void showHomepage();
     void showAbout();
+    void showSupportEmail();
 
 private:
     std::unique_ptr<Ui::MainWindow> m_Ui;
-    std::unique_ptr<AppInfo::RecentFileManager> m_RecentFiles; // To set up and update recently opened file paths
+    std::unique_ptr<Editor::RecentFileManager> m_RecentFiles; // To set up and update recently opened file paths
 
     std::unique_ptr<Crossword::CrosswordBase> m_Crossword;
     Crossword::Formats::CrosswordFormatSupportLocator m_FormatSupport;

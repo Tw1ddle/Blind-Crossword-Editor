@@ -5,6 +5,7 @@
 #include <QStringList>
 
 #include "crosswordloadingtest.h"
+#include "crosswordsavingtest.h"
 
 namespace Tests
 {
@@ -22,6 +23,10 @@ TestRunner::TestRunner()
     CrosswordLoadingTest crosswordLoadingTest;
 
     QTest::qExec(&crosswordLoadingTest, testCommand);
+
+    CrosswordSavingTest crosswordSavingTest;
+
+    QTest::qExec(&crosswordSavingTest, testCommand);
 }
 
 }

@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <vector>
+#include <tuple>
 
 #include "crosswordclue.h"
 #include "crossworditem.h"
@@ -51,7 +52,14 @@ public:
     struct GridState
     {
         VectorMath::Vec3i m_Dimensions;
-        std::vector<std::pair<VectorMath::Vec3i, CrosswordItem>> m_Grid;
+
+        // Tuple indices
+        enum
+        {
+            COORDINATE,
+            SOLUTION
+        };
+        std::vector<std::tuple<VectorMath::Vec3i, CrosswordItem>> m_Grid;
     };
     GridState m_GridState;
 

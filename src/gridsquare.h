@@ -1,14 +1,12 @@
 #ifndef GRIDSQUARE_H
 #define GRIDSQUARE_H
 
-#include "griditem.h"
-
-#include "crossworditem.h"
+#include "gridshape.h"
 
 namespace Grid
 {
 
-class GridSquare : public GridItem
+class GridSquare : public GridShape
 {
 public:
     GridSquare(Crossword::CrosswordItem& item, float width, float height);
@@ -18,15 +16,14 @@ public:
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
-private:
-    Crossword::CrosswordItem& m_Item;
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
-    float m_Width;
-    float m_Height;
+private:
 };
 
 }

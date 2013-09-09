@@ -3,6 +3,10 @@
 
 #include <QDialog>
 
+#include "crosswordclue.h"
+#include "crosswordstate.h"
+#include "gridshape.h"
+
 namespace Ui
 {
     class NewCrosswordCluePage;
@@ -15,11 +19,19 @@ class NewCrosswordCluePage : public QDialog
 {
     Q_OBJECT
 public:
-    explicit NewCrosswordCluePage(QWidget* parent = 0);
+    explicit NewCrosswordCluePage(const Crossword::CrosswordState::ClueState& clueState, const QList<Grid::GridShape*> gridShapes, QWidget* parent = 0);
     ~NewCrosswordCluePage();
+
+    // Get the clue specified by the user
+    Crossword::CrosswordClue getClue();
 
 private:
     Ui::NewCrosswordCluePage* ui;
+
+    void setupContent();
+
+    const Crossword::CrosswordState::ClueState& m_ClueState;
+    const QList<Grid::GridShape*> m_GridShapes;
 };
 
 }

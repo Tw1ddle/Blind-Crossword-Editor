@@ -2,12 +2,14 @@
 
 #include <QSettings>
 #include <QApplication>
+#include <QDir>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "appsettings.h"
 
-using namespace AppInfo;
+using namespace Editor;
+using namespace Editor::Preferences;
 
 RecentFileManager::RecentFileManager(Editor::MainWindow* window, Ui::MainWindow* ui, int maxFiles) :
     m_MaxFiles(maxFiles)
@@ -34,51 +36,53 @@ void RecentFileManager::createActions(Editor::MainWindow* window, Ui::MainWindow
     }
 }
 
-// TODO Check for a bug that can occur - filepaths can be implementation/OS dependent e.g. separators
 void RecentFileManager::addFile(const QString& filepath)
 {
-    QSettings settings;
-    QStringList files = settings.value(SettingsKeys::recentCrosswordFiles).toStringList();
+    // Filepaths can be implementation/OS dependent. We expect native separators, so check:
+    Q_ASSERT(QDir::toNativeSeparators(filepath) == filepath);
 
-    files.removeAll(filepath); // Remove duplicates
+    Preferences::AppSettings settings;
+    QStringList filepaths = settings.getRecentCrosswordFilepaths();
 
-    files.prepend(filepath);
+    filepaths.removeAll(filepath); // Remove duplicates
 
-    while(files.size() > m_MaxFiles)
+    filepaths.prepend(filepath);
+
+    while(filepaths.size() > m_MaxFiles)
     {
-        files.removeLast();
+        filepaths.removeLast();
     }
 
-    settings.setValue(SettingsKeys::recentCrosswordFiles, files);
+    settings.setRecentCrosswordFilepaths(filepaths);
 
     updateActions();
 }
 
 void RecentFileManager::removeFile(const QString& filepath)
 {
-    QSettings settings;
-    QStringList files = settings.value(SettingsKeys::recentCrosswordFiles).toStringList();
+    Preferences::AppSettings settings;
+    QStringList filepaths = settings.getRecentCrosswordFilepaths();
 
-    files.removeAll(filepath);
+    filepaths.removeAll(filepath);
 
-    settings.setValue(SettingsKeys::recentCrosswordFiles, files);
+    settings.setRecentCrosswordFilepaths(filepaths);
 
     updateActions();
 }
 
 void RecentFileManager::clearFiles()
 {
-    QSettings settings;
+    Preferences::AppSettings settings;
 
-    settings.remove(SettingsKeys::recentCrosswordFiles);
+    settings.clearRecentCrosswordFilepaths();
 
     updateActions();
 }
 
 void RecentFileManager::updateActions()
 {
-    QSettings settings;
-    QStringList files = settings.value(SettingsKeys::recentCrosswordFiles).toStringList();
+    Preferences::AppSettings settings;
+    QStringList files = settings.getRecentCrosswordFilepaths();
 
     // Set up and show recently loaded files
     int numRecentFiles = qMin(files.size(), m_MaxFiles);

@@ -12,6 +12,9 @@ namespace Editor
 QString numLettersInGrid(const Crossword::CrosswordState& state);
 QString numItemsInGrid(const Crossword::CrosswordState& state);
 QString numEmptiesInGrid(const Crossword::CrosswordState& state);
+QString numClues(const Crossword::CrosswordState& state);
+
+QString numCluesForDirection(const Crossword::CrosswordState& state, const QString& direction);
 
 }
 

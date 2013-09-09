@@ -34,16 +34,21 @@ AboutPage::~AboutPage()
 
 void AboutPage::showLicensePage()
 {
-    LicensePage licensePage;
+    LicensePage licensePage(this);
 
     licensePage.exec();
 }
 
 void AboutPage::showContributorsPage()
 {
-    ContributorsPage contributorsPage;
+    ContributorsPage contributorsPage(this);
 
     contributorsPage.exec();
+}
+
+void AboutPage::showAboutQt()
+{
+    QApplication::aboutQt();
 }
 
 }

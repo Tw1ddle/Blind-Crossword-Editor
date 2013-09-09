@@ -36,12 +36,9 @@ win32 {
 # Application metadata
 VERSION = 0.1.0
 QMAKE_TARGET_PRODUCT = "Blind Crossword Editor"
-QMAKE_TARGET_DESCRIPTION = "An accessible 2D and 3D crossword editor"
-QMAKE_TARGET_COMPANY = "3D Crosswords Limited"
-QMAKE_TARGET_COPYRIGHT = "Copyright 2013"
-
-# Additional languages
-TRANSLATIONS += blind-crossword-editor_de.ts
+QMAKE_TARGET_DESCRIPTION = "An accessible 2D and 3D crossword editor."
+QMAKE_TARGET_COMPANY = "3D Crosswords Limited."
+QMAKE_TARGET_COPYRIGHT = "Copyright 2013."
 
 # Pass macros to the C preprocessor with the application metadata
 DEFINES += \
@@ -56,6 +53,7 @@ DEFINES += \
 
 
 include(test/tests.pri)
+include(lang/lang.pri)
 include(src/src.pro)
 
 FORMS += \
@@ -71,7 +69,3 @@ FORMS += \
 
 RESOURCES += \
     res/resources.qrc
-
-OTHER_FILES += \
-    test/tests.pri \
-    src/src.pro

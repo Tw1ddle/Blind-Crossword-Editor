@@ -16,7 +16,7 @@ namespace Editor
     class MainWindow;
 }
 
-namespace AppInfo
+namespace Editor
 {
 
 // Models "recently opened file list" functionality for crossword puzzle files

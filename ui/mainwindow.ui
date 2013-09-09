@@ -30,7 +30,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QGraphicsView" name="graphicsView">
+       <widget class="Grid::GridView" name="graphicsView">
         <property name="acceptDrops">
          <bool>false</bool>
         </property>
@@ -64,15 +64,42 @@
     </property>
     <widget class="QMenu" name="menuRecent_Files">
      <property name="title">
-      <string>Recent Files</string>
+      <string>Open Recent</string>
      </property>
      <addaction name="actionClear_Recent_Files"/>
      <addaction name="separator"/>
+    </widget>
+    <widget class="QMenu" name="menuExport">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>Export</string>
+     </property>
+     <addaction name="actionPDF"/>
+     <addaction name="actionTo_WebGL"/>
+     <addaction name="separator"/>
+     <addaction name="actionWebGL"/>
+     <addaction name="actionCanvas"/>
+    </widget>
+    <widget class="QMenu" name="menuCopy_to_Clipboard">
+     <property name="title">
+      <string>Copy to Clipboard</string>
+     </property>
+     <addaction name="actionClues_2"/>
+     <addaction name="actionSolutions"/>
+     <addaction name="actionPuzzle_Grid"/>
+     <addaction name="actionSolution_Grid"/>
     </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="menuRecent_Files"/>
     <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="menuExport"/>
+    <addaction name="menuCopy_to_Clipboard"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint"/>
     <addaction name="separator"/>
     <addaction name="actionProperties"/>
     <addaction name="separator"/>
@@ -215,7 +242,82 @@
     <string>Email Support</string>
    </property>
   </action>
+  <action name="actionTo_WebGL">
+   <property name="text">
+    <string>Image</string>
+   </property>
+  </action>
+  <action name="actionWebGL">
+   <property name="text">
+    <string>WebGL</string>
+   </property>
+  </action>
+  <action name="actionHTML_Canvas">
+   <property name="text">
+    <string>HTML Canvas...</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionCanvas">
+   <property name="text">
+    <string>HTML5 Canvas</string>
+   </property>
+  </action>
+  <action name="actionPDF">
+   <property name="text">
+    <string>Adobe PDF</string>
+   </property>
+  </action>
+  <action name="actionClues">
+   <property name="text">
+    <string>Puzzle</string>
+   </property>
+  </action>
+  <action name="actionSolution">
+   <property name="text">
+    <string>Solution</string>
+   </property>
+  </action>
+  <action name="actionNumbered_Solution">
+   <property name="text">
+    <string>Numbered Solution</string>
+   </property>
+  </action>
+  <action name="actionClues_2">
+   <property name="text">
+    <string>Clues</string>
+   </property>
+  </action>
+  <action name="actionSolutions">
+   <property name="text">
+    <string>Solution Words</string>
+   </property>
+  </action>
+  <action name="actionPuzzle_Grid">
+   <property name="text">
+    <string>Puzzle Grid</string>
+   </property>
+  </action>
+  <action name="actionSolution_Grid">
+   <property name="text">
+    <string>Solution Grid</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Grid::GridView</class>
+   <extends>QGraphicsView</extends>
+   <header>gridview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -346,6 +448,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionEmail_Support</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showSupportEmail()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showAbout()</slot>
@@ -356,5 +474,6 @@
   <slot>showPreferences()</slot>
   <slot>showCrosswordProperties()</slot>
   <slot>newCrossword()</slot>
+  <slot>showSupportEmail()</slot>
  </slots>
 </ui>

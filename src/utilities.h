@@ -24,6 +24,9 @@ namespace Utilities
     // Gets all the filenames of files in the directory, but not that of folders
     QStringList getFilenamesInDirectory(const QDir& directory);
 
+    // Gets all the filepaths of files in the directory, but not that of folders
+    QStringList getFilepathsInDirectory(const QDir& directory);
+
     // Return file paths/names that match the given file extension
     const QStringList filterByExtension(const QStringList& filenames, const QString& extension);
 

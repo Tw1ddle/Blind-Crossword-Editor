@@ -2,11 +2,12 @@
 
 #include <QPainter>
 #include <QPen>
+#include <QList>
 
 namespace Grid
 {
 
-GridSquare::GridSquare(Crossword::CrosswordItem& item, float width, float height) : m_Item(item), m_Width(width), m_Height(height)
+GridSquare::GridSquare(Crossword::CrosswordItem& item, float width, float height) : GridShape(item, width, height)
 {
 }
 
@@ -39,18 +40,38 @@ void GridSquare::mousePressEvent(QGraphicsSceneMouseEvent* event)
     GridItem::mousePressEvent(event);
 }
 
+void GridSquare::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+{
+    GridItem::mouseReleaseEvent(event);
+}
+
 void GridSquare::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
 {
-    getPen().setColor(QColor(Qt::red));
-
     GridItem::hoverEnterEvent(event);
 }
 
 void GridSquare::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
 {
-    getPen().setColor(QColor(Qt::blue));
-
     GridItem::hoverLeaveEvent(event);
+}
+
+QVariant GridSquare::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
+{
+    if(change == QGraphicsItem::ItemSelectedChange)
+    {
+        if(value == true)
+        {
+            // TODO change colour to setting
+            getPen().setColor(QColor(Qt::green));
+        }
+        else if(value == false)
+        {
+            // TODO change colour to setting
+            getPen().setColor(QColor(Qt::black));
+        }
+    }
+
+    return GridItem::itemChange(change, value);
 }
 
 QRectF GridSquare::boundingRect() const

@@ -34,7 +34,7 @@ void GridSceneRectangularLayers::addGrid(int gridNumber)
     QString gridNumberString = QString::number(gridNumber);
     QString gridStringTag = tr("Grid %1").arg(gridNumberString);
     QGraphicsSimpleTextItem* gridTag = new QGraphicsSimpleTextItem(gridStringTag);
-    auto coordinate = gridModel.m_Grid.at(baseIndex).first;
+    auto coordinate = std::get<Crossword::CrosswordState::GridState::COORDINATE>(gridModel.m_Grid.at(baseIndex));
 
     // TODO get item spacing and grid tag offset
     gridTag->setPos(coordinate.x() * 100 - 30, coordinate.y() * 100 + gridNumber * 700);
@@ -43,8 +43,8 @@ void GridSceneRectangularLayers::addGrid(int gridNumber)
 
     for(int i = baseIndex; i < lastIndex; i++)
     {
-        auto coordinate = gridModel.m_Grid.at(i).first;
-        Crossword::CrosswordItem& letter = gridModel.m_Grid.at(i).second;
+        auto coordinate = std::get<Crossword::CrosswordState::GridState::COORDINATE>(gridModel.m_Grid.at(i));
+        Crossword::CrosswordItem& letter = std::get<Crossword::CrosswordState::GridState::SOLUTION>(gridModel.m_Grid.at(i));
 
         // TODO get size setting
         Grid::GridSquare* square = new Grid::GridSquare(letter, 100, 100);
