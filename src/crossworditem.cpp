@@ -3,7 +3,7 @@
 namespace Crossword
 {
 
-CrosswordItem::CrosswordItem(const QString& text, const QColor& colour) : m_Text(text), m_Colour(colour)
+CrosswordItem::CrosswordItem(const QString& text, const VectorMath::Vec3i& coordinate, const QColor& colour) : m_Text(text), m_Coordinate(coordinate), m_Colour(colour)
 {
 }
 
@@ -15,6 +15,19 @@ const QString& CrosswordItem::getText() const
 void CrosswordItem::setText(const QString& text)
 {
     m_Text = text;
+}
+
+void CrosswordItem::clear()
+{
+    // TODO probably need to change the colour to some default.
+    // Do any languages use a glyph for the empty string?
+    m_Text = "";
+    m_Colour = Qt::white;
+}
+
+const VectorMath::Vec3i& CrosswordItem::getCoordinate() const
+{
+    return m_Coordinate;
 }
 
 }

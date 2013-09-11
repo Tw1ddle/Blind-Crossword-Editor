@@ -276,8 +276,7 @@ bool MainWindow::saveCrossword(const QString& filepath)
         return false;
     }
 
-    bool consistent = m_Crossword->isValid();
-    Q_ASSERT(consistent);
+    Q_ASSERT(m_Crossword->isValid()); // This has no side effects
 
     return true;
 }
@@ -353,7 +352,13 @@ void MainWindow::showHomepage()
 {
     bool success = Utilities::openUrl(AppInfo::getHomepage());
 
-    Q_ASSERT(success);
+    if(!success)
+    {
+        QMessageBox::information(this,
+                                 tr("Homepage Failed to Open"),
+                                 tr("Failed to open web browser. Find us online at %1").
+                                 arg(AppInfo::getHomepage().toString()));
+    }
 }
 
 void MainWindow::showAbout()
@@ -365,8 +370,16 @@ void MainWindow::showAbout()
 
 void MainWindow::showSupportEmail()
 {
-    // TODO internationalize this
-    QDesktopServices::openUrl(QUrl("mailto:sam@silver42.karoo.co.uk?subject=Support Email&body=Please send your support message"));
+    QString supportEmail;
+
+    // TODO check that this works with Asian languages etc
+
+    supportEmail += "mailto:sam@silver42.karoo.co.uk?subject=";
+    supportEmail += tr("Support Email");
+    supportEmail += "&body=";
+    supportEmail += tr("Please send your support message");
+
+    QDesktopServices::openUrl(QUrl(supportEmail));
 }
 
 // Exiting the application

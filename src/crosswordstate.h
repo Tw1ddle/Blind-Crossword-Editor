@@ -56,10 +56,9 @@ public:
         // Tuple indices
         enum
         {
-            COORDINATE,
-            SOLUTION
+            ITEM,
         };
-        std::vector<std::tuple<VectorMath::Vec3i, CrosswordItem>> m_Grid;
+        std::vector<std::tuple<CrosswordItem>> m_Grid;
     };
     GridState m_GridState;
 

@@ -14,6 +14,7 @@ public:
 
     virtual QRectF boundingRect() const override;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0) override;
+    virtual void clear() override;
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;

@@ -37,6 +37,11 @@ void GridClue::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     }
 }
 
+void GridClue::clear()
+{
+    // TODO Note we don't clear the clue here (maybe do this later when it's all implemented properly)
+}
+
 void GridClue::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     Q_UNUSED(event);

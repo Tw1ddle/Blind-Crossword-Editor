@@ -15,7 +15,7 @@ QString numLettersInGrid(const Crossword::CrosswordState& state)
 
     for(auto& item : grid)
     {
-        QString itemText = std::get<Crossword::CrosswordState::GridState::SOLUTION>(item).getText();
+        QString itemText = std::get<Crossword::CrosswordState::GridState::ITEM>(item).getText();
 
         numLetters += itemText.size();
     }
@@ -41,7 +41,7 @@ QString numEmptiesInGrid(const Crossword::CrosswordState& state)
 
     for(auto& item : grid)
     {
-        QString itemText = std::get<Crossword::CrosswordState::GridState::SOLUTION>(item).getText();
+        QString itemText = std::get<Crossword::CrosswordState::GridState::ITEM>(item).getText();
 
         if(itemText.size() == 0)
         {

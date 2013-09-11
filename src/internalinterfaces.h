@@ -2,6 +2,7 @@
 #define INTERNALINTERFACES_H
 
 #include "crosswordstate.h"
+#include "formatscommon.h"
 
 namespace InternalInterface
 {
@@ -14,8 +15,11 @@ namespace InternalInterface
         virtual Crossword::CrosswordState::GridState& getGrid() = 0;
 
         // Finer interface for adding clues
-        virtual void addClue(const Crossword::CrosswordClue& clue) = 0;
+        virtual void addClue(const Crossword::CrosswordClue&) = 0;
         virtual const Crossword::CrosswordClue& getLastAddedClue() const = 0;
+
+        virtual VectorMath::Vec3i getGridDimensions() const = 0;
+        virtual VectorMath::Vec3i getNextCoordinateForDirection(Crossword::Formats::Direction, VectorMath::Vec3i index) const = 0;
     };
 
     class CrosswordStateToLoader

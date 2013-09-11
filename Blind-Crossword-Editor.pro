@@ -13,7 +13,7 @@ win32-msvc* {
     QMAKE_CXXFLAGS_WARN_ON += -W4
 
     # Silence some known Qt warnings
-    QMAKE_CXXFLAGS += -wd4127 -wd4512 -wd4189
+    QMAKE_CXXFLAGS += -wd4127 -wd4512 -wd4189 -wd4718
 
     # Treat warnings as errors
     QMAKE_CXXFLAGS += -WX

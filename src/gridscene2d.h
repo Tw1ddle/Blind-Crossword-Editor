@@ -18,8 +18,9 @@ protected:
     virtual void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
-    virtual void addGrid();
+    virtual void addGrid() override;
     virtual bool advance() override;
+    virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) override;
 
     enum UserTypingDirection
     {

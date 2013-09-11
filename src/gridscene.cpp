@@ -78,21 +78,13 @@ void GridScene::keyPressEvent(QKeyEvent* event)
         m_State = UserState::SELECTING_CLUE;
     }
 
-    // Type letters into the grid
-    if(m_State == UserState::FILLING_GRID)
-    {
-        QString keyText = event->text();
-
-        auto shapes = getSelectedGridShapes();
-        typeInItems(keyText, shapes);
-    }
-
     // Delete text from grid squares
     if(event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
     {
         auto shapes = getSelectedGridShapes();
         for(auto& shape : shapes)
         {
+            // TODO clear item don't just delete text
             shape->getItem().setText("");
             shape->update();
         }
@@ -136,20 +128,30 @@ QList<Grid::GridShape*> GridScene::getSelectedGridShapes()
     return shapes;
 }
 
+std::vector<GridShape*>& GridScene::getGridShapes()
+{
+    return m_GridShapes;
+}
+
 void GridScene::typeInItems(const QString& text, QList<GridShape*>& items)
 {
     if((!text.isEmpty()) && items.size() == 1)
     {
         auto item = items.at(0);
 
-        auto shapes = dynamic_cast<GridShape*>(item);
+        auto shape = dynamic_cast<GridShape*>(item);
 
-        if(shapes)
+        if(shape)
         {
-            shapes->getItem().setText(text);
-            shapes->update();
+            shape->getItem().setText(text);
+            shape->update();
         }
     }
+}
+
+void GridScene::onSelectionChanged()
+{
+
 }
 
 void GridScene::addClue()

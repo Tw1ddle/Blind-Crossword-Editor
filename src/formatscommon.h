@@ -26,7 +26,8 @@ enum class Direction
 
     // 3D combination lock-style puzzles
     DIAMETRIC, // Through the disc
-    CIRCULAR, // Around a disc
+    CLOCKWISE, // Around a disc
+    ANTICLOCKWISE, // The other way
 
     // All of the above
     SNAKING, // Each letter could be anywhere, turn corners etc

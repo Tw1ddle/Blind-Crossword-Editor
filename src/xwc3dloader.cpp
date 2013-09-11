@@ -131,7 +131,7 @@ bool XWC3DLoader::loadGridHighlights(CrosswordState& puzzle, QStringList& lines)
 
             QString colourName = currentHighlight.takeFirst();
 
-            // TODO apply the highlights to the grid
+            // TODO apply the highlights to the grid NOTE that the highlights appear in the file before the grid is loaded
             Q_UNUSED(puzzle);
 
             Q_UNUSED(x);
@@ -195,11 +195,11 @@ bool XWC3DLoader::readGrid(CrosswordState& puzzle, QStringList& lines, std::pair
 
                     if(currentCharacter == XWC3D::Common::blackSquare)
                     {
-                        puzzle.m_GridState.m_Grid.push_back(std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
+                        puzzle.m_GridState.m_Grid.push_back(std::make_tuple(CrosswordItem(QString(""), Vec3i(x, y, z), QColor(Qt::black))));
                     }
                     else
                     {
-                        puzzle.m_GridState.m_Grid.push_back(std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
+                        puzzle.m_GridState.m_Grid.push_back(std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, z), QColor(Qt::white))));
                     }
                 }
             }
@@ -225,12 +225,12 @@ bool XWC3DLoader::readGrid(CrosswordState& puzzle, QStringList& lines, std::pair
                         if(currentLine.at(0) == XWC3D::Common::blackSquare)
                         {
                             puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
+                                        std::make_tuple(CrosswordItem(QString(""), Vec3i(x, y, z), QColor(Qt::black))));
                         }
                         else
                         {
                             puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::black))));
+                                        std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, z), QColor(Qt::black))));
                         }
                     }
                 }
@@ -243,12 +243,12 @@ bool XWC3DLoader::readGrid(CrosswordState& puzzle, QStringList& lines, std::pair
                         if(currentLine.at(z) == XWC3D::Common::blackSquare)
                         {
                             puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(""), QColor(Qt::black))));
+                                        std::make_tuple(CrosswordItem(QString(""), Vec3i(x, y, z), QColor(Qt::black))));
                         }
                         else
                         {
                             puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_tuple(Vec3i(x, y, z), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
+                                        std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, z), QColor(Qt::white))));
                         }
                     }
                 }
@@ -432,6 +432,19 @@ const std::vector<Vec3i> XWC3DLoader::loadLetterPositionsForDirection(Direction 
         {
             letterPositions.push_back(startPosition - VectorMath::Vec3i(0, 0, i));
         }
+    }
+
+    else if(Direction::DIAMETRIC == direction)
+    {
+        // TODO
+    }
+    else if(Direction::CLOCKWISE == direction)
+    {
+        // TODO
+    }
+    else if(Direction::ANTICLOCKWISE == direction)
+    {
+        // TODO
     }
 
     return letterPositions;

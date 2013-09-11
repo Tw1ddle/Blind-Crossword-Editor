@@ -12,4 +12,9 @@ Crossword::CrosswordItem& GridShape::getItem()
     return m_Item;
 }
 
+void GridShape::clear()
+{
+    m_Item.clear();
+}
+
 }

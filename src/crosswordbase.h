@@ -46,6 +46,11 @@ public:
     void addClue(const CrosswordClue& clue) override;
     virtual const Crossword::CrosswordClue& getLastAddedClue() const override;
 
+    // Given an item in the grid, find the index of the next one along in any given direction
+    // If the index would run off the edge of a grid, it loops back around to the opposite side
+    virtual VectorMath::Vec3i getNextCoordinateForDirection(Crossword::Formats::Direction, VectorMath::Vec3i coordinate) const override;
+    virtual VectorMath::Vec3i getGridDimensions() const override;
+
 protected:
 
 public slots:

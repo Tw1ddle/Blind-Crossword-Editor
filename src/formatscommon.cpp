@@ -16,7 +16,8 @@ const QMap<QString, Direction> Common::getDirections()
     map.insert("Down", Direction::DOWN);
     map.insert("Up", Direction::UP);
     map.insert("Diametric", Direction::DIAMETRIC);
-    map.insert("Circular", Direction::CIRCULAR);
+    map.insert("Clockwise", Direction::CLOCKWISE);
+    map.insert("Anticlockwise", Direction::ANTICLOCKWISE);
     map.insert("Snaking", Direction::SNAKING);
     map.insert("Unknown", Direction::UNKNOWN);
 

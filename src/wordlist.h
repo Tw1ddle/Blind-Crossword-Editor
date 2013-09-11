@@ -5,7 +5,10 @@
 #include <tuple>
 #include <QString>
 
-// A set of crossword clue solution words. Used for auto-filling the grid and providing suggestions
+namespace Editor
+{
+
+// A set of crossword clue solution words and cue data. Used for auto-filling the grid and/or providing suggestions
 class WordList
 {
 public:
@@ -14,5 +17,7 @@ public:
 private:
     std::vector<std::tuple<QString>> m_Words;
 };
+
+}
 
 #endif // WORDLIST_H

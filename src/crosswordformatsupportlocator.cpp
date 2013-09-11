@@ -23,6 +23,8 @@ CrosswordFormatSupportLocator::CrosswordFormatSupportLocator()
 
 CrosswordFormatSupportLocator::~CrosswordFormatSupportLocator()
 {
+    // TODO C4718 QMapMode... compiler error was preventing this from building in release mode (till I disabled the warning)
+    // ... look into it
     qDeleteAll(m_Loaders);
     m_Loaders.clear();
 

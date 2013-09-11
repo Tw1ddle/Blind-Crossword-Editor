@@ -1,6 +1,8 @@
 #ifndef VECTORMATH_H
 #define VECTORMATH_H
 
+#include <math.h>
+
 namespace VectorMath
 {
 
@@ -21,8 +23,10 @@ public:
 
     inline void operator+=(const Vector3<T>&);
     inline void operator-=(const Vector3<T>&);
+    inline void operator%=(const Vector3<T>&);
     inline void operator*=(const T);
     inline void operator/=(const T);
+
 
     inline Vector3 operator+() const;
     inline Vector3 operator-() const;
@@ -31,6 +35,8 @@ public:
 
     inline Vector3 operator+(const Vector3<T>&) const;
     inline Vector3 operator-(const Vector3<T>&) const;
+
+    inline Vector3<T> abs() const;
 
     inline T x() const;
     inline T y() const;
@@ -97,6 +103,13 @@ template<class T> void Vector3<T>::operator+=(const Vector3<T>& u)
 template<class T> void Vector3<T>::operator-=(const Vector3<T>& u)
 {
     m_Vec = m_Vec - u;
+}
+
+template<class T> void Vector3<T>::operator%=(const Vector3<T>& u)
+{
+    m_Vec[0] = m_Vec[0] % u.m_Vec[0];
+    m_Vec[1] = m_Vec[1] % u.m_Vec[1];
+    m_Vec[2] = m_Vec[2] % u.m_Vec[2];
 }
 
 template<class T> void Vector3<T>::operator*=(T s)
@@ -167,6 +180,11 @@ template<class T> void Vector3<T>::y(T y)
 template<class T> void Vector3<T>::z(T z)
 {
     m_Vec[2] = z;
+}
+
+template<class T> Vector3<T> Vector3<T>::abs() const
+{
+    return Vector3<T>(std::abs(m_Vec[0]), std::abs(m_Vec[1]), std::abs(m_Vec[2]));
 }
 
 typedef Vector3<float> Vec3f;

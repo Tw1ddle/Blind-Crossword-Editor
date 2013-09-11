@@ -150,12 +150,12 @@ bool XWCLoader::readGrid(CrosswordState& puzzle, QStringList& lines) const
             // Lower case letters are used for the solution words, with a '1' for each black square.
             if(currentCharacter == XWC::Common::blackSquare)
             {
-                puzzle.m_GridState.m_Grid.push_back(std::make_tuple(Vec3i(x, y, 0), CrosswordItem(QString(""), QColor(Qt::black))));
+                puzzle.m_GridState.m_Grid.push_back(std::make_tuple(CrosswordItem(QString(""), Vec3i(x, y, 0), QColor(Qt::black))));
             }
             // If all the words have not yet been entered, there will be a '0' (zero) for each empty white square.
             else
             {
-                puzzle.m_GridState.m_Grid.push_back(std::make_tuple(Vec3i(x, y, 0), CrosswordItem(QString(currentCharacter), QColor(Qt::white))));
+                puzzle.m_GridState.m_Grid.push_back(std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, 0), QColor(Qt::white))));
             }
         }
     }

@@ -71,6 +71,90 @@ const CrosswordClue& CrosswordBase::getLastAddedClue() const
     return m_State->m_ClueState.m_Clues.back();
 }
 
+VectorMath::Vec3i CrosswordBase::getNextCoordinateForDirection(Formats::Direction direction, VectorMath::Vec3i coordinate) const
+{
+    VectorMath::Vec3i next(0, 0, 0);
+
+    switch(direction)
+    {
+    // Get the next item
+    case Formats::Direction::ACROSS:
+        next = coordinate + VectorMath::Vec3i(1, 0, 0);
+        break;
+
+    case Formats::Direction::BACKWARDS:
+        next = coordinate + VectorMath::Vec3i(-1, 0, 0);
+        break;
+
+    case Formats::Direction::AWAY:
+        next = coordinate + VectorMath::Vec3i(0, 1, 0);
+        break;
+
+    case Formats::Direction::TOWARDS:
+        next = coordinate + VectorMath::Vec3i(0, -1, 0);
+        break;
+
+    case Formats::Direction::DOWN:
+        next = coordinate + VectorMath::Vec3i(0, 0, 1);
+        break;
+
+    case Formats::Direction::UP:
+        next = coordinate + VectorMath::Vec3i(0, 0, -1);
+        break;
+
+
+    case Formats::Direction::DIAMETRIC:
+        // TODO
+        // ...
+        break;
+    case Formats::Direction::CLOCKWISE:
+        next = coordinate + VectorMath::Vec3i(0, 1, 0);
+        break;
+
+    case Formats::Direction::ANTICLOCKWISE:
+        next = coordinate + VectorMath::Vec3i(0, -1, 0);
+        break;
+
+
+    // These are invalid directions to ask for a 'next' item
+    case Formats::Direction::SNAKING:
+        Q_ASSERT(false);
+        break;
+
+    case Formats::Direction::UNKNOWN:
+        Q_ASSERT(false);
+        break;
+    default:
+        Q_ASSERT(false);
+    }
+
+    auto dimensions = m_State->m_GridState.m_Dimensions;
+
+    // Move the coordinate into the grid space (in case it ran over the edges)
+    next %= dimensions;
+    if(next.x() < 0)
+    {
+        next.set(next.x() + dimensions.x(), next.y(), next.z());
+    }
+    if(next.y() < 0)
+    {
+        next.set(next.x(), next.y() + dimensions.y(), next.z());
+    }
+    if(next.z() < 0)
+    {
+        next.set(next.x(), next.y(), next.z() + dimensions.z());
+    }
+
+    return next;
+}
+
+VectorMath::Vec3i CrosswordBase::getGridDimensions() const
+{
+    auto dimensions = m_State->m_GridState.m_Dimensions;
+
+    return dimensions;
+}
+
 void CrosswordBase::resetState()
 {
     auto blankState = std::unique_ptr<CrosswordState>(new CrosswordState);
@@ -109,10 +193,9 @@ void CrosswordBase::setScene(QGraphicsView* view)
     }
     else
     {
+        // TODO
         // If the format isn't one the program has a native loader for but we've got this far, assume it's a 2D puzzle
-        Q_ASSERT(false); // Remove this failure if proper support for plugin loaders/savers is added
-
-        scene = new Grid::GridScene2D(view, this);
+        Q_ASSERT(false); // Remove this failure if proper support for plugin-based loaders/savers is added
     }
 
     if(view->scene() != nullptr)

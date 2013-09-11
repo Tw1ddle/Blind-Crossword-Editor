@@ -56,7 +56,7 @@ bool XWCSaver::save(const QString& filepath, const CrosswordState& state) const
         for(int x = 0; x < gridX; x++)
         {
             // Get the character at the current index and convert it to lower case (lower case characters only in solution grid)
-            QString currentCharacter = std::get<CrosswordState::GridState::SOLUTION>(grid.m_Grid.at(x + (y * gridY))).getText().toLower();
+            QString currentCharacter = std::get<CrosswordState::GridState::ITEM>(grid.m_Grid.at(x + (y * gridY))).getText().toLower();
 
             if(currentCharacter.isEmpty())
             {

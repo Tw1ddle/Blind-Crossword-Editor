@@ -15,6 +15,8 @@ public:
 
     virtual Crossword::CrosswordItem& getItem();
 
+    virtual void clear() override;
+
 protected:
     Crossword::CrosswordItem& m_Item;
 

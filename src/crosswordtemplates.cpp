@@ -21,7 +21,7 @@ CrosswordState Empty::make2DGrid(int x, int y)
     {
         for(int gridX = 0; x < gridX; gridX++)
         {
-            grid.m_Grid.push_back(std::make_tuple(VectorMath::Vec3i(gridX, gridY, 0), CrosswordItem("", QColor(Qt::white))));
+            grid.m_Grid.push_back(std::make_tuple(CrosswordItem("", VectorMath::Vec3i(gridX, gridY, 0), QColor(Qt::white))));
         }
     }
 
