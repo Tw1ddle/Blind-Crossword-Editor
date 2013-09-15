@@ -35,7 +35,7 @@ public:
     QString getFilepath() const;
     QString getFilename() const;
 
-    // Only use non-const accessor for loading/saving states
+    // Only use non-const accessor for loading/saving states - see interfacess
     CrosswordState& getState() override;
     const CrosswordState& getState() const override;
 

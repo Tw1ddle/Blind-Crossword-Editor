@@ -15,7 +15,6 @@ namespace Crossword
 {
 
 // Models the state of a crossword puzzle
-// TODO make the state friends with the loaders/savers and add getters/setters to the CrosswordBase wherever else necessary
 class CrosswordState
 {
 public:

@@ -30,6 +30,9 @@ private slots:
     // Helper methods
     void loadFile(const QString& filepath);
     void saveFile(const QString& filepath);
+
+private:
+    Crossword::Formats::CrosswordFormatSupportLocator m_FormatSupport;
 };
 
 }

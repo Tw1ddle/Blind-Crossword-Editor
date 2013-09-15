@@ -55,11 +55,13 @@ const std::pair<QString, QString> CROSSWORD_COMPILER_LEGACY = std::make_pair("cc
 const std::pair<QString, QString> CROSSWORD_COMPILER_40_51 = std::make_pair("CC4", "4-5.1");
 
 // Across Lite Text
-// TODO find out if the format has version numbers
 const std::pair<QString, QString> ACROSSLITETEXT = std::make_pair("txt", "1.0.0");
 
 // Rich text
 const std::pair<QString, QString> RICHTEXT100 = std::make_pair("rtf", "1.0.0");
+
+// Custom xml
+const std::pair<QString, QString> CUSTOM_XML100 = std::make_pair("xml", "1.0.0");
 
 // More supported formats go here...
 

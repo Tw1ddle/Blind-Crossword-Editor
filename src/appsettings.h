@@ -37,10 +37,9 @@ const int maxRecentCrosswordFiles = 10;
 }
 
 // Persistent platform-independent application settings
-
-// TODO make const correct
-class AppSettings
+class AppSettings : QObject
 {
+    Q_OBJECT
 public:
     AppSettings();
     ~AppSettings();
@@ -48,24 +47,20 @@ public:
     static QString getDefaultSaveFilename();
 
     // Recent crossword files
-    int getMaxRecentCrosswordFiles();
+    int getMaxRecentCrosswordFiles() const;
     void setMaxRecentCrosswordFiles(int max);
-    QStringList getRecentCrosswordFilepaths();
+    QStringList getRecentCrosswordFilepaths() const;
     void setRecentCrosswordFilepaths(const QStringList& paths);
     void clearRecentCrosswordFilepaths();
 
     // Default load/save folders
-    QString getCrosswordLoadPath();
-    QString getCrosswordSavePath();
+    QString getCrosswordLoadPath() const;
+    QString getCrosswordSavePath() const;
 
     void setCrosswordLoadPath(const QString& path);
     void setCrosswordSavePath(const QString& path);
 
 private:
-    // On settings object creation and destruction
-    void loadSettings();
-    void saveSettings();
-
     std::unique_ptr<QSettings> m_Settings;
 };
 

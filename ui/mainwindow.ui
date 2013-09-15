@@ -112,6 +112,7 @@
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
+    <addaction name="actionInsert_Symbol"/>
     <addaction name="actionPreferences"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -310,6 +311,11 @@
     <string>Solution Grid</string>
    </property>
   </action>
+  <action name="actionInsert_Symbol">
+   <property name="text">
+    <string>Insert Symbol</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -356,7 +362,7 @@
    <sender>actionQuit</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>showQuitConfirmation()</slot>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

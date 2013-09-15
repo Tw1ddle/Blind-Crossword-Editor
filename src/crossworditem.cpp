@@ -19,8 +19,7 @@ void CrosswordItem::setText(const QString& text)
 
 void CrosswordItem::clear()
 {
-    // TODO probably need to change the colour to some default.
-    // Do any languages use a glyph for the empty string?
+    // TODO do any languages use a glyph for the empty string?
     m_Text = "";
     m_Colour = Qt::white;
 }
@@ -28,6 +27,11 @@ void CrosswordItem::clear()
 const VectorMath::Vec3i& CrosswordItem::getCoordinate() const
 {
     return m_Coordinate;
+}
+
+const QColor& CrosswordItem::getColour() const
+{
+    return m_Colour;
 }
 
 }

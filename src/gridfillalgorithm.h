@@ -3,8 +3,8 @@
 
 #include "crosswordclue.h"
 
-// TODO A grid filling algorithm takes a word list and a set of clue coordinates
-// Information inferred from this by the algorithm lets it fill the grid
+// Takes a word list and a set of clues (that contain grid coordinates)
+// Information inferred from this data lets the algorithm fill the grid
 
 namespace Editor
 {

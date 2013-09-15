@@ -37,6 +37,7 @@ public:
     inline Vector3 operator-(const Vector3<T>&) const;
 
     inline Vector3<T> abs() const;
+    inline T product() const;
 
     inline T x() const;
     inline T y() const;
@@ -185,6 +186,11 @@ template<class T> void Vector3<T>::z(T z)
 template<class T> Vector3<T> Vector3<T>::abs() const
 {
     return Vector3<T>(std::abs(m_Vec[0]), std::abs(m_Vec[1]), std::abs(m_Vec[2]));
+}
+
+template<class T> T Vector3<T>::product() const
+{
+    return T(m_Vec[0] * m_Vec[1] * m_Vec[2]);
 }
 
 typedef Vector3<float> Vec3f;

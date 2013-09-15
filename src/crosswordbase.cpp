@@ -20,7 +20,27 @@ CrosswordBase::CrosswordBase()
 
 bool CrosswordBase::isValid() const
 {
-    // TODO A lot of sanity checking about the state of the puzzle should go here
+    // Size check
+    auto dimensions = m_State->m_GridState.m_Dimensions;
+    auto size = m_State->m_GridState.m_Grid.size();
+    if(size != static_cast<decltype(size)>(dimensions.product()))
+    {
+        return false;
+    }
+
+    // Must have a file extension (even a default one is fine)
+    auto extension = m_State->m_FileFormat.m_Extension;
+    if(extension.isEmpty())
+    {
+        return false;
+    }
+
+    // Some sort of version identifier must be set
+    auto version = m_State->m_FileFormat.m_Version;
+    if(version.isEmpty())
+    {
+        return false;
+    }
 
     return true;
 }

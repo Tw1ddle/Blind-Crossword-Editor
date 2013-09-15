@@ -7,6 +7,7 @@
 #include "acrosslitetextloader.h"
 #include "acrosslitetextsaver.h"
 #include "plaintextsaver.h"
+#include "xmlsaver.h"
 
 #include <QtAlgorithms>
 #include <QFileInfo>
@@ -125,6 +126,9 @@ void CrosswordFormatSupportLocator::registerFormats()
     // Across Lite Text support
     registerLoader(new CrosswordFormat(ACROSSLITETEXT), new AcrossLiteTextLoader());
     registerSaver(new CrosswordFormat(ACROSSLITETEXT), new AcrossLiteTextSaver());
+
+    // XML custom format saving
+    registerSaver(new CrosswordFormat(CUSTOM_XML100), new XMLSaver());
 
     // TODO More file support... could scan a directory for .dlls or something
 }

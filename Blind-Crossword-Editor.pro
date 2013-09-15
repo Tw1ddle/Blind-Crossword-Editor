@@ -13,7 +13,10 @@ win32-msvc* {
     QMAKE_CXXFLAGS_WARN_ON += -W4
 
     # Silence some known Qt warnings
-    QMAKE_CXXFLAGS += -wd4127 -wd4512 -wd4189 -wd4718
+    QMAKE_CXXFLAGS += -wd4127 -wd4512 -wd4189
+
+    # Silence a warning that popped up concerning the QMap destructor in the crossword format support locator
+    QMAKE_CXXFLAGS += -wd4718
 
     # Treat warnings as errors
     QMAKE_CXXFLAGS += -WX

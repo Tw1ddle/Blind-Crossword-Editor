@@ -13,9 +13,6 @@ public:
     GridScene3D(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
 
 private:
-    virtual bool advance() override;
-    virtual void addGrid() override;
-    virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) override;
 };
 
 }

@@ -15,6 +15,7 @@ class WebGLSaver : public CrosswordSaver
 public:
     WebGLSaver();
 
+    // Saves an XML file which is bundled with the WebGL code
     virtual bool save(const QString& filepath, const CrosswordState& state) const;
 };
 

@@ -17,14 +17,15 @@ public:
 
     const QString& getText() const;
     const VectorMath::Vec3i& getCoordinate() const;
+    const QColor& getColour() const;
     void setText(const QString& text);
 
     virtual void clear();
 
 private:
     QString m_Text;
-    QColor m_Colour;
     VectorMath::Vec3i m_Coordinate;
+    QColor m_Colour;
 };
 
 }

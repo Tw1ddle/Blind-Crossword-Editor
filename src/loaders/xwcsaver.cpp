@@ -1,7 +1,6 @@
 #include "xwcsaver.h"
 
 #include "crosswordstatistics.h"
-#include "formatscommon.h"
 #include "xwccommon.h"
 #include "utilities.h"
 
@@ -19,7 +18,7 @@ bool XWCSaver::save(const QString& filepath, const CrosswordState& state) const
 {
     QStringList lines;
 
-    auto& metadata = state.m_Metadata;
+    const auto& metadata = state.m_Metadata;
 
     // Line 1: Version number followed by Author name.
     if(!metadata.m_Authors.contains(XWC::Common::TXWordGridVersionIdentifier))
@@ -39,15 +38,15 @@ bool XWCSaver::save(const QString& filepath, const CrosswordState& state) const
     lines += metadata.m_Type;
 
 
-    auto& grid = state.m_GridState;
+    const auto& grid = state.m_GridState;
 
     // Line 4: Number of rows in the crossword grid
     lines += QString::number(grid.m_Dimensions.x());
     // Line 5: Number of columns in the crossword grid
     lines += QString::number(grid.m_Dimensions.y());
 
-    int gridX = grid.m_Dimensions.x();
-    int gridY = grid.m_Dimensions.y();
+    const int gridX = grid.m_Dimensions.x();
+    const int gridY = grid.m_Dimensions.y();
 
     // Next lines write the Solution grid
     for(int y = 0; y < gridY; y++)
@@ -83,8 +82,17 @@ bool XWCSaver::save(const QString& filepath, const CrosswordState& state) const
     auto mode = modes.find(metadata.m_Type).value();
     if(mode == XWC::Modes::SOLVE)
     {
-        // TODO
-        // Taking "solve" grid to mean the grid that is provided at the start of a game
+        std::vector<QString> solveGrid(grid.m_Dimensions.product());
+
+        for(const auto& clue : state.m_ClueState.m_Clues)
+        {
+            auto letterPositions = clue.getLetterPositions();
+
+            for(auto& letterPosition : letterPositions)
+            {
+                solveGrid.at(letterPosition.x() + (letterPosition.y() * gridY)).toUpper();
+            }
+        }
     }
 
     // Write the file to disk
@@ -104,9 +112,9 @@ bool XWCSaver::saveCluesForDirection(const CrosswordState& state, QStringList& l
     QString numInDirection = Editor::numCluesForDirection(state, directionString);
     lines += numInDirection;
 
-    auto& clues = state.m_ClueState.m_Clues;
+    const auto& clues = state.m_ClueState.m_Clues;
 
-    for(auto& clue : clues)
+    for(const auto& clue : clues)
     {
         if(clue.getDirection() == directionString)
         {

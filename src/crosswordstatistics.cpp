@@ -6,7 +6,6 @@
 namespace Editor
 {
 
-// TODO solution grid or puzzle grid??
 QString numLettersInGrid(const Crossword::CrosswordState& state)
 {
     auto& grid = state.m_GridState.m_Grid;
@@ -32,7 +31,6 @@ QString numItemsInGrid(const Crossword::CrosswordState& state)
     return QString::number(numItems);
 }
 
-// TODO solution grid or puzzle grid??
 QString numEmptiesInGrid(const Crossword::CrosswordState& state)
 {
     auto& grid = state.m_GridState.m_Grid;

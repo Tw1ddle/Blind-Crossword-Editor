@@ -18,22 +18,12 @@ bool PlainTextSaver::save(const QString& filepath, const CrosswordState& state) 
 
     QStringList lines;
 
-    // Metadata
-    auto& fileFormat = state.m_FileFormat;
-
-    lines += fileFormat.m_Extension;
-    lines += fileFormat.m_Version;
-
     auto& metadata = state.m_Metadata;
 
     lines += metadata.m_Title;
     lines += metadata.m_Authors;
     lines += metadata.m_Type;
     lines += metadata.m_Notes;
-
-    // Don't need to print these out, really
-    auto& dataSources = state.m_DataSources;
-    Q_UNUSED(dataSources);
 
     // Clues
     auto& clues = state.m_ClueState.m_Clues;
@@ -42,18 +32,22 @@ bool PlainTextSaver::save(const QString& filepath, const CrosswordState& state) 
     {
         QString clueString;
 
-        // TODO save all the clue details
-        clueString.append(clue.getClue());
-        clueString.append(clue.getNumber());
-        // TODO clueString.append(clue.getSolution());
-        clueString.append(clue.getDirection());
+        clueString += clue.getNumber() + " ";
+        clueString += clue.getDirection() + " ";
+        clueString += clue.getClue() + " ";
+        clueString += clue.getSolution() + " ";
+
 
         auto& letterPositions = clue.getLetterPositions();
         for(auto& letterPosition : letterPositions)
         {
-            Q_UNUSED(letterPosition);
-            // TODO append letter position
+            clueString += QString::number(letterPosition.x()) + ",";
+            clueString += QString::number(letterPosition.y()) + ",";
+            clueString += QString::number(letterPosition.z());
+            clueString += "|";
         }
+
+        lines += clueString;
     }
 
     auto success = Utilities::writeFile(file, lines);

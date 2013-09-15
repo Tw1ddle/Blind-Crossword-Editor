@@ -34,7 +34,7 @@ inline QString getCopyrightNotice()
 
 inline QString getLicenseText()
 {
-    // TODO
+    // TODO GPLv3 license text
     QString license = "This software is provided as-is, without any express or implied warranty.";
 
     return license;
@@ -59,6 +59,12 @@ inline QString getArtists()
 
 inline QUrl getHomepage()
 {
+    return QUrl("http://www.calendarpuzzles.co.uk/");
+}
+
+inline QUrl getHelpWebsite()
+{
+    // TODO
     return QUrl("http://www.calendarpuzzles.co.uk/");
 }
 

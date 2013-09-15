@@ -11,62 +11,9 @@ GridScene2D::GridScene2D(QObject* parent, InternalInterface::CrosswordStateToGri
     addGrid();
 }
 
-void GridScene2D::keyPressEvent(QKeyEvent* event)
-{
-    GridScene::keyPressEvent(event);
-
-    // Set the direction of typing with the arrow keys (perspective of looking at a 2D grid top-down)
-    auto key = event->key();
-    if(key == Qt::Key_Right || key == Qt::Key_Left || key == Qt::Key_Up || key == Qt::Key_Down)
-    {
-        auto lastTypingDirection = m_TypingDirection;
-
-        switch (key)
-        {
-        case Qt::Key_Right:
-            m_TypingDirection = RIGHT;
-            break;
-        case Qt::Key_Left:
-            m_TypingDirection = LEFT;
-            break;
-        case Qt::Key_Up:
-            m_TypingDirection = UP;
-            break;
-        case Qt::Key_Down:
-            m_TypingDirection = DOWN;
-            break;
-        }
-
-        event->accept();
-
-        if(lastTypingDirection == m_TypingDirection)
-        {
-            advance();
-        }
-    }
-    else
-    {
-        // Type letters into the grid
-        if(m_State == UserState::FILLING_GRID)
-        {
-            QString keyText = event->text();
-
-            auto shapes = getSelectedGridShapes();
-            typeInItems(keyText, shapes);
-
-            advance();
-        }
-    }
-}
-
-void GridScene2D::keyReleaseEvent(QKeyEvent* event)
-{
-    GridScene::keyReleaseEvent(event);
-}
-
 void GridScene2D::addGrid()
 {
-    Crossword::CrosswordState::GridState& gridModel = getCrosswordState()->getGrid();
+    Crossword::CrosswordState::GridState& gridModel = getCrosswordInterface()->getGrid();
 
     QGraphicsItemGroup* gridItem = new QGraphicsItemGroup();
 
@@ -90,7 +37,42 @@ void GridScene2D::addGrid()
     addItem(gridItem);
 }
 
-bool GridScene2D::advance()
+void GridScene2D::keyPressEvent(QKeyEvent* event)
+{
+    // Set the direction of typing with the arrow keys (perspective of looking at a 2D grid top-down)
+    auto key = event->key();
+
+    if(isNavigationKey(key))
+    {
+        switch (key)
+        {
+        case Qt::Key_Right:
+            m_TypingDirection = RIGHT;
+            break;
+        case Qt::Key_Left:
+            m_TypingDirection = LEFT;
+            break;
+        case Qt::Key_Up:
+            m_TypingDirection = UP;
+            break;
+        case Qt::Key_Down:
+            m_TypingDirection = DOWN;
+            break;
+        }
+        selectNextGridShape();
+    }
+
+    GridScene::keyPressEvent(event);
+
+    event->accept();
+}
+
+void GridScene2D::keyReleaseEvent(QKeyEvent* event)
+{
+    GridScene::keyReleaseEvent(event);
+}
+
+bool GridScene2D::selectNextGridShape()
 {
     auto shapes = getSelectedGridShapes();
 
@@ -102,7 +84,7 @@ bool GridScene2D::advance()
 
     auto current = shapes.at(0)->getItem().getCoordinate();
     VectorMath::Vec3i next(0, 0, 0);
-    auto state = getCrosswordState();
+    auto state = getCrosswordInterface();
 
     switch(m_TypingDirection)
     {
@@ -132,7 +114,17 @@ bool GridScene2D::advance()
 
 GridShape* GridScene2D::getGridShapeForCoordinate(VectorMath::Vec3i coordinate)
 {
-    return getGridShapes().at(coordinate.x() + coordinate.y() * getCrosswordState()->getGridDimensions().y());
+    return getGridShapes().at(coordinate.x() + coordinate.y() * getCrosswordInterface()->getGridDimensions().x());
+}
+
+bool GridScene2D::isNavigationKey(int keyCode) const
+{
+    bool isArrow = (keyCode == Qt::Key_Right ||
+                  keyCode == Qt::Key_Left ||
+                  keyCode == Qt::Key_Up ||
+                  keyCode == Qt::Key_Down);
+
+    return isArrow;
 }
 
 }

@@ -20,24 +20,25 @@ public:
     virtual ~GridScene();
 
 protected:
-    InternalInterface::CrosswordStateToGridScene* getCrosswordState();
+    InternalInterface::CrosswordStateToGridScene* getCrosswordInterface();
 
+    // Input handling
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-
     virtual void keyPressEvent(QKeyEvent* event) override;
     virtual void keyReleaseEvent(QKeyEvent* event) override;
 
+    // Grid getters
     QList<Grid::GridShape*> getSelectedGridShapes();
-
     std::vector<GridShape*>& getGridShapes();
+    virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) = 0;
 
+    // Grid editing
     virtual void typeInItems(const QString& text, QList<GridShape*>& items);
     virtual void onSelectionChanged();
 
-    // Actions the user is performing on the grid
+    // Actions the user performs
     enum UserState
     {
         FILLING_GRID,
@@ -45,21 +46,15 @@ protected:
     };
     UserState m_State;
 
-    virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) = 0;
-
 private:
-    InternalInterface::CrosswordStateToGridScene* m_CrosswordState;
-
     void addClue();
     void createClueFromSelection();
-
-
-    virtual bool advance() = 0; // Get the next item in the grid. Assumes puzzles have some concept of order or direction.
-    virtual void addGrid() = 0; // Grid items (views) must be in the same order as the crossword grid item vector (models), so that coordinates are the same (to enable lookup rather than having pointers)
-
-    bool m_LeftMouseDown;
+    virtual bool selectNextGridShape() = 0; // Get the next item in the grid. Assumes puzzles have some concept of order or direction.
+    virtual bool isNavigationKey(int keyCode) const = 0; // Controls allow user to most around the grid using certain keys
 
     std::vector<GridShape*> m_GridShapes;
+    InternalInterface::CrosswordStateToGridScene* m_CrosswordState;
+    bool m_LeftMouseDown;
 };
 
 }

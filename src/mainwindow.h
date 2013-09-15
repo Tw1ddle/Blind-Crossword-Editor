@@ -68,7 +68,8 @@ private slots:
     void showPreferences();
 
     // View
-    void fitGridsInView();
+    void fitGridInView();
+    void centerGridInView();
 
     // About
     void showHelp();

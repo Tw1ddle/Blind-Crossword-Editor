@@ -57,8 +57,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::handleArgument(const QString& arg)
 {
-    // Attempts to load the first (and only the first) file with a valid crossword extension (if any)
-    // If the arguments end with a file format extension, try to load it
+    // Attempts to load the file referred to by the argument if it has a valid file format extension
     if(m_FormatSupport.isLoaderSupported(arg))
     {
         loadCrossword(arg);
@@ -80,9 +79,10 @@ void MainWindow::newCrossword()
     NewCrosswordPage newCrosswordPage(this);
 
     // TODO get a chosen template from this
-    newCrosswordPage.exec();
-
-    // m_Crossword->setState(newCrosswordPage.getState());
+    if(QDialog::Accepted == newCrosswordPage.exec())
+    {
+        // m_Crossword->setState(newCrosswordPage.getState());
+    }
 }
 
 void MainWindow::loadCrosswordDialog()
@@ -200,7 +200,7 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
     }
 
     // Internal sanity checks
-    bool consistent = m_Crossword->isValid();
+    bool consistent = crossword->isValid();
 
     if(!consistent)
     {
@@ -212,20 +212,21 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
 
 bool MainWindow::saveCrosswordDialog()
 {
-    // TODO
-    // If the puzzle has been saved under a file path already, then overwrite the file
-    // Otherwise open a dialog with a default name and a list of formats to choose from
+    QString filepath;
+
+    // Check for existing file reference
+    QFileInfo file(m_Crossword->getFilepath());
+    if(file.exists())
+    {
+        Q_ASSERT(!m_Crossword->getFilepath().isEmpty());
+        filepath = m_Crossword->getFilepath();
+    }
 
     // Attempt to use a default save directory
     Preferences::AppSettings settings;
     QString defaultDirectory = settings.getCrosswordSavePath();
-    QDir dir(defaultDirectory);
-    if(!dir.exists(defaultDirectory))
-    {
-        defaultDirectory = QString();
-    }
 
-    QString filepath = QFileDialog::getSaveFileName(this, tr("Save Crossword File"), defaultDirectory, QString());
+    filepath = QFileDialog::getSaveFileName(this, tr("Save Crossword File"), defaultDirectory, QString());
     if(filepath.isNull())
     {
         return false;
@@ -310,11 +311,15 @@ void MainWindow::loadFile(const QString& filepath)
 void MainWindow::printCrossword()
 {
     // TODO
+
+    // Generate a PDF of the crossword
 }
 
 void MainWindow::emailCrossword()
 {
     // TODO
+
+    // Generate a PDF of the crossword and attach it to the email
 }
 
 void MainWindow::showCrosswordProperties()
@@ -335,7 +340,13 @@ void MainWindow::showPreferences()
 
 // View menu implementations
 
-void MainWindow::fitGridsInView()
+void MainWindow::fitGridInView()
+{
+    // TODO
+    // Call method on graphics scene/view to do this
+}
+
+void MainWindow::centerGridInView()
 {
     // TODO
     // Call method on graphics scene/view to do this
@@ -345,7 +356,15 @@ void MainWindow::fitGridsInView()
 
 void MainWindow::showHelp()
 {
-    // TODO
+    bool success = Utilities::openUrl(AppInfo::getHelpWebsite());
+
+    if(!success)
+    {
+        QMessageBox::information(this,
+                                 tr("Help Failed to Open"),
+                                 tr("Failed to open web browser. Find us online at %1").
+                                 arg(AppInfo::getHelpWebsite().toString()));
+    }
 }
 
 void MainWindow::showHomepage()
@@ -372,8 +391,6 @@ void MainWindow::showSupportEmail()
 {
     QString supportEmail;
 
-    // TODO check that this works with Asian languages etc
-
     supportEmail += "mailto:sam@silver42.karoo.co.uk?subject=";
     supportEmail += tr("Support Email");
     supportEmail += "&body=";
@@ -387,13 +404,10 @@ void MainWindow::showSupportEmail()
 bool MainWindow::showQuitConfirmation()
 {
     QMessageBox msgBox(this);
-    msgBox.setText(tr("Do you want to save your changes to %1?").arg(m_Crossword->getFilename()));
+    msgBox.setText(tr("Do you want to save changes you made to %1?").arg(m_Crossword->getFilename()));
     msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     msgBox.button(QMessageBox::Discard)->setText(tr("Don't Save"));
     msgBox.setDefaultButton(QMessageBox::Save);
-    // TODO center the buttons on this messagebox
-    // ...
-    // TODO check this behaviour isn't buggy!
 
     auto save = msgBox.exec();
 

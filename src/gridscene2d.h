@@ -18,8 +18,8 @@ protected:
     virtual void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
-    virtual void addGrid() override;
-    virtual bool advance() override;
+    virtual void addGrid();
+    virtual bool selectNextGridShape() override;
     virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) override;
 
     enum UserTypingDirection
@@ -30,6 +30,8 @@ private:
         DOWN
     };
     UserTypingDirection m_TypingDirection;
+
+    virtual bool isNavigationKey(int keyCode) const override;
 };
 
 }

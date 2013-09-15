@@ -22,7 +22,7 @@ GridScene::~GridScene()
 {
 }
 
-InternalInterface::CrosswordStateToGridScene* GridScene::getCrosswordState()
+InternalInterface::CrosswordStateToGridScene* GridScene::getCrosswordInterface()
 {
     return m_CrosswordState;
 }
@@ -31,21 +31,21 @@ void GridScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     QGraphicsScene::mousePressEvent(event);
 
-    // If mouse is down then
-    if(event->button() == Qt::LeftButton)
+    if(Qt::LeftButton == event->button())
     {
         m_LeftMouseDown = true;
     }
 
     // Open grid item setting box on right click
-    if(event->button() == Qt::RightButton)
+    if(Qt::RightButton == event->button())
     {
+        // TODO
     }
 }
 
 void GridScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-    if(event->button() == Qt::LeftButton)
+    if(Qt::LeftButton == event->button())
     {
         m_LeftMouseDown = false;
     }
@@ -73,31 +73,45 @@ void GridScene::keyPressEvent(QKeyEvent* event)
 {
     QGraphicsScene::keyPressEvent(event);
 
-    if(event->key() == Qt::Key_Control)
+    auto key = event->key();
+
+    if(Qt::Key_Control == key)
     {
         m_State = UserState::SELECTING_CLUE;
     }
 
-    // Delete text from grid squares
-    if(event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
+    // Clear grid square(s)
+    if(Qt::Key_Delete == key || Qt::Key_Backspace == key)
     {
         auto shapes = getSelectedGridShapes();
         for(auto& shape : shapes)
         {
-            // TODO clear item don't just delete text
-            shape->getItem().setText("");
+            shape->clear();
             shape->update();
         }
     }
+
+    if(UserState::FILLING_GRID == m_State && !isNavigationKey(key))
+    {
+        // Insert the input into the grid
+        QString keyText = event->text();
+
+        auto shapes = getSelectedGridShapes();
+        typeInItems(keyText, shapes);
+
+        selectNextGridShape();
+    }
+
+    event->accept();
 }
 
 void GridScene::keyReleaseEvent(QKeyEvent* event)
 {
     QGraphicsScene::keyReleaseEvent(event);
 
-    if(event->key() == Qt::Key_Control)
+    if(Qt::Key_Control == event->key())
     {
-        if(m_State == UserState::SELECTING_CLUE)
+        if(UserState::SELECTING_CLUE == m_State)
         {
             // TODO wait for an action or choose an appropriate action here
 
@@ -161,13 +175,13 @@ void GridScene::addClue()
     // If there are shapes selected then construct a clue out of them
     if(!shapes.empty())
     {
-        Editor::NewCrosswordCluePage newCluePage(getCrosswordState()->getClues(), shapes);
+        Editor::NewCrosswordCluePage newCluePage(getCrosswordInterface()->getClues(), shapes);
 
         int result = newCluePage.exec();
-        if(result == QDialog::Accepted)
+        if(QDialog::Accepted == result)
         {
-            getCrosswordState()->addClue(newCluePage.getClue());
-            const Crossword::CrosswordClue& clue = getCrosswordState()->getLastAddedClue();
+            getCrosswordInterface()->addClue(newCluePage.getClue());
+            const Crossword::CrosswordClue& clue = getCrosswordInterface()->getLastAddedClue();
 
             auto gridClue = new Grid::GridClue(clue, 50, 50); // TODO get width and height settings
             gridClue->setParentItem(shapes.at(0));

@@ -15,33 +15,22 @@ AppSettings::AppSettings()
 {
     m_Settings = std::unique_ptr<QSettings>(new QSettings(AppInfo::getOrganizationName(), AppInfo::getAppName()));
 
-    loadSettings();
-}
-
-AppSettings::~AppSettings()
-{
-    saveSettings();
-}
-
-void AppSettings::loadSettings()
-{
     m_Settings->sync();
 }
 
-void AppSettings::saveSettings()
+AppSettings::~AppSettings()
 {
     m_Settings->sync();
 }
 
 QString AppSettings::getDefaultSaveFilename()
 {
-    // TODO make translatable
-    QString saveFilename = "untitled";
+    QString saveFilename = tr("untitled");
 
     return saveFilename;
 }
 
-int AppSettings::getMaxRecentCrosswordFiles()
+int AppSettings::getMaxRecentCrosswordFiles() const
 {
     bool ok = false;
 
@@ -52,7 +41,7 @@ int AppSettings::getMaxRecentCrosswordFiles()
     return max;
 }
 
-QStringList AppSettings::getRecentCrosswordFilepaths()
+QStringList AppSettings::getRecentCrosswordFilepaths() const
 {
     auto paths = m_Settings->value(recentCrosswordFiles).toStringList();
 
@@ -69,24 +58,41 @@ void AppSettings::clearRecentCrosswordFilepaths()
     m_Settings->remove(recentCrosswordFiles);
 }
 
-QString AppSettings::getCrosswordLoadPath()
+QString AppSettings::getCrosswordLoadPath() const
 {    
     auto path = m_Settings->value(crosswordLoadPath, Defaults::crosswordLoadPath).toString();
 
     Q_ASSERT(!path.isEmpty());
 
-    // TODO may need changing for other platforms
-    return Utilities::getApplicationDirPath().append(path);
+    auto fullpath = Utilities::getApplicationDirPath().append(path);
+
+    QDir dir(fullpath);
+    if(!dir.exists(fullpath))
+    {
+        fullpath = QString();
+    }
+
+    return fullpath;
 }
 
-QString AppSettings::getCrosswordSavePath()
+QString AppSettings::getCrosswordSavePath() const
 {
     auto path = m_Settings->value(crosswordSavePath, Defaults::crosswordSavePath).toString();
 
     Q_ASSERT(!path.isEmpty());
 
-    // TODO may need changing for other platforms
-    return Utilities::getApplicationDirPath().append(path);
+    // This works fine for Windows
+    auto fullpath = Utilities::getApplicationDirPath().append(path);
+
+    QDir dir(fullpath);
+    if(!dir.exists(fullpath))
+    {
+        fullpath = QString();
+    }
+
+    // Other platforms might want different default paths...
+
+    return fullpath;
 }
 
 void AppSettings::setCrosswordLoadPath(const QString& path)
