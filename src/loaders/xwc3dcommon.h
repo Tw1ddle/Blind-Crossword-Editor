@@ -29,7 +29,7 @@ public:
     static const QChar blackSquare; // Black filled-in squares
     static const QChar clueAttributeSeparator; // The separator between elements of clues
     static const QChar highlightAttributeSeparator; // The separator between highlights of clues
-    static const QChar subattributeSeparator; // The separators between subattributes e.g. each coordinate of clues
+    static const QChar subAttributeSeparator; // The separators between subattributes e.g. each coordinate of clues
 };
 
 }

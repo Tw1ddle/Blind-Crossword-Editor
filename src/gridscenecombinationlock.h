@@ -17,7 +17,7 @@ protected:
 
 private:
     virtual bool selectNextGridShape() override;
-    virtual void addGrid();
+    virtual void addGrid(int gridNumber);
     virtual bool isNavigationKey(int keyCode) const override;
     virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) override;
 

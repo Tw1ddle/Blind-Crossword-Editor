@@ -46,8 +46,9 @@ XMLSaver::XMLSaver()
 {
 }
 
-bool XMLSaver::save(const QString& filepath, const CrosswordState& state) const
+QStringList XMLSaver::save(const CrosswordState& state) const
 {
+    QString filepath;
     // Write the file to disk
     QFile file(filepath);
     file.open(QFile::WriteOnly);
@@ -108,10 +109,11 @@ bool XMLSaver::save(const QString& filepath, const CrosswordState& state) const
     {
         qDebug() << xml.device()->errorString();
 
-        return false;
+        return QStringList();
     }
 
-    return true;
+    // TODO use an IODevice that writes to a QStringList...
+    return QStringList();
 }
 
 }

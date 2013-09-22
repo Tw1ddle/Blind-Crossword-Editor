@@ -12,6 +12,8 @@ class GridView : public QGraphicsView
 public:
     explicit GridView(QWidget *parent = 0);
 
+    void fitSceneInView();
+
 protected:
     void wheelEvent(QWheelEvent* event);
     

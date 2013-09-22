@@ -20,7 +20,9 @@ HEADERS += \
     src/loaders/formatscommon.h \
     src/loaders/exporters.h \
     src/loaders/crosswordformat.h \
-    src/loaders/crosswordformatsupportlocator.h
+    src/loaders/crosswordformatsupportlocator.h \
+    src/loaders/crosswordexportsupportlocator.h \
+    src/loaders/crosswordloadsupportlocator.h
 
 SOURCES += \
     src/loaders/crosswordloader.cpp \
@@ -40,4 +42,6 @@ SOURCES += \
     src/loaders/formatscommon.cpp \
     src/loaders/exporters.cpp \
     src/loaders/crosswordformat.cpp \
-    src/loaders/crosswordformatsupportlocator.cpp
+    src/loaders/crosswordformatsupportlocator.cpp \
+    src/loaders/crosswordexportsupportlocator.cpp \
+    src/loaders/crosswordloadsupportlocator.cpp

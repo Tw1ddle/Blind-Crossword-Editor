@@ -1,14 +1,5 @@
 #include "crosswordformatsupportlocator.h"
 
-#include "xwcloader.h"
-#include "xwcsaver.h"
-#include "xwc3dloader.h"
-#include "xwc3dsaver.h"
-#include "acrosslitetextloader.h"
-#include "acrosslitetextsaver.h"
-#include "plaintextsaver.h"
-#include "xmlsaver.h"
-
 #include <QtAlgorithms>
 #include <QFileInfo>
 #include <QStringList>
@@ -18,8 +9,6 @@ using namespace Crossword::Formats;
 
 CrosswordFormatSupportLocator::CrosswordFormatSupportLocator()
 {
-    // Register all the supported formats here (temporarily)
-    registerFormats();
 }
 
 CrosswordFormatSupportLocator::~CrosswordFormatSupportLocator()
@@ -75,12 +64,12 @@ bool CrosswordFormatSupportLocator::isSaverSupported(const CrosswordFormat& form
 
 bool CrosswordFormatSupportLocator::isLoaderSupported(const QString& filepath) const
 {
-    return locate(m_Loaders, filepath);
+    return (nullptr != locate(m_Loaders, filepath));
 }
 
 bool CrosswordFormatSupportLocator::isSaverSupported(const QString& filepath) const
 {
-    return locate(m_Savers, filepath);
+    return (nullptr != locate(m_Savers, filepath));
 }
 
 const QString CrosswordFormatSupportLocator::getExtension(const QString& filepath) const
@@ -93,7 +82,8 @@ const QString CrosswordFormatSupportLocator::getExtension(const QString& filepat
 const QStringList CrosswordFormatSupportLocator::getSupportedLoadingExtensions() const
 {
     QStringList extensions;
-    for(auto format : m_Loaders.keys())
+    auto keys = m_Loaders.keys();
+    for(auto format : keys)
     {
         extensions.append(format->getExtension());
     }
@@ -105,30 +95,12 @@ const QStringList CrosswordFormatSupportLocator::getSupportedSavingExtensions() 
 {
     // This may need refactoring if we need to be able to save to specific versions of a format
     QStringList extensions;
-    for(auto format : m_Savers.keys())
+
+    auto keys = m_Savers.keys();
+    for(auto format : keys)
     {
         extensions.append(format->getExtension());
     }
 
     return extensions;
-}
-
-void CrosswordFormatSupportLocator::registerFormats()
-{
-    // Load and save XWC files (v1.0.1)
-    registerLoader(new CrosswordFormat(XWC101), new XWCLoader());
-    registerSaver(new CrosswordFormat(XWC101), new XWCSaver());
-
-    // Load and save XWC3D files (v1.0.0)
-    registerLoader(new CrosswordFormat(XWC3D100), new XWC3DLoader());
-    registerSaver(new CrosswordFormat(XWC3D100), new XWC3DSaver());
-
-    // Across Lite Text support
-    registerLoader(new CrosswordFormat(ACROSSLITETEXT), new AcrossLiteTextLoader());
-    registerSaver(new CrosswordFormat(ACROSSLITETEXT), new AcrossLiteTextSaver());
-
-    // XML custom format saving
-    registerSaver(new CrosswordFormat(CUSTOM_XML100), new XMLSaver());
-
-    // TODO More file support... could scan a directory for .dlls or something
 }

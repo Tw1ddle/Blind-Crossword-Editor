@@ -12,10 +12,8 @@ PlainTextSaver::PlainTextSaver()
 {
 }
 
-bool PlainTextSaver::save(const QString& filepath, const CrosswordState& state) const
+QStringList PlainTextSaver::save(const CrosswordState& state) const
 {
-    QFile file(filepath);
-
     QStringList lines;
 
     auto& metadata = state.m_Metadata;
@@ -50,9 +48,7 @@ bool PlainTextSaver::save(const QString& filepath, const CrosswordState& state) 
         lines += clueString;
     }
 
-    auto success = Utilities::writeFile(file, lines);
-
-    return success;
+    return lines;
 }
 
 }

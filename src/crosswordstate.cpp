@@ -3,8 +3,4 @@
 namespace Crossword
 {
 
-CrosswordState::CrosswordState()
-{
-}
-
 }

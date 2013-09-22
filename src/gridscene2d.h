@@ -18,7 +18,7 @@ protected:
     virtual void keyReleaseEvent(QKeyEvent* event) override;
 
 private:
-    virtual void addGrid();
+    virtual void addGrid(int gridNumber = 0);
     virtual bool selectNextGridShape() override;
     virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) override;
 

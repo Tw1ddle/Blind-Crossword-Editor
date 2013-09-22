@@ -1,9 +1,10 @@
 #include "webglsaver.h"
 
 #include "xmlsaver.h"
+#include "utilities.h"
 
-#include <QFileInfo>
-#include <QDir>
+#include <QFile>
+#include <QResource>
 
 namespace Crossword
 {
@@ -15,16 +16,32 @@ WebGLSaver::WebGLSaver()
 {
 }
 
-bool WebGLSaver::save(const QString& filepath, const CrosswordState& state) const
+QStringList WebGLSaver::save(const CrosswordState& state) const
 {
+    // TODO check that this resource path works
+    QResource resource(":/webgl/webgl.html");
+    Q_ASSERT(resource.isValid());
+
+    QStringList webTemplate = Utilities::readFile(resource.absoluteFilePath(), Utilities::INCLUDE_EMPTY_LINES);
+    Q_ASSERT(!webTemplate.empty());
+
     XMLSaver xmlSaver;
+    QStringList xml = xmlSaver.save(state);
 
-    xmlSaver.save(filepath, state);
+    // The tag in the WebGL template where the xml state data will be inserted
+    QRegExp replacementTag("<XML_CROSSWORD></XML_CROSSWORD>");
 
-    // Read a web template and insert the required data (JSON or XML) into the file
-    // TODO ":/webtemplates/webgl.html"
+    int index = webTemplate.indexOf(replacementTag);
 
-    return false;
+    if(index == -1)
+    {
+        return QStringList();
+    }
+
+    // TODO insert the xml into the webTemplate at the index
+    xml += "TODO";
+
+    return webTemplate;
 }
 
 }

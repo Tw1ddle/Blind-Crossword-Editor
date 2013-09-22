@@ -3,6 +3,7 @@
 INCLUDEPATH += $$PWD
 
 include(loaders/loaders.pri)
+include(wordlists/wordlists.pri)
 
 HEADERS += \
     src/crosswordstate.h \
@@ -39,7 +40,8 @@ HEADERS += \
     src/gridclue.h \
     src/gridshape.h \
     src/gridfillalgorithm.h \
-    src/wordlist.h
+    src/wordlist.h \
+    src/gridsceneundocommands.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -73,4 +75,4 @@ SOURCES += \
     src/gridclue.cpp \
     src/gridshape.cpp \
     src/gridfillalgorithm.cpp \
-    src/wordlist.cpp
+    src/gridsceneundocommands.cpp

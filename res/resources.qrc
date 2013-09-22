@@ -5,5 +5,10 @@
     <qresource prefix="/templates">
         <file>templates/template1.xwc</file>
     </qresource>
-    <qresource prefix="/webtemplates"/>
+    <qresource prefix="/webgl">
+        <file>webgl/webgl.html</file>
+    </qresource>
+    <qresource prefix="/canvas">
+        <file>canvas/canvas.html</file>
+    </qresource>
 </RCC>

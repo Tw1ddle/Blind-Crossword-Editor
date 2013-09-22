@@ -17,6 +17,9 @@ public:
     XWC3DLoader();
 
     virtual bool load(const QString& filepath, CrosswordState& puzzle) const override;
+    virtual bool load(const QStringList& data, CrosswordState& puzzle) const override;
+
+    virtual CrosswordState load(const QStringList& data) const override;
 
 private:
     bool loadMetadata(CrosswordState& puzzle, QStringList& lines) const;

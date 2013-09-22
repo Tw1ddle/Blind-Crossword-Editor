@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include "crosswordformatsupportlocator.h"
+#include "crosswordloadsupportlocator.h"
 
 namespace Tests
 {
@@ -15,24 +15,27 @@ class CrosswordSavingTest : public QObject
 private slots:
     void initTestCase();
 
-    // Loads and then saves known crossword states to and from the same formats
-    // Compares the saved files to saves that are known to be correct
-    void checkExpectedOutputs();
-
     // Saves a crossword state to all the supported save formats
     void saveToSupportedFormats();
 
-    // Overrwrite an existing crossword file
-    void overwriteFile();
+    // Checks that files resaved in the same format remain the same as the originals
+    void checkEquivalence();
+
+    void checkEquivalent(const QStringList& first, const QStringList& second);
 
     void cleanupTestCase();
 
-    // Helper methods
-    void loadFile(const QString& filepath);
-    void saveFile(const QString& filepath);
-
 private:
-    Crossword::Formats::CrosswordFormatSupportLocator m_FormatSupport;
+    // Helper methods
+    bool loadFile(Crossword::CrosswordState& state, const QString& filepath);
+    QStringList saveFile(const Crossword::CrosswordState& state, const QString& extension);
+
+    void testSaveFile(const Crossword::CrosswordState& state, const QString& filename, const QString& extension);
+
+    Crossword::Formats::CrosswordLoadSupportLocator m_FormatSupport;
+
+    // The maximum number of differences to warn about before going to next file
+    static const int m_MaxNumDifferences = 6;
 };
 
 }

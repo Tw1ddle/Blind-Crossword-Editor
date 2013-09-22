@@ -1,19 +1,19 @@
 #include "mainwindow.h"
 
 #include <QMessageBox>
-#include <QSettings>
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QUrl>
 #include <QMimeData>
-#include <QDesktopServices>
 #include <QAbstractButton>
+#include <QDebug>
 
 #include <memory>
 
 #include "ui_mainwindow.h"
+
 #include "recentfilemanager.h"
 #include "appsettings.h"
 #include "utilities.h"
@@ -58,12 +58,12 @@ MainWindow::~MainWindow()
 void MainWindow::handleArgument(const QString& arg)
 {
     // Attempts to load the file referred to by the argument if it has a valid file format extension
-    if(m_FormatSupport.isLoaderSupported(arg))
+    if(m_CrosswordLoadSupport.isLoaderSupported(arg))
     {
         loadCrossword(arg);
     }
     #ifdef QT_DEBUG
-    if(!m_FormatSupport.isLoaderSupported(arg))
+    if(!m_CrosswordLoadSupport.isLoaderSupported(arg))
     {
         QMessageBox::information(this, tr("Unrecognized Argument"), tr("Could not parse argument: %1").arg(arg));
     }
@@ -88,7 +88,7 @@ void MainWindow::newCrossword()
 void MainWindow::loadCrosswordDialog()
 {
     // Construct a name filter for supported formats
-    QStringList formats = m_FormatSupport.getSupportedLoadingExtensions();
+    QStringList formats = m_CrosswordLoadSupport.getSupportedLoadingExtensions();
     QString nameFilter = Utilities::createNameFilter(tr("Crossword Files"), formats);
 
     // Attempt to get the default directory for looking for crosswords in
@@ -130,27 +130,6 @@ void MainWindow::loadRecentCrossword()
     }
 }
 
-void MainWindow::dropEvent(QDropEvent* ev)
-{
-    QList<QUrl> urls = ev->mimeData()->urls();
-
-    for(auto url : urls)
-    {
-        QString filepath = url.toLocalFile();
-        QString nativeFilepath = QDir::toNativeSeparators(filepath);
-
-        if(!filepath.isEmpty())
-        {
-            loadCrossword(nativeFilepath);
-        }
-    }
-}
-
-void MainWindow::dragEnterEvent(QDragEnterEvent* ev)
-{
-    ev->accept();
-}
-
 bool MainWindow::loadCrossword(const QString& filepath)
 {
     auto newCrossword = loadCrosswordHelper(filepath);
@@ -180,7 +159,7 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
         return nullptr;
     }
 
-    auto loader = m_FormatSupport.locateLoader(filepath);
+    auto loader = m_CrosswordLoadSupport.locateLoader(filepath);
 
     if(!loader)
     {
@@ -204,6 +183,8 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
 
     if(!consistent)
     {
+        qDebug() << qPrintable(QString("Invalid crossword state"));
+
         QMessageBox::information(this, tr("Inconsistent file"), tr("File loaded with errors"));
     }
 
@@ -212,28 +193,23 @@ std::unique_ptr<CrosswordBase> MainWindow::loadCrosswordHelper(const QString& fi
 
 bool MainWindow::saveCrosswordDialog()
 {
-    QString filepath;
+    Preferences::AppSettings settings;
+
+    QString filepath = m_Crossword->getFilepath();
 
     // Check for existing file reference
     QFileInfo file(m_Crossword->getFilepath());
-    if(file.exists())
-    {
-        Q_ASSERT(!m_Crossword->getFilepath().isEmpty());
-        filepath = m_Crossword->getFilepath();
-    }
 
-    // Attempt to use a default save directory
-    Preferences::AppSettings settings;
-    QString defaultDirectory = settings.getCrosswordSavePath();
+    QString defaultSaveDirectory = settings.getCrosswordSavePath();
+    QString fileName = settings.getDefaultSaveFilename();
+    QStringList formats = m_CrosswordLoadSupport.getSupportedSavingExtensions();
+    QString nameFilter = Utilities::createNameFilter(tr("Crossword Files"), formats);
 
-    filepath = QFileDialog::getSaveFileName(this, tr("Save Crossword File"), defaultDirectory, QString());
+    filepath = QFileDialog::getSaveFileName(this, tr("Save Crossword File"), defaultSaveDirectory, QString());
     if(filepath.isNull())
     {
         return false;
     }
-
-    QStringList formats = m_FormatSupport.getSupportedSavingExtensions();
-    QString nameFilter = Utilities::createNameFilter(tr("Crossword Files"), formats);
 
     // Convert the file path to use native directory separators
     QString nativeFilepath = QDir::toNativeSeparators(filepath);
@@ -255,11 +231,11 @@ bool MainWindow::saveCrossword(const QString& filepath)
 
     if(!saveable)
     {
-        QMessageBox::information(this, tr("Could not save"), tr("This crossword is in an inconsistent state and could not be saved"));
+        QMessageBox::information(this, tr("Could not save"), tr("The crossword is in an inconsistent state and could not be saved"));
         return false;
     }
 
-    auto saver = m_FormatSupport.locateSaver(filepath);
+    auto saver = m_CrosswordLoadSupport.locateSaver(filepath);
 
     if(!saver)
     {
@@ -268,13 +244,24 @@ bool MainWindow::saveCrossword(const QString& filepath)
         return false;
     }
 
-    bool success = saver->save(filepath, m_Crossword->getState());
-
-    if(!success)
+    QStringList lines = saver->save(m_Crossword->getState());
+    if(lines.empty())
     {
         // The saver failed
         QMessageBox::information(this, tr("Save failed"), tr("Failed to save crossword file: %1").arg(filepath));
         return false;
+    }
+    else
+    {
+        QFile file(filepath);
+
+        bool success = Utilities::writeFile(file, lines);
+
+        if(!success)
+        {
+            QMessageBox::information(this, tr("Save failed"), tr("Failed to write crossword file to disk: %1").arg(filepath));
+            return false;
+        }
     }
 
     Q_ASSERT(m_Crossword->isValid()); // This has no side effects
@@ -285,20 +272,29 @@ bool MainWindow::saveCrossword(const QString& filepath)
 // Save the currently open crossword
 bool MainWindow::saveCurrentCrossword()
 {
-    if(m_Crossword->hasFilepath())
+    return saveCrosswordDialog();
+}
+
+bool MainWindow::exportWebGLCrossword()
+{
+    auto saver = m_CrosswordExportSupport.locateSaver(Formats::WEBGL100);
+
+    QStringList data = saver->save(m_Crossword->getState());
+
+    if(data.isEmpty())
     {
-        return saveCrossword(m_Crossword->getFilename());
+        return false;
     }
-    else
-    {
-        return saveCrosswordDialog();
-    }
+
+    // TODO
+
+    return true;
 }
 
 // Drag-and-drops
 void MainWindow::loadFile(const QString& filepath)
 {
-    bool isSupportedCrosswordFormat = m_FormatSupport.isLoaderSupported(filepath);
+    bool isSupportedCrosswordFormat = m_CrosswordLoadSupport.isLoaderSupported(filepath);
 
     if(isSupportedCrosswordFormat)
     {
@@ -340,16 +336,9 @@ void MainWindow::showPreferences()
 
 // View menu implementations
 
-void MainWindow::fitGridInView()
+void MainWindow::fitGridSceneInView()
 {
-    // TODO
-    // Call method on graphics scene/view to do this
-}
-
-void MainWindow::centerGridInView()
-{
-    // TODO
-    // Call method on graphics scene/view to do this
+    m_Ui->graphicsView->fitSceneInView();
 }
 
 // About menu implementations
@@ -396,7 +385,7 @@ void MainWindow::showSupportEmail()
     supportEmail += "&body=";
     supportEmail += tr("Please send your support message");
 
-    QDesktopServices::openUrl(QUrl(supportEmail));
+    Utilities::openUrl(QUrl(supportEmail));
 }
 
 // Exiting the application
@@ -413,9 +402,8 @@ bool MainWindow::showQuitConfirmation()
 
     if(QMessageBox::Yes == save)
     {
-        saveCurrentCrossword();
-
-        return true;
+        // Do not quit if saving fails for some reason
+        return saveCurrentCrossword();
     }
     else if(QMessageBox::No == save)
     {
@@ -463,4 +451,25 @@ bool MainWindow::eventFilter(QObject* object, QEvent* event)
     }
 
     return false;
+}
+
+void MainWindow::dropEvent(QDropEvent* ev)
+{
+    QList<QUrl> urls = ev->mimeData()->urls();
+
+    for(auto url : urls)
+    {
+        QString filepath = url.toLocalFile();
+        QString nativeFilepath = QDir::toNativeSeparators(filepath);
+
+        if(!filepath.isEmpty())
+        {
+            loadCrossword(nativeFilepath);
+        }
+    }
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent* ev)
+{
+    ev->accept();
 }

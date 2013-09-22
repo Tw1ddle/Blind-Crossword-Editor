@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include "crosswordformatsupportlocator.h"
+#include "crosswordloadsupportlocator.h"
 
 namespace Tests
 {
@@ -15,8 +15,6 @@ class CrosswordLoadingTest : public QObject
     Q_OBJECT
 private slots:
     void initTestCase();
-
-    QStringList getTestDataFilepaths(QString dirPath);
 
     // Tests that the loaders actually work by applying test files to them.
     // Load up a series of working puzzles
@@ -33,8 +31,10 @@ private slots:
     void cleanupTestCase();
 
 private:
+    bool loadCrosswords(QString testPath);
+
     Crossword::CrosswordState m_State;
-    Crossword::Formats::CrosswordFormatSupportLocator m_FormatSupport;
+    Crossword::Formats::CrosswordLoadSupportLocator m_FormatSupport;
 };
 
 }

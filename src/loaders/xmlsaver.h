@@ -14,7 +14,7 @@ class XMLSaver : public CrosswordSaver
 public:
     XMLSaver();
 
-    virtual bool save(const QString& filepath, const CrosswordState& state) const override;
+    virtual QStringList save(const CrosswordState& state) const override;
 };
 
 }

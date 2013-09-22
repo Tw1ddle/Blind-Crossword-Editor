@@ -19,8 +19,7 @@ bool XWCLoader::load(const QString& filepath, CrosswordState& puzzle) const
     QStringList data = readFile(filepath, puzzle);
 
     // Empty file or failed to read
-    bool success = !data.empty();
-    if(!success)
+    if(data.empty())
     {
         return false;
     }
@@ -28,31 +27,49 @@ bool XWCLoader::load(const QString& filepath, CrosswordState& puzzle) const
     // Datasources
     puzzle.m_DataSources.m_PuzzleFilePath = filepath;
 
-    success = loadMetadata(puzzle, data);
+    return load(data, puzzle);
+}
+
+bool XWCLoader::load(const QStringList& data, CrosswordState& puzzle) const
+{
+    QStringList lines = data; // A copy of the data the loading methods can take apart
+
+    bool success = false;
+
+    success = loadMetadata(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
-    success = loadGrid(puzzle, data);
+    success = loadGrid(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
-    success = loadClues(puzzle, data);
+    success = loadClues(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
-    success = loadSolveGrid(puzzle, data);
+    success = loadSolveGrid(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
     return true;
+}
+
+CrosswordState XWCLoader::load(const QStringList& data) const
+{
+    CrosswordState state;
+
+    load(data, state);
+
+    return state;
 }
 
 bool XWCLoader::loadMetadata(CrosswordState& puzzle, QStringList& lines) const
@@ -147,16 +164,7 @@ bool XWCLoader::readGrid(CrosswordState& puzzle, QStringList& lines) const
             QChar currentCharacter = currentLine.at(x);
             Q_ASSERT(currentCharacter.isLetterOrNumber());
 
-            // Lower case letters are used for the solution words, with a '1' for each black square.
-            if(currentCharacter == XWC::Common::blackSquare)
-            {
-                puzzle.m_GridState.m_Grid.push_back(std::make_tuple(CrosswordItem(QString(""), Vec3i(x, y, 0), QColor(Qt::black))));
-            }
-            // If all the words have not yet been entered, there will be a '0' (zero) for each empty white square.
-            else
-            {
-                puzzle.m_GridState.m_Grid.push_back(std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, 0), QColor(Qt::white))));
-            }
+            puzzle.m_GridState.m_Grid.push_back(std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, 0), QColor(Qt::white))));
         }
     }
 
@@ -215,7 +223,9 @@ bool XWCLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lines
 
         // Char 13 Vertical bar
         // Next characters contain the uppercase solution word L-J followed by a vertical bar.
-        QString solution = currentClue.takeFirst();
+
+        // Convert since the grids themselves will be loaded in as lower case. Take care to save in upper case though.
+        QString solution = currentClue.takeFirst().toLower();
 
         // If the clue has been defined, the words of the clue optionally followed by the word length in parentheses.
         QString clueWords;

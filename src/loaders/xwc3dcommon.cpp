@@ -25,7 +25,7 @@ const QChar Common::whiteSquare = '0'; // If all the words have not yet been ent
 const QChar Common::blackSquare = '1'; // Lower case letters are used for the solution words, with a '1' for each black square.
 const QChar Common::clueAttributeSeparator = '|'; // The separator between elements of clues
 const QChar Common::highlightAttributeSeparator = '|';
-const QChar Common::subattributeSeparator = ',';
+const QChar Common::subAttributeSeparator = ',';
 
 }
 

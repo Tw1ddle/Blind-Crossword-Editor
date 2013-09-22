@@ -8,6 +8,10 @@
 namespace Tests
 {
 
+QStringList getTestDataFilepaths(QString dirPath);
+
+QString getFilenameForFilepath(QString filePath);
+
 // Get standard puzzle path
 inline QString getRegularCrosswordTestPath()
 {

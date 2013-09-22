@@ -4,7 +4,8 @@
 #include <QMainWindow>
 
 #include "crosswordbase.h"
-#include "crosswordformatsupportlocator.h"
+#include "crosswordloadsupportlocator.h"
+#include "crosswordexportsupportlocator.h"
 
 namespace Ui
 {
@@ -59,6 +60,9 @@ private slots:
     void newCrossword();
     bool saveCrossword(const QString& filepath);
     bool saveCurrentCrossword();
+
+    bool exportWebGLCrossword();
+
     void printCrossword();
     void emailCrossword();
     void showCrosswordProperties();
@@ -68,8 +72,7 @@ private slots:
     void showPreferences();
 
     // View
-    void fitGridInView();
-    void centerGridInView();
+    void fitGridSceneInView();
 
     // About
     void showHelp();
@@ -79,10 +82,12 @@ private slots:
 
 private:
     std::unique_ptr<Ui::MainWindow> m_Ui;
-    std::unique_ptr<Editor::RecentFileManager> m_RecentFiles; // To set up and update recently opened file paths
+    std::unique_ptr<Editor::RecentFileManager> m_RecentFiles; // To set up and update recently opened crossword file paths
 
     std::unique_ptr<Crossword::CrosswordBase> m_Crossword;
-    Crossword::Formats::CrosswordFormatSupportLocator m_FormatSupport;
+
+    Crossword::Formats::CrosswordLoadSupportLocator m_CrosswordLoadSupport;
+    Crossword::Formats::CrosswordExportSupportLocator m_CrosswordExportSupport;
 };
 
 }

@@ -14,7 +14,7 @@ class PlainTextSaver : public CrosswordSaver
 public:
     PlainTextSaver();
 
-    virtual bool save(const QString& filepath, const CrosswordState& state) const override;
+    virtual QStringList save(const CrosswordState& state) const override;
 };
 
 }

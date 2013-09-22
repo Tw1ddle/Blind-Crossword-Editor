@@ -9,7 +9,14 @@
 namespace Utilities
 {
     // Utilities for reading and writing text
-    bool readFile(const QString& path, QStringList& text);
+    enum FileOption
+    {
+        SKIP_EMPTY_LINES,
+        INCLUDE_EMPTY_LINES
+    };
+    bool readFile(const QString& path, QStringList& text, FileOption option = SKIP_EMPTY_LINES);
+    QStringList readFile(const QString& path, FileOption option = SKIP_EMPTY_LINES);
+
     bool writeFile(QFile& file, const QStringList& text);
     bool existsFile(const QString& path);
     bool openUrl(const QUrl& url);

@@ -3,6 +3,8 @@
 #include <QPainter>
 #include <QPen>
 
+#include "appsettings.h"
+
 namespace Grid
 {
 
@@ -28,8 +30,12 @@ void GridClue::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     if(!text.isNull())
     {
         // TODO fetch font from settings
+        const Editor::Preferences::AppSettings settings;
+        QString fontName = settings.getGridShapeFontName();
+        QString fontSize = settings.getGridShapeFontSize();
+
         QFont font;
-        font.setFamily("Georgia");
+        font.setFamily(fontName);
         font.setPixelSize(m_Width);
 
         painter->setFont(font);

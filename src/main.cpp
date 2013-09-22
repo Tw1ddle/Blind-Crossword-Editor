@@ -45,6 +45,10 @@ public:
         {
             qDebug() << "Exception thrown: " << e.what();
         }
+        catch(...)
+        {
+            qDebug() << "Unknown exception thrown";
+        }
 
         return false;
     }
@@ -80,17 +84,13 @@ int main(int argc, char *argv[])
     // Get application arguments
     const QStringList arguments = app.arguments();
 
-    // Debug - show each argument in a QMessageBox
-    /*
+    // Print the arguments
     #ifdef QT_DEBUG
-    for (int i = 0; i < arguments.size(); i++)
+    for(int i = 0; i < arguments.size(); i++)
     {
-        QMessageBox box;
-        box.setText(arguments[i]);
-        box.exec();
+        qDebug() << qPrintable(QString("Invocation argument %1: %2 \n").arg(QString::number(i), arguments.at(i)));
     }
     #endif
-    */
 
     Editor::MainWindow mainWindow;
 

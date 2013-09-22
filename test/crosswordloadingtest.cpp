@@ -15,79 +15,62 @@ void CrosswordLoadingTest::initTestCase()
 {
 }
 
-QStringList CrosswordLoadingTest::getTestDataFilepaths(QString dirPath)
-{
-    QDir testDataDir(dirPath);
-
-    auto files = Utilities::getFilepathsInDirectory(testDataDir);
-
-    if(files.empty())
-    {
-        qWarning() << "No test files found";
-    }
-    else
-    {
-        qDebug() << QString("%1 test files found").arg(files.size());
-    }
-
-    return files;
-}
-
 void CrosswordLoadingTest::loadValidCrosswords()
 {
-    auto files = getTestDataFilepaths(Tests::getRegularCrosswordTestPath());
+    bool success = loadCrosswords(Tests::getRegularCrosswordTestPath());
 
-    for(auto& file : files)
-    {
-        auto supported = m_FormatSupport.isLoaderSupported(file);
-        QVERIFY(supported);
-
-        auto loader = m_FormatSupport.locateLoader(file);
-        auto loadSuccess = loader->load(file, m_State);
-        QVERIFY2(loadSuccess, qPrintable(QString("Failed to load regular crossword: %1").arg(file)));
-    }
+    QVERIFY2(success, "Regular crosswords failed to load");
 }
 
 void CrosswordLoadingTest::loadUnusualCrosswords()
 {
-    auto files = getTestDataFilepaths(Tests::getUnusualCrosswordTestPath());
+    bool success = loadCrosswords(Tests::getUnusualCrosswordTestPath());
 
-    for(auto& file : files)
-    {
-        auto supported = m_FormatSupport.isLoaderSupported(file);
-        QVERIFY(supported);
-
-        auto loader = m_FormatSupport.locateLoader(file);
-        auto loadSuccess = loader->load(file, m_State);
-        QVERIFY2(loadSuccess, qPrintable(QString("Failed to load unusual crossword: %1").arg(file)));
-    }
+    QVERIFY2(success, "Unusual crosswords failed to load");
 }
 
 void CrosswordLoadingTest::loadBrokenCrosswords()
 {
-    auto files = getTestDataFilepaths(Tests::getBrokenCrosswordTestPath());
+    bool success = loadCrosswords(Tests::getBrokenCrosswordTestPath());
 
-    for(auto& file : files)
-    {
-        auto supported = m_FormatSupport.isLoaderSupported(file);
-        QVERIFY(supported);
-
-        auto loader = m_FormatSupport.locateLoader(file);
-        auto loadSuccess = loader->load(file, m_State);
-        QVERIFY2(!loadSuccess, qPrintable(QString("Loaded broken crossword: %1").arg(file)));
-    }
+    QVERIFY2(!success, "Broken crosswords loaded anyway");
 }
 
 void CrosswordLoadingTest::loadInvalidFiles()
 {
-    auto files = getTestDataFilepaths(Tests::getInvalidCrosswordTestPath());
+    bool success = loadCrosswords(Tests::getInvalidCrosswordTestPath());
 
+    QVERIFY2(!success, "Invalid crosswords loaded");
+}
+
+bool CrosswordLoadingTest::loadCrosswords(QString testPath)
+{
+    auto files = getTestDataFilepaths(testPath);
+
+    bool allSuccessful = true;
     for(auto& file : files)
     {
-        auto supported = m_FormatSupport.isLoaderSupported(file);
+        QString filename = Tests::getFilenameForFilepath(file);
 
-        QVERIFY2(!supported, qPrintable(QString("Erroneously identified file as a supported file format: %1").arg(file)));
+        if(auto loader = m_FormatSupport.locateLoader(file))
+        {
+            if(loader->load(file, m_State))
+            {
+            }
+            else
+            {
+                qDebug() << qPrintable(QString("Crossword failed to load: %1").arg(filename));
+                allSuccessful = false;
+            }
+        }
+        else
+        {
+            qDebug() << qPrintable(QString("Unsupported format for file: %1").arg(filename));
+            allSuccessful = false;
+        }
     }
+
+    return allSuccessful;
 }
 
 void CrosswordLoadingTest::cleanupTestCase()

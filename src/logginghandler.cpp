@@ -17,7 +17,7 @@ void debugConsoleOutputHandler(QtMsgType type, const QMessageLogContext& context
 {
     QString output;
 
-    output.append(AppInfo::getAppName()).append(" ").append(AppInfo::getVersionNumber()).append(" - ");
+    output.append(AppInfo::getAppName()).append(" ").append(AppInfo::getVersionNumber()).append(" -");
 
     // Print message type
     switch(type)
@@ -32,7 +32,7 @@ void debugConsoleOutputHandler(QtMsgType type, const QMessageLogContext& context
 
     output.append(msg);
 
-    output.append(". Line: ").append(context.line).append("\n");
+    output.append(QString("At file: %1 line: %2").arg(context.file, QString::number(context.line)));
 
     #ifdef Q_OS_WIN32
     OutputDebugString(reinterpret_cast<const wchar_t*>(output.utf16()));

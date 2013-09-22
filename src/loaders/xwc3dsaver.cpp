@@ -9,17 +9,37 @@ XWC3DSaver::XWC3DSaver()
 {
 }
 
-bool XWC3DSaver::save(const QString& filepath, const CrosswordState& state) const
+QStringList XWC3DSaver::save(const CrosswordState& state) const
 {
     QStringList lines;
 
+    if(!saveMetadata(state, lines))
+    {
+        return QStringList();
+    }
+
+    if(!saveGrid(state, lines))
+    {
+        return QStringList();
+    }
+
+    if(!saveClues(state, lines))
+    {
+        return QStringList();
+    }
+
+    return lines;
+}
+
+bool XWC3DSaver::saveMetadata(const CrosswordState& state, QStringList& lines) const
+{
     // Metadata
 
     // Line 1: Format type
-    lines += Formats::XWC101.first;
+    lines += Formats::XWC3D100.first;
 
     // Line 2: Format version
-    lines += Formats::XWC101.second;
+    lines += Formats::XWC3D100.second;
 
     const auto& metadata = state.m_Metadata;
 
@@ -42,6 +62,11 @@ bool XWC3DSaver::save(const QString& filepath, const CrosswordState& state) cons
     // JPG is supported in this application
     lines += dataSources.m_BackgroundImagePath;
 
+    return true;
+}
+
+bool XWC3DSaver::saveGrid(const CrosswordState& state, QStringList& lines) const
+{
     // Grid
     const auto& grid = state.m_GridState;
 
@@ -71,10 +96,45 @@ bool XWC3DSaver::save(const QString& filepath, const CrosswordState& state) cons
         }
     }
 
+    // Optional grid highlights
+    // TODO
+    lines += "There is no highlight in this puzzle!";
+
+    return true;
+}
+
+bool XWC3DSaver::saveClues(const CrosswordState& state, QStringList& lines) const
+{
     // Clues
 
-
-    Q_UNUSED(filepath);
+    if(!saveCluesForDirection(state, lines, Direction::ACROSS))
+    {
+        return false;
+    }
+    if(!saveCluesForDirection(state, lines, Direction::BACKWARDS))
+    {
+        return false;
+    }
+    if(!saveCluesForDirection(state, lines, Direction::AWAY))
+    {
+        return false;
+    }
+    if(!saveCluesForDirection(state, lines, Direction::TOWARDS))
+    {
+        return false;
+    }
+    if(!saveCluesForDirection(state, lines, Direction::DOWN))
+    {
+        return false;
+    }
+    if(!saveCluesForDirection(state, lines, Direction::UP))
+    {
+        return false;
+    }
+    if(!saveCluesForDirection(state, lines, Direction::SNAKING))
+    {
+        return false;
+    }
 
     return true;
 }
@@ -90,38 +150,69 @@ bool XWC3DSaver::saveCluesForDirection(const CrosswordState& state, QStringList&
 
     const auto& clues = state.m_ClueState.m_Clues;
 
-    // TODO finish this and also worry about the
-
     for(const auto& clue : clues)
     {
+        // No empty clues allowed
+        if(clue.getLetterPositions().size() <= 0)
+        {
+            return false;
+        }
+
         if(clue.getDirection() == directionString)
         {
             QString line;
+
+            // Unique identifier
+            line += clue.getIdentifier();
+            line += XWC3D::Common::clueAttributeSeparator;
 
             // Clue number
             line += clue.getNumber();
             line += XWC3D::Common::clueAttributeSeparator;
 
-            // Row number of the first letter of the solution word in the grid.
-            line += QString::number(clue.getLetterPositions().at(0).x());
+            // Letter positions
+            auto& letterPositions = clue.getLetterPositions();
+
+            // Number of letters in the solution word
+            line += QString::number(letterPositions.size());
             line += XWC3D::Common::clueAttributeSeparator;
 
-            // Column number of the first letter of the solution word in the grid.
-            line += QString::number(clue.getLetterPositions().at(0).y());
-            line += XWC3D::Common::clueAttributeSeparator;
+            if(direction != Direction::SNAKING)
+            {
+                // Row number of the first letter of the solution word in the grid.
+                line += QString::number(letterPositions.at(0).x());
+                line += XWC3D::Common::subAttributeSeparator;
+                // Column number of the first letter of the solution word in the grid.
+                line += QString::number(letterPositions.at(0).y());
+                line += XWC3D::Common::subAttributeSeparator;
+                // Grid depth number of the first letter of the solution word in the grid.
+                line += QString::number(letterPositions.at(0).z());
+                line += XWC3D::Common::clueAttributeSeparator;
+            }
+            else
+            {
+                // Snaking clues have all their letter coordinates listed
+                for(size_t i = 0; i < clue.getLetterPositions().size(); i++)
+                {
+                    line += QString::number(letterPositions.at(i).x());
+                    line += XWC3D::Common::subAttributeSeparator;
+                    line += QString::number(letterPositions.at(i).y());
+                    line += XWC3D::Common::subAttributeSeparator;
+                    line += QString::number(letterPositions.at(i).z());
+                    line += XWC3D::Common::clueAttributeSeparator;
+                }
+            }
 
-            // Grid depth number of the first letter of the solution word in the grid.
-
-            // Number of letters in the solution word.
-            line += QString::number(clue.getLetterPositions().size());
-            line += XWC3D::Common::clueAttributeSeparator;
-
-            // Next characters contain the solution word followed by a vertical bar.
+            // Next characters contain the upper case solution word.
             line += clue.getSolution().toUpper();
             line += XWC3D::Common::clueAttributeSeparator;
 
-            // The clue text itself
+            // The clue text itself.
             line += clue.getClue();
+            line += XWC3D::Common::clueAttributeSeparator;
+
+            // The solution word length breakdown e.g. (2,3)
+            line += clue.getComponentLengths();
 
             lines += line;
         }

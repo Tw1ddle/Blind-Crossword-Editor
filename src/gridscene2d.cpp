@@ -2,6 +2,8 @@
 
 #include <QKeyEvent>
 
+#include "gridsceneundocommands.h"
+
 namespace Grid
 {
 
@@ -11,8 +13,10 @@ GridScene2D::GridScene2D(QObject* parent, InternalInterface::CrosswordStateToGri
     addGrid();
 }
 
-void GridScene2D::addGrid()
+void GridScene2D::addGrid(int gridNumber)
 {
+    Q_UNUSED(gridNumber);
+
     Crossword::CrosswordState::GridState& gridModel = getCrosswordInterface()->getGrid();
 
     QGraphicsItemGroup* gridItem = new QGraphicsItemGroup();
@@ -31,7 +35,7 @@ void GridScene2D::addGrid()
         square->setParentItem(gridItem);
         addItem(square);
 
-        getGridShapes().push_back(square);
+        addGridShape(square);
     }
 
     addItem(gridItem);
@@ -107,7 +111,8 @@ bool GridScene2D::selectNextGridShape()
     auto shape = getGridShapeForCoordinate(next);
 
     clearSelection();
-    shape->setSelected(true);
+
+    addCommand(new SelectGridItemCommand(shape));
 
     return true;
 }

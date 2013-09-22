@@ -21,6 +21,8 @@ QStringList CrosswordLoader::readFile(const QString& filepath, CrosswordState& s
     QStringList data;
     bool success = Utilities::readFile(filepath, data);
 
+    Q_ASSERT(success);
+
     if(success)
     {
         // Set the puzzle file location

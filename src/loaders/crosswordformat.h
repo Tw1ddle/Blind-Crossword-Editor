@@ -63,6 +63,9 @@ const std::pair<QString, QString> RICHTEXT100 = std::make_pair("rtf", "1.0.0");
 // Custom xml
 const std::pair<QString, QString> CUSTOM_XML100 = std::make_pair("xml", "1.0.0");
 
+// WebGL
+const std::pair<QString, QString> WEBGL100 = std::make_pair("webgl", "1.0.0");
+
 // More supported formats go here...
 
 // Known crossword formats

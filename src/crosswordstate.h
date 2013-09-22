@@ -18,8 +18,6 @@ namespace Crossword
 class CrosswordState
 {
 public:
-    CrosswordState();
-
     // Technical metadata
     // File format
     struct FileFormat
@@ -55,7 +53,7 @@ public:
         // Tuple indices
         enum
         {
-            ITEM,
+            ITEM
         };
         std::vector<std::tuple<CrosswordItem>> m_Grid;
     };

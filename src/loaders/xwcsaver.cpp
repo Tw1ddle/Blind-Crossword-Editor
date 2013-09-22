@@ -4,6 +4,8 @@
 #include "xwccommon.h"
 #include "utilities.h"
 
+#include <QDebug>
+
 namespace Crossword
 {
 
@@ -14,10 +16,35 @@ XWCSaver::XWCSaver() : CrosswordSaver()
 {
 }
 
-bool XWCSaver::save(const QString& filepath, const CrosswordState& state) const
+QStringList XWCSaver::save(const CrosswordState& state) const
 {
     QStringList lines;
 
+    if(!saveMetadata(state, lines))
+    {
+        return QStringList();
+    }
+
+    if(!saveGrid(state, lines))
+    {
+        return QStringList();
+    }
+
+    if(!saveClues(state, lines))
+    {
+        return QStringList();
+    }
+
+    if(!saveSolveGrid(state, lines))
+    {
+        return QStringList();
+    }
+
+    return lines;
+}
+
+bool XWCSaver::saveMetadata(const CrosswordState& state, QStringList& lines) const
+{
     const auto& metadata = state.m_Metadata;
 
     // Line 1: Version number followed by Author name.
@@ -45,6 +72,13 @@ bool XWCSaver::save(const QString& filepath, const CrosswordState& state) const
     // Line 5: Number of columns in the crossword grid
     lines += QString::number(grid.m_Dimensions.y());
 
+    return true;
+}
+
+bool XWCSaver::saveGrid(const CrosswordState& state, QStringList& lines) const
+{
+    const auto& grid = state.m_GridState;
+
     const int gridX = grid.m_Dimensions.x();
     const int gridY = grid.m_Dimensions.y();
 
@@ -69,38 +103,24 @@ bool XWCSaver::save(const QString& filepath, const CrosswordState& state) const
         lines += currentLine;
     }
 
+    return true;
+}
+
+bool XWCSaver::saveClues(const CrosswordState& state, QStringList& lines) const
+{
     // The first line after the solution grid contains the number of Across clues.
-    saveCluesForDirection(state, lines, Direction::ACROSS);
-
-    // Followed by Down clues
-    saveCluesForDirection(state, lines, Direction::DOWN);
-
-    // If the Mode is Solve, immediately following the Down clues is the Solve grid,
-    // one row for each row of the crossword.
-    // It is similar to the Solution grid except that the solved words are in upper case characters.
-    auto modes = XWC::Common::getModes();
-    auto mode = modes.find(metadata.m_Type).value();
-    if(mode == XWC::Modes::SOLVE)
+    if(!saveCluesForDirection(state, lines, Direction::ACROSS))
     {
-        std::vector<QString> solveGrid(grid.m_Dimensions.product());
-
-        for(const auto& clue : state.m_ClueState.m_Clues)
-        {
-            auto letterPositions = clue.getLetterPositions();
-
-            for(auto& letterPosition : letterPositions)
-            {
-                solveGrid.at(letterPosition.x() + (letterPosition.y() * gridY)).toUpper();
-            }
-        }
+        return false;
     }
 
-    // Write the file to disk
-    QFile file(filepath);
+    // Followed by Down clues
+    if(!saveCluesForDirection(state, lines, Direction::DOWN))
+    {
+        return false;
+    }
 
-    auto success = Utilities::writeFile(file, lines);
-
-    return success;
+    return true;
 }
 
 bool XWCSaver::saveCluesForDirection(const CrosswordState& state, QStringList& lines, Crossword::Formats::Direction direction) const
@@ -149,6 +169,39 @@ bool XWCSaver::saveCluesForDirection(const CrosswordState& state, QStringList& l
 
             lines += line;
         }
+    }
+
+    return true;
+}
+
+bool XWCSaver::saveSolveGrid(const CrosswordState& state, QStringList& lines) const
+{
+    // If the Mode is Solve, immediately following the Down clues is the Solve grid,
+    // one row for each row of the crossword.
+    // It is similar to the Solution grid except that the solved words are in upper case characters.
+    const auto& metadata = state.m_Metadata;
+    auto modes = XWC::Common::getModes();
+    auto mode = modes.find(metadata.m_Type).value();
+
+    // TODO replace this with a loop that inserts the current guesses/solutions
+    // from the clues, rather than just an uppercase grid
+    QStringList solveGrid;
+    if(mode == XWC::Modes::SOLVE)
+    {
+        saveGrid(state, solveGrid);
+
+        for(auto& line : solveGrid)
+        {
+            for(auto& letter : line)
+            {
+                if(letter.isLetter())
+                {
+                    letter = letter.toUpper();
+                }
+            }
+        }
+
+        lines += solveGrid;
     }
 
     return true;

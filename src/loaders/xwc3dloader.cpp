@@ -12,13 +12,12 @@ XWC3DLoader::XWC3DLoader()
 {
 }
 
-bool Crossword::Formats::XWC3DLoader::load(const QString& filepath, Crossword::CrosswordState& puzzle) const
+bool Crossword::Formats::XWC3DLoader::load(const QString& filepath, CrosswordState& puzzle) const
 {
     QStringList data = readFile(filepath, puzzle);
 
     // Empty file or failed to read
-    bool success = !data.empty();
-    if(!success)
+    if(data.empty())
     {
         return false;
     }
@@ -26,31 +25,49 @@ bool Crossword::Formats::XWC3DLoader::load(const QString& filepath, Crossword::C
     // Datasources
     puzzle.m_DataSources.m_PuzzleFilePath = filepath;
 
-    success = loadMetadata(puzzle, data);
+    return load(data, puzzle);
+}
+
+bool XWC3DLoader::load(const QStringList& data, CrosswordState& puzzle) const
+{
+    QStringList lines = data;
+
+    bool success = false;
+
+    success = loadMetadata(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
-    success = loadGridHighlights(puzzle, data);
+    success = loadGridHighlights(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
-    success = loadGrid(puzzle, data);
+    success = loadGrid(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
-    success = loadClues(puzzle, data);
+    success = loadClues(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
     return true;
+}
+
+CrosswordState XWC3DLoader::load(const QStringList& data) const
+{
+    CrosswordState state;
+
+    load(data, state);
+
+    return state;
 }
 
 bool XWC3DLoader::loadMetadata(CrosswordState& puzzle, QStringList& lines) const
@@ -120,7 +137,7 @@ bool XWC3DLoader::loadGridHighlights(CrosswordState& puzzle, QStringList& lines)
 
     while(!highlights.empty())
     {
-        QStringList currentHighlight = highlights.takeFirst().split(XWC3D::Common::subattributeSeparator);
+        QStringList currentHighlight = highlights.takeFirst().split(XWC3D::Common::subAttributeSeparator);
 
         const int numSubattributes = 4;
         if(currentHighlight.size() == numSubattributes)
@@ -158,19 +175,11 @@ bool XWC3DLoader::loadGrid(CrosswordState& puzzle, QStringList& lines) const
         return false;
     }
 
-    // There are two possible grid layouts - rectangular grids and combination lock grids
     // Rectangular grids
     auto rectangularGridFormat = Crossword::Formats::XWC3D100;
     if(rectangularGridFormat.first == extension)
     {
         return readGrid(puzzle, lines, rectangularGridFormat);
-    }
-
-    // Combination lock grids
-    auto combinationGridFormat = Crossword::Formats::XWC3DR100;
-    if(combinationGridFormat.first == extension)
-    {
-        return readGrid(puzzle, lines, combinationGridFormat);
     }
 
     return false;
@@ -200,56 +209,6 @@ bool XWC3DLoader::readGrid(CrosswordState& puzzle, QStringList& lines, std::pair
                     else
                     {
                         puzzle.m_GridState.m_Grid.push_back(std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, z), QColor(Qt::white))));
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
-    if(format == Crossword::Formats::XWC3DR100) // Combination lock grids
-    {
-        for(int z = 0; z < dimensions.z(); z++)
-        {
-            for(int y = 0; y < dimensions.y(); y++)
-            {
-                QString currentLine = lines.takeFirst();
-
-                if(y == 0) // Disc hub
-                {
-                    for(int x = 0; x < dimensions.x(); x++)
-                    {
-                        QChar currentCharacter = currentLine.at(0);
-
-                        if(currentLine.at(0) == XWC3D::Common::blackSquare)
-                        {
-                            puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_tuple(CrosswordItem(QString(""), Vec3i(x, y, z), QColor(Qt::black))));
-                        }
-                        else
-                        {
-                            puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, z), QColor(Qt::black))));
-                        }
-                    }
-                }
-                else
-                {
-                    for(int x = 0; x < dimensions.x(); x++)
-                    {
-                        QChar currentCharacter = currentLine.at(x);
-
-                        if(currentLine.at(z) == XWC3D::Common::blackSquare)
-                        {
-                            puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_tuple(CrosswordItem(QString(""), Vec3i(x, y, z), QColor(Qt::black))));
-                        }
-                        else
-                        {
-                            puzzle.m_GridState.m_Grid.push_back(
-                                        std::make_tuple(CrosswordItem(QString(currentCharacter), Vec3i(x, y, z), QColor(Qt::white))));
-                        }
                     }
                 }
             }
@@ -320,7 +279,7 @@ bool XWC3DLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lin
             std::vector<Vec3i> letterPositions;
 
             // The starting coordinate of the clue
-            QStringList startPositionList = currentClue.takeFirst().split(XWC3D::Common::subattributeSeparator);
+            QStringList startPositionList = currentClue.takeFirst().split(XWC3D::Common::subAttributeSeparator);
             int gridX = startPositionList.takeFirst().toInt() - 1;
             int gridY = startPositionList.takeFirst().toInt() - 1;
             int gridZ = startPositionList.takeFirst().toInt() - 1;
@@ -349,7 +308,7 @@ bool XWC3DLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lin
         else if(direction == Formats::Direction::SNAKING)
         {
             // Indices at which clue numbers appear
-            QStringList clueIndices = currentClue.takeFirst().split(XWC3D::Common::subattributeSeparator);
+            QStringList clueIndices = currentClue.takeFirst().split(XWC3D::Common::subAttributeSeparator);
             // The clue numbers
             QString numbers = currentClue.takeFirst();
 
@@ -360,7 +319,7 @@ bool XWC3DLoader::loadCluesForDirection(CrosswordState& puzzle, QStringList& lin
             std::vector<Vec3i> letterPositions;
             for(int i = 0; i < length; i++)
             {
-                QStringList coordinate = currentClue.takeFirst().split(XWC3D::Common::subattributeSeparator);
+                QStringList coordinate = currentClue.takeFirst().split(XWC3D::Common::subAttributeSeparator);
                 int gridX = coordinate.takeFirst().toInt() - 1;
                 int gridY = coordinate.takeFirst().toInt() - 1;
                 int gridZ = coordinate.takeFirst().toInt() - 1;
@@ -432,19 +391,6 @@ const std::vector<Vec3i> XWC3DLoader::loadLetterPositionsForDirection(Direction 
         {
             letterPositions.push_back(startPosition - VectorMath::Vec3i(0, 0, i));
         }
-    }
-
-    else if(Direction::DIAMETRIC == direction)
-    {
-        // TODO
-    }
-    else if(Direction::CLOCKWISE == direction)
-    {
-        // TODO
-    }
-    else if(Direction::ANTICLOCKWISE == direction)
-    {
-        // TODO
     }
 
     return letterPositions;

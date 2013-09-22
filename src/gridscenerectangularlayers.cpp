@@ -2,8 +2,8 @@
 
 #include "gridscene.h"
 #include "gridsquare.h"
+#include "gridsceneundocommands.h"
 
-#include <QGraphicsSimpleTextItem>
 #include <QKeyEvent>
 
 namespace Grid
@@ -13,10 +13,9 @@ GridSceneRectangularLayers::GridSceneRectangularLayers(QObject* parent, Internal
 {
     m_TypingDirection = RIGHT;
 
-    auto grids = getCrosswordInterface()->getGrid().m_Dimensions.z();
+    auto numGrids = getCrosswordInterface()->getGrid().m_Dimensions.z();
 
-    // For each grid
-    for(int z = 0; z < grids; z++)
+    for(int z = 0; z < numGrids; z++)
     {
         addGrid(z);
     }
@@ -45,7 +44,7 @@ void GridSceneRectangularLayers::addGrid(int gridNumber)
 
         addItem(square);
 
-        getGridShapes().push_back(square);
+        addGridShape(square);
     }
 
     addItem(gridItem);
@@ -95,11 +94,11 @@ void GridSceneRectangularLayers::keyReleaseEvent(QKeyEvent* event)
 bool GridSceneRectangularLayers::isNavigationKey(int keyCode) const
 {
     bool isNavigation = (keyCode == Qt::Key_Right ||
-                  keyCode == Qt::Key_Left ||
-                  keyCode == Qt::Key_Up ||
-                  keyCode == Qt::Key_Down ||
-                  keyCode == Qt::Key_PageDown ||
-                  keyCode == Qt::Key_PageUp);
+                         keyCode == Qt::Key_Left ||
+                         keyCode == Qt::Key_Up ||
+                         keyCode == Qt::Key_Down ||
+                         keyCode == Qt::Key_PageDown ||
+                         keyCode == Qt::Key_PageUp);
 
     return isNavigation;
 }
@@ -143,7 +142,8 @@ bool GridSceneRectangularLayers::selectNextGridShape()
     auto shape = getGridShapeForCoordinate(next);
 
     clearSelection();
-    shape->setSelected(true);
+
+    addCommand(new SelectGridItemCommand(shape));
 
     return true;
 }

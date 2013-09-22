@@ -15,9 +15,14 @@ class XWCSaver : public CrosswordSaver
 public:
     XWCSaver();
 
-    virtual bool save(const QString& filepath, const CrosswordState& state) const override;
+    virtual QStringList save(const CrosswordState& state) const override;
 
 private:
+    bool saveMetadata(const CrosswordState& state, QStringList& lines) const;
+    bool saveGrid(const CrosswordState& state, QStringList& lines) const;
+    bool saveClues(const CrosswordState& state, QStringList& lines) const;
+    bool saveSolveGrid(const CrosswordState& state, QStringList& lines) const;
+
     bool saveCluesForDirection(const CrosswordState& state, QStringList& lines, Crossword::Formats::Direction direction) const;
 };
 

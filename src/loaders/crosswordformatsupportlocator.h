@@ -4,6 +4,7 @@
 #include <QString>
 #include <QStringList>
 #include <QMap>
+#include <QFileInfo>
 #include <tuple>
 
 #include "crosswordformat.h"
@@ -35,6 +36,8 @@ public:
 
     // Whether the format extension is supported (takes any kind of filename or path so long)
     // Note this does not check to see if the specific format version is supported
+
+    // This works for extensions alone too, provided that they have the prepended "." e.g. ".xwc"
     const CrosswordLoader* locateLoader(const QString& filepath) const;
     const CrosswordSaver* locateSaver(const QString& filepath) const;
 
@@ -50,6 +53,10 @@ public:
     const QStringList getSupportedLoadingExtensions() const;
     // Get a list of the supported saving file formats
     const QStringList getSupportedSavingExtensions() const;
+
+    // Extract the file extension from a file path
+    // Returns all characters after but not including the last '.'
+    const QString getExtension(const QString& filepath) const;
 
 private:
     // Generalization for loader/saver calls
@@ -68,13 +75,9 @@ private:
     template<class T, class V>
     const V* locate(const QMap<const T*, const V*>& map, const QString& filepath) const;
 
-    // Extract the file extension from a file path
-    // Returns all characters after but not including the last '.'
-    const QString getExtension(const QString& filepath) const;
-
     // Called on construction, just registers all the supported loaders and savers
     // Might change this later if format support can be extended externally (.dlls etc)
-    void registerFormats();
+    virtual void registerFormats() = 0;
 
     // Only one loader or saver should be registered for any particular version of a file format
     QMap<const Formats::CrosswordFormat*, const CrosswordLoader*> m_Loaders;
@@ -100,10 +103,19 @@ const V* CrosswordFormatSupportLocator::locate(const QMap<const T*, const V*>& m
 template<class T, class V>
 const V* CrosswordFormatSupportLocator::locate(const QMap<const T*, const V*>& map, const QString& filepath) const
 {
-    QList<const T*> keys = map.keys();
+    QFileInfo file(filepath);
 
-    // Trim the provided filepath to get the file extension
-    const QString extension = this->getExtension(filepath);
+    Q_ASSERT(!file.isDir());
+
+    // If necessary trim the provided filepath to get the file extension
+    QString extension = filepath;
+
+    if(!file.suffix().isEmpty())
+    {
+        extension = getExtension(filepath);
+    }
+
+    QList<const T*> keys = map.keys();
 
     for(auto key : keys)
     {
@@ -119,7 +131,7 @@ const V* CrosswordFormatSupportLocator::locate(const QMap<const T*, const V*>& m
 template<class T, class V>
 bool CrosswordFormatSupportLocator::isSupported(const QMap<const T*, const V*>& map, const T& format) const
 {
-    return (locate(map, format) != nullptr);
+    return (nullptr != locate(map, format));
 }
 
 }

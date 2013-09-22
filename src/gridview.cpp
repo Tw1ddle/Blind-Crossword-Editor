@@ -10,6 +10,11 @@ GridView::GridView(QWidget* parent) :
     setScene(new QGraphicsScene()); // Start with an empty scene
 }
 
+void GridView::fitSceneInView()
+{
+    fitInView(scene()->itemsBoundingRect(), Qt::KeepAspectRatio);
+}
+
 void GridView::wheelEvent(QWheelEvent* event)
 {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);

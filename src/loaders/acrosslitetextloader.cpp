@@ -34,25 +34,43 @@ bool AcrossLiteTextLoader::load(const QString& filepath, CrosswordState& puzzle)
     // Datasources
     puzzle.m_DataSources.m_PuzzleFilePath = filepath;
 
-    success = loadMetadata(puzzle, data);
+    return load(data, puzzle);
+}
+
+bool AcrossLiteTextLoader::load(const QStringList& data, CrosswordState& puzzle) const
+{
+    QStringList lines = data;
+
+    bool success = false;
+
+    success = loadMetadata(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
-    success = loadGrid(puzzle, data);
+    success = loadGrid(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
-    success = loadClues(puzzle, data);
+    success = loadClues(puzzle, lines);
     if(!success)
     {
         return false;
     }
 
     return true;
+}
+
+CrosswordState AcrossLiteTextLoader::load(const QStringList& data) const
+{
+    CrosswordState state;
+
+    load(data, state);
+
+    return state;
 }
 
 bool AcrossLiteTextLoader::loadMetadata(CrosswordState& puzzle, QStringList& lines) const

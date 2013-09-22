@@ -10,10 +10,22 @@ CrosswordClue::CrosswordClue(const QString& number, const QString& guess, const 
         m_ComponentLengths = QString::number(getLetterPositions().size());
     }
 
+    // TODO make threadsafe solution
+    static int identifier_index = 0;
+
+    m_Identifier = QString::number(identifier_index);
+
+    identifier_index++;
+
     Q_ASSERT(!letterPositions.empty());
     Q_ASSERT(!number.isEmpty());
     Q_ASSERT(!clue.isEmpty());
     Q_ASSERT(!direction.isEmpty());
+}
+
+const QString& CrosswordClue::getIdentifier() const
+{
+    return m_Identifier;
 }
 
 const QString& CrosswordClue::getNumber() const

@@ -2,7 +2,8 @@
 #define GRIDSCENE_H
 
 #include <QGraphicsScene>
-#include <QDebug>
+#include <QUndoStack>
+#include <QUndoView>
 
 #include "internalinterfaces.h"
 
@@ -10,6 +11,7 @@ namespace Grid
 {
 
 class GridShape;
+class GridClue;
 
 // Base class for scenes that display the crossword grids
 class GridScene : public QGraphicsScene
@@ -30,13 +32,20 @@ protected:
     virtual void keyReleaseEvent(QKeyEvent* event) override;
 
     // Grid getters
-    QList<Grid::GridShape*> getSelectedGridShapes();
-    std::vector<GridShape*>& getGridShapes();
     virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) = 0;
+    QList<Grid::GridShape*> getSelectedGridShapes() const;
+    const std::vector<GridShape*>& getGridShapes() const;
+    void addGridShape(GridShape* shape);
 
     // Grid editing
     virtual void typeInItems(const QString& text, QList<GridShape*>& items);
     virtual void onSelectionChanged();
+
+    // Modifying grid visibility
+    void showGridShapes();
+    void hideGridShapes();
+    void showClues();
+    void hideClues();
 
     // Actions the user performs
     enum UserState
@@ -46,6 +55,9 @@ protected:
     };
     UserState m_State;
 
+    // Add a command to the undo stack
+    void addCommand(QUndoCommand* const command);
+
 private:
     void addClue();
     void createClueFromSelection();
@@ -53,8 +65,15 @@ private:
     virtual bool isNavigationKey(int keyCode) const = 0; // Controls allow user to most around the grid using certain keys
 
     std::vector<GridShape*> m_GridShapes;
+    std::vector<GridClue*> m_GridClues;
+
     InternalInterface::CrosswordStateToGridScene* m_CrosswordState;
     bool m_LeftMouseDown;
+
+    std::unique_ptr<QUndoStack> m_UndoStack;
+    #ifdef QT_DEBUG
+    std::unique_ptr<QUndoView> m_UndoView;
+    #endif
 };
 
 }

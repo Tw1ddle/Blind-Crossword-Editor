@@ -19,6 +19,7 @@ class CrosswordBase : public InternalInterface::CrosswordStateToGridScene,
 {
 public:
     CrosswordBase();
+    virtual ~CrosswordBase();
 
     // If the crossword has a valid state
     // then it may be loaded or saved to disk

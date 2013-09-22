@@ -8,7 +8,7 @@
 namespace Utilities
 {
 
-bool readFile(const QString& path, QStringList& text)
+bool readFile(const QString& path, QStringList& text, FileOption option)
 {
     // Note that QFile expects the file separator to be '/' regardless of operating system.
 
@@ -28,13 +28,29 @@ bool readFile(const QString& path, QStringList& text)
     do
     {
         currentLine = in.readLine();
-        if(currentLine.length() != 0) //skips empty lines
+        if(SKIP_EMPTY_LINES == option && currentLine.length() != 0)
+        {
+            text << currentLine;
+        }
+        else if(INCLUDE_EMPTY_LINES == option)
         {
             text << currentLine;
         }
     } while (!currentLine.isNull());
 
     return true;
+}
+
+QStringList readFile(const QString& path, FileOption option)
+{
+    QStringList text;
+
+    if(readFile(path, text, option))
+    {
+        return text;
+    }
+
+    return QStringList();
 }
 
 bool writeFile(QFile& file, const QStringList& text)
@@ -129,14 +145,16 @@ const QString createNameFilter(const QString& title, const QStringList& permitte
 {
     QString nameFilter;
 
-    nameFilter.append(title);
+    nameFilter += title;
 
-    nameFilter.append(" (");
+    nameFilter += " (";
     for(auto format : permittedFormats)
     {
-        nameFilter.append("*.").append(format).append(" ");
+        nameFilter += "*.";
+        nameFilter += format;
+        nameFilter += " ";
     }
-    nameFilter.append(")");
+    nameFilter += ")";
 
     return nameFilter;
 }

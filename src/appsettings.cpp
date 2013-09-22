@@ -105,6 +105,32 @@ void AppSettings::setCrosswordSavePath(const QString& path)
     m_Settings->setValue(crosswordSavePath, path);
 }
 
+QString AppSettings::getGridShapeFontName() const
+{
+    return m_Settings->value(gridShapeFontName, Defaults::gridShapeFontName).toString();
+}
+
+void AppSettings::setGridShapeFontName(const QString& name)
+{
+    m_Settings->setValue(gridShapeFontName, name);
+}
+
+int AppSettings::getGridShapeFontSize() const
+{
+    bool ok = false;
+
+    int size = m_Settings->value(gridShapeFontSize, Defaults::gridShapeFontSize).toInt(&ok);
+
+    Q_ASSERT(ok);
+
+    return size;
+}
+
+void AppSettings::setGridShapeFontSize(int pointSize)
+{
+    m_Settings->setValue(gridShapeFontSize, pointSize);
+}
+
 }
 
 }

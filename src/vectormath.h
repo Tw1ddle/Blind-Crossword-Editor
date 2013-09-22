@@ -3,6 +3,8 @@
 
 #include <math.h>
 
+#include <QString>
+
 namespace VectorMath
 {
 
@@ -195,6 +197,16 @@ template<class T> T Vector3<T>::product() const
 
 typedef Vector3<float> Vec3f;
 typedef Vector3<int> Vec3i;
+
+template<class T>
+QString toString(T vector)
+{
+    QString x(QString::number(vector.x()));
+    QString y(QString::number(vector.y()));
+    QString z(QString::number(vector.z()));
+
+    return QString(x + "," + y + "," + z);
+}
 
 }
 

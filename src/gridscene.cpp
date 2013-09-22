@@ -6,6 +6,7 @@
 
 #include "gridclue.h"
 #include "gridshape.h"
+#include "gridsceneundocommands.h"
 
 #include "newcrosswordcluepage.h"
 
@@ -15,6 +16,14 @@ namespace Grid
 GridScene::GridScene(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState) :
     QGraphicsScene(parent), m_CrosswordState(crosswordState), m_LeftMouseDown(false)
 {    
+    m_UndoStack = std::unique_ptr<QUndoStack>(new QUndoStack());
+
+    #ifdef QT_DEBUG
+    m_UndoView = std::unique_ptr<QUndoView>(new QUndoView(m_UndoStack.get()));
+    m_UndoView->setWindowTitle(tr("Undo Command List"));
+    m_UndoView->show();
+    #endif
+
     m_State = UserState::FILLING_GRID;
 }
 
@@ -59,12 +68,12 @@ void GridScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 
     if(m_State == UserState::SELECTING_CLUE && m_LeftMouseDown)
     {
-        QGraphicsItem* item;
-        item = itemAt(event->scenePos(), QTransform());
+        QGraphicsItem* item = itemAt(event->scenePos(), QTransform());
 
-        if(item)
+        // TODO what about selections that overlap themselves? e.g. overlapping snaking clues
+        if(item && !item->isSelected())
         {
-            item->setSelected(true);
+            addCommand(new SelectGridItemCommand(item));
         }
     }
 }
@@ -123,7 +132,7 @@ void GridScene::keyReleaseEvent(QKeyEvent* event)
     }
 }
 
-QList<Grid::GridShape*> GridScene::getSelectedGridShapes()
+QList<Grid::GridShape*> GridScene::getSelectedGridShapes() const
 {
     auto items = selectedItems();
 
@@ -142,9 +151,14 @@ QList<Grid::GridShape*> GridScene::getSelectedGridShapes()
     return shapes;
 }
 
-std::vector<GridShape*>& GridScene::getGridShapes()
+const std::vector<GridShape*>& GridScene::getGridShapes() const
 {
     return m_GridShapes;
+}
+
+void GridScene::addGridShape(GridShape* shape)
+{
+    m_GridShapes.push_back(shape);
 }
 
 void GridScene::typeInItems(const QString& text, QList<GridShape*>& items)
@@ -157,15 +171,50 @@ void GridScene::typeInItems(const QString& text, QList<GridShape*>& items)
 
         if(shape)
         {
-            shape->getItem().setText(text);
-            shape->update();
+            addCommand(new EditGridShapeTextCommand(shape, text));
         }
     }
 }
 
 void GridScene::onSelectionChanged()
 {
+}
 
+void GridScene::showGridShapes()
+{
+    for(GridShape* shape : m_GridShapes)
+    {
+        shape->setVisible(true);
+    }
+}
+
+void GridScene::hideGridShapes()
+{
+    for(GridShape* shape : m_GridShapes)
+    {
+        shape->setVisible(false);
+    }
+}
+
+void GridScene::showClues()
+{
+    for(GridClue* clue : m_GridClues)
+    {
+        clue->setVisible(true);
+    }
+}
+
+void GridScene::hideClues()
+{
+    for(GridClue* clue : m_GridClues)
+    {
+        clue->setVisible(false);
+    }
+}
+
+void GridScene::addCommand(QUndoCommand* const command)
+{
+    m_UndoStack->push(command);
 }
 
 void GridScene::addClue()

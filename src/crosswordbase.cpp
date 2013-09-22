@@ -18,6 +18,10 @@ CrosswordBase::CrosswordBase()
     m_State = std::unique_ptr<CrosswordState>(new CrosswordState);
 }
 
+CrosswordBase::~CrosswordBase()
+{
+}
+
 bool CrosswordBase::isValid() const
 {
     // Size check
@@ -57,15 +61,11 @@ bool CrosswordBase::hasFilepath() const
 
 QString CrosswordBase::getFilepath() const
 {
-    Q_ASSERT(hasFilepath());
-
     return m_State->m_DataSources.m_PuzzleFilePath;
 }
 
 QString CrosswordBase::getFilename() const
 {
-    Q_ASSERT(hasFilepath());
-
     QFileInfo info(getFilepath());
 
     return info.fileName();
@@ -213,9 +213,10 @@ void CrosswordBase::setScene(QGraphicsView* view)
     }
     else
     {
-        // TODO
-        // If the format isn't one the program has a native loader for but we've got this far, assume it's a 2D puzzle
-        Q_ASSERT(false); // Remove this failure if proper support for plugin-based loaders/savers is added
+        // If the format isn't one the program has a native loader for but we've got this far anyway, assume it's a 2D puzzle
+        Q_ASSERT(false);
+
+        scene = new Grid::GridScene2D(view, this);
     }
 
     if(view->scene() != nullptr)
@@ -224,6 +225,7 @@ void CrosswordBase::setScene(QGraphicsView* view)
     }
 
     view->setScene(scene);
+    view->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
 }
 
 CrosswordState& CrosswordBase::getState()

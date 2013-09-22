@@ -133,6 +133,8 @@
      <string>View</string>
     </property>
     <addaction name="actionPuzzle_Metadata"/>
+    <addaction name="separator"/>
+    <addaction name="actionFit_Grids_In_View"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -316,6 +318,11 @@
     <string>Insert Symbol</string>
    </property>
   </action>
+  <action name="actionFit_Grids_In_View">
+   <property name="text">
+    <string>Fit Grids In View</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -470,6 +477,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionFit_Grids_In_View</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fitGridSceneInView()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionWebGL</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>exportWebGLCrossword()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showAbout()</slot>
@@ -481,5 +520,7 @@
   <slot>showCrosswordProperties()</slot>
   <slot>newCrossword()</slot>
   <slot>showSupportEmail()</slot>
+  <slot>fitGridSceneInView()</slot>
+  <slot>exportWebGLCrossword()</slot>
  </slots>
 </ui>
