@@ -20,7 +20,11 @@ protected:
 signals:
     
 public slots:
-    
+
+private:
+    double m_CurrentZoom; // For keeping track of and limiting the zoom level of the view
+    const double m_UpperZoomLimit;
+    const double m_LowerZoomLimit;
 };
 
 }

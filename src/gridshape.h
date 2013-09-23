@@ -14,6 +14,7 @@ public:
     GridShape(Crossword::CrosswordItem& item, float width, float height);
 
     virtual Crossword::CrosswordItem& getItem();
+    virtual void setItem(const Crossword::CrosswordItem& item);
 
     virtual void clear() override;
 

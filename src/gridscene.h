@@ -21,6 +21,10 @@ public:
     explicit GridScene(QObject* parent, InternalInterface::CrosswordStateToGridScene* const crosswordState);
     virtual ~GridScene();
 
+public slots:
+    virtual void undo();
+    virtual void redo();
+
 protected:
     InternalInterface::CrosswordStateToGridScene* getCrosswordInterface();
 
@@ -42,10 +46,8 @@ protected:
     virtual void onSelectionChanged();
 
     // Modifying grid visibility
-    void showGridShapes();
-    void hideGridShapes();
-    void showClues();
-    void hideClues();
+    void toggleClueVisibility();
+    void toggleGridShapeVisibility();
 
     // Actions the user performs
     enum UserState
@@ -57,6 +59,8 @@ protected:
 
     // Add a command to the undo stack
     void addCommand(QUndoCommand* const command);
+    void beginCommandMacro(const QString& description);
+    void endCommandMacro();
 
 private:
     void addClue();

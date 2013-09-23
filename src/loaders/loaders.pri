@@ -22,7 +22,8 @@ HEADERS += \
     src/loaders/crosswordformat.h \
     src/loaders/crosswordformatsupportlocator.h \
     src/loaders/crosswordexportsupportlocator.h \
-    src/loaders/crosswordloadsupportlocator.h
+    src/loaders/crosswordloadsupportlocator.h \
+    src/loaders/canvassaver.h
 
 SOURCES += \
     src/loaders/crosswordloader.cpp \
@@ -44,4 +45,5 @@ SOURCES += \
     src/loaders/crosswordformat.cpp \
     src/loaders/crosswordformatsupportlocator.cpp \
     src/loaders/crosswordexportsupportlocator.cpp \
-    src/loaders/crosswordloadsupportlocator.cpp
+    src/loaders/crosswordloadsupportlocator.cpp \
+    src/loaders/canvassaver.cpp

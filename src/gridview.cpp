@@ -5,7 +5,7 @@
 using namespace Grid;
 
 GridView::GridView(QWidget* parent) :
-    QGraphicsView(parent)
+    QGraphicsView(parent), m_CurrentZoom(1.0), m_UpperZoomLimit(20.0), m_LowerZoomLimit(0.5)
 {
     setScene(new QGraphicsScene()); // Start with an empty scene
 }
@@ -13,6 +13,7 @@ GridView::GridView(QWidget* parent) :
 void GridView::fitSceneInView()
 {
     fitInView(scene()->itemsBoundingRect(), Qt::KeepAspectRatio);
+    m_CurrentZoom = 1.0;
 }
 
 void GridView::wheelEvent(QWheelEvent* event)
@@ -24,10 +25,18 @@ void GridView::wheelEvent(QWheelEvent* event)
 
     if(event->delta() > 0)
     {
-        scale(scaleFactor, scaleFactor);
+        if(m_CurrentZoom <= m_UpperZoomLimit)
+        {
+            m_CurrentZoom *= scaleFactor;
+            scale(scaleFactor, scaleFactor);
+        }
     }
     else
     {
-        scale(invScaleFactor, invScaleFactor);
+        if(m_CurrentZoom >= m_LowerZoomLimit)
+        {
+            m_CurrentZoom *= invScaleFactor;
+            scale(invScaleFactor, invScaleFactor);
+        }
     }
 }

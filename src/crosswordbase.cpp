@@ -3,6 +3,7 @@
 #include <QGraphicsView>
 #include <QFileInfo>
 
+#include "gridview.h"
 #include "gridscene2d.h"
 #include "gridscene3d.h"
 #include "gridscenerectangularlayers.h"
@@ -187,14 +188,14 @@ void CrosswordBase::setState(std::unique_ptr<CrosswordState>& nextState)
     m_State.swap(nextState);
 }
 
-void CrosswordBase::setScene(QGraphicsView* view)
+void CrosswordBase::setScene(Grid::GridView* view)
 {
     // Create the appropriate scene type based on the puzzle format
     auto format = m_State->m_FileFormat.m_Extension;
     auto formats2D = Formats::get2DFormats();
     auto formats3D = Formats::get3DFormats();
 
-    QGraphicsScene* scene = nullptr;
+    Grid::GridScene* scene = nullptr;
 
     if(formats2D.contains(format))
     {
@@ -225,7 +226,7 @@ void CrosswordBase::setScene(QGraphicsView* view)
     }
 
     view->setScene(scene);
-    view->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
+    view->fitSceneInView();
 }
 
 CrosswordState& CrosswordBase::getState()

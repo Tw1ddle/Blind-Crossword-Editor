@@ -1,6 +1,8 @@
 #include "gridsceneundocommands.h"
 
-Grid::EditGridShapeTextCommand::EditGridShapeTextCommand(GridShape* shape, const QString& newText) : m_Shape(shape),
+#include "gridshape.h"
+
+Grid::EditShapeTextCommand::EditShapeTextCommand(GridShape* shape, const QString& newText) : m_Shape(shape),
     m_NewText(newText), m_OldText(shape->getItem().getText())
 {
     shape->getItem().setText(newText);
@@ -9,61 +11,140 @@ Grid::EditGridShapeTextCommand::EditGridShapeTextCommand(GridShape* shape, const
     setText(QString("Edit %1 from \"%2\" to \"%3\"").arg(VectorMath::toString(shape->getItem().getCoordinate()), m_OldText, m_NewText));
 }
 
-Grid::EditGridShapeTextCommand::~EditGridShapeTextCommand()
+Grid::EditShapeTextCommand::~EditShapeTextCommand()
 {
 }
 
-void Grid::EditGridShapeTextCommand::undo()
+void Grid::EditShapeTextCommand::undo()
 {
     m_Shape->getItem().setText(m_OldText);
     m_Shape->update();
 }
 
-void Grid::EditGridShapeTextCommand::redo()
+void Grid::EditShapeTextCommand::redo()
 {
     m_Shape->getItem().setText(m_NewText);
     m_Shape->update();
 }
 
 
-Grid::SelectGridItemCommand::SelectGridItemCommand(QGraphicsItem* item) : m_Item(item)
+Grid::SelectItemCommand::SelectItemCommand(QGraphicsItem* item) : m_Item(item)
 {
     m_Item->setSelected(true);
 
-    setText(QString("Selected item"));
+    setText(QString("Select item"));
 }
 
-Grid::SelectGridItemCommand::~SelectGridItemCommand()
+Grid::SelectItemCommand::~SelectItemCommand()
 {
 }
 
-void Grid::SelectGridItemCommand::undo()
+void Grid::SelectItemCommand::undo()
 {
     m_Item->setSelected(false);
 }
 
-void Grid::SelectGridItemCommand::redo()
+void Grid::SelectItemCommand::redo()
 {
     m_Item->setSelected(true);
 }
 
-Grid::DeselectGridItemCommand::DeselectGridItemCommand(QGraphicsItem* item) : m_Item(item)
+Grid::DeselectItemCommand::DeselectItemCommand(QGraphicsItem* item) : m_Item(item)
 {
     m_Item->setSelected(false);
 
-    setText(QString("Deselected item"));
+    setText(QString("Deselect item"));
 }
 
-Grid::DeselectGridItemCommand::~DeselectGridItemCommand()
+Grid::DeselectItemCommand::~DeselectItemCommand()
 {
 }
 
-void Grid::DeselectGridItemCommand::undo()
+void Grid::DeselectItemCommand::undo()
 {
     m_Item->setSelected(true);
 }
 
-void Grid::DeselectGridItemCommand::redo()
+void Grid::DeselectItemCommand::redo()
 {
     m_Item->setSelected(false);
+}
+
+
+Grid::ToggleItemVisibleCommand::ToggleItemVisibleCommand(QGraphicsItem* item) : m_Item(item), m_OldVisibility(item->isVisible())
+{
+    m_Item->setVisible(!m_OldVisibility);
+
+    setText(QString("Toggle item visiblity"));
+}
+
+Grid::ToggleItemVisibleCommand::~ToggleItemVisibleCommand()
+{
+}
+
+void Grid::ToggleItemVisibleCommand::undo()
+{
+    m_Item->setVisible(m_OldVisibility);
+}
+
+void Grid::ToggleItemVisibleCommand::redo()
+{
+    m_Item->setVisible(m_OldVisibility);
+}
+
+
+// This stops selecting the currently selected items - this does not clear the content of any items
+Grid::ClearSelectionCommand::ClearSelectionCommand(QList<QGraphicsItem*> items) : m_OldSelection(items)
+{
+    for(auto& item : m_OldSelection)
+    {
+        item->setSelected(false);
+    }
+
+    setText(QString("Clear current selection"));
+}
+
+Grid::ClearSelectionCommand::~ClearSelectionCommand()
+{
+}
+
+void Grid::ClearSelectionCommand::undo()
+{
+    for(auto& item : m_OldSelection)
+    {
+        item->setSelected(true);
+    }
+}
+
+void Grid::ClearSelectionCommand::redo()
+{
+    for(auto& item : m_OldSelection)
+    {
+        item->setSelected(false);
+    }
+}
+
+// Clears the contents of a shape
+Grid::ClearShapeCommand::ClearShapeCommand(Grid::GridShape* shape) : m_Shape(shape), m_OldItem(shape->getItem())
+{
+    m_Shape->getItem().clear();
+    m_Shape->update();
+
+    setText(QString("Clear contents of shape at %1").arg(VectorMath::toString(m_Shape->getItem().getCoordinate())));
+}
+
+Grid::ClearShapeCommand::~ClearShapeCommand()
+{
+}
+
+void Grid::ClearShapeCommand::undo()
+{
+    m_Shape->setItem(m_OldItem);
+    m_Shape->update();
+}
+
+void Grid::ClearShapeCommand::redo()
+{
+    m_Shape->getItem().clear();
+    m_Shape->update();
 }

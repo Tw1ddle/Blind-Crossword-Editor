@@ -7,7 +7,10 @@
 
 #include "internalinterfaces.h"
 
-class QGraphicsView;
+namespace Grid
+{
+class GridView;
+}
 
 namespace Crossword
 {
@@ -62,7 +65,7 @@ public slots:
     void setState(std::unique_ptr<CrosswordState>& nextState);
 
     // Set a scene appropriate to the crossword state i.e. file format loaded
-    virtual void setScene(QGraphicsView* view);
+    virtual void setScene(Grid::GridView* view);
     // virtual void setMetadataEditor(); // TODO Set an appropriate metadata editor for the crossword state
     // i.e. the file format loaded... and for other dialogs too...
 

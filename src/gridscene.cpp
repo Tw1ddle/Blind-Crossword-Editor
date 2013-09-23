@@ -31,6 +31,16 @@ GridScene::~GridScene()
 {
 }
 
+void GridScene::undo()
+{
+    m_UndoStack->undo();
+}
+
+void GridScene::redo()
+{
+    m_UndoStack->redo();
+}
+
 InternalInterface::CrosswordStateToGridScene* GridScene::getCrosswordInterface()
 {
     return m_CrosswordState;
@@ -52,14 +62,15 @@ void GridScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
+// TODO reimplement the base class events so it's possible to put undo/redos in easier
 void GridScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
+    QGraphicsScene::mouseReleaseEvent(event);
+
     if(Qt::LeftButton == event->button())
     {
         m_LeftMouseDown = false;
     }
-
-    QGraphicsScene::mouseReleaseEvent(event);
 }
 
 void GridScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
@@ -73,7 +84,8 @@ void GridScene::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
         // TODO what about selections that overlap themselves? e.g. overlapping snaking clues
         if(item && !item->isSelected())
         {
-            addCommand(new SelectGridItemCommand(item));
+            // TODO merge sequences of these selection commands
+            addCommand(new SelectItemCommand(item));
         }
     }
 }
@@ -93,11 +105,13 @@ void GridScene::keyPressEvent(QKeyEvent* event)
     if(Qt::Key_Delete == key || Qt::Key_Backspace == key)
     {
         auto shapes = getSelectedGridShapes();
+
+        beginCommandMacro(QString("Clear %1 shapes").arg(QString::number(shapes.size())));
         for(auto& shape : shapes)
         {
-            shape->clear();
-            shape->update();
+            addCommand(new ClearShapeCommand(shape));
         }
+        endCommandMacro();
     }
 
     if(UserState::FILLING_GRID == m_State && !isNavigationKey(key))
@@ -161,62 +175,6 @@ void GridScene::addGridShape(GridShape* shape)
     m_GridShapes.push_back(shape);
 }
 
-void GridScene::typeInItems(const QString& text, QList<GridShape*>& items)
-{
-    if((!text.isEmpty()) && items.size() == 1)
-    {
-        auto item = items.at(0);
-
-        auto shape = dynamic_cast<GridShape*>(item);
-
-        if(shape)
-        {
-            addCommand(new EditGridShapeTextCommand(shape, text));
-        }
-    }
-}
-
-void GridScene::onSelectionChanged()
-{
-}
-
-void GridScene::showGridShapes()
-{
-    for(GridShape* shape : m_GridShapes)
-    {
-        shape->setVisible(true);
-    }
-}
-
-void GridScene::hideGridShapes()
-{
-    for(GridShape* shape : m_GridShapes)
-    {
-        shape->setVisible(false);
-    }
-}
-
-void GridScene::showClues()
-{
-    for(GridClue* clue : m_GridClues)
-    {
-        clue->setVisible(true);
-    }
-}
-
-void GridScene::hideClues()
-{
-    for(GridClue* clue : m_GridClues)
-    {
-        clue->setVisible(false);
-    }
-}
-
-void GridScene::addCommand(QUndoCommand* const command)
-{
-    m_UndoStack->push(command);
-}
-
 void GridScene::addClue()
 {
     const QList<Grid::GridShape*> shapes = getSelectedGridShapes();
@@ -236,6 +194,60 @@ void GridScene::addClue()
             gridClue->setParentItem(shapes.at(0));
         }
     }
+}
+
+void GridScene::typeInItems(const QString& text, QList<GridShape*>& items)
+{
+    if((!text.isEmpty()) && items.size() == 1)
+    {
+        auto item = items.at(0);
+
+        auto shape = dynamic_cast<GridShape*>(item);
+
+        if(shape)
+        {
+            addCommand(new EditShapeTextCommand(shape, text));
+        }
+    }
+}
+
+void GridScene::onSelectionChanged()
+{
+}
+
+void GridScene::toggleGridShapeVisibility()
+{
+    beginCommandMacro("Toggle grid shape visibility");
+    for(GridShape* shape : m_GridShapes)
+    {
+        addCommand(new ToggleItemVisibleCommand(shape));
+    }
+    endCommandMacro();
+}
+
+void GridScene::toggleClueVisibility()
+{
+    beginCommandMacro("Toggle clue visibility");
+    for(GridClue* clue : m_GridClues)
+    {
+        addCommand(new ToggleItemVisibleCommand(clue));
+    }
+    endCommandMacro();
+}
+
+void GridScene::addCommand(QUndoCommand* const command)
+{
+    m_UndoStack->push(command);
+}
+
+void GridScene::beginCommandMacro(const QString& description)
+{
+    m_UndoStack->beginMacro(description);
+}
+
+void GridScene::endCommandMacro()
+{
+    m_UndoStack->endMacro();
 }
 
 }

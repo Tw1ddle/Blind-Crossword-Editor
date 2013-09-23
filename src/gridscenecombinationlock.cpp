@@ -112,9 +112,10 @@ bool GridSceneCombinationLock::selectNextGridShape()
 
     auto shape = getGridShapeForCoordinate(next);
 
-    clearSelection();
-
-    addCommand(new SelectGridItemCommand(shape));
+    beginCommandMacro("Select next grid shape");
+    addCommand(new ClearSelectionCommand(selectedItems()));
+    addCommand(new SelectItemCommand(shape));
+    endCommandMacro();
 
     return true;
 }

@@ -12,6 +12,11 @@ Crossword::CrosswordItem& GridShape::getItem()
     return m_Item;
 }
 
+void GridShape::setItem(const Crossword::CrosswordItem& item)
+{
+    m_Item = item;
+}
+
 void GridShape::clear()
 {
     m_Item.clear();
