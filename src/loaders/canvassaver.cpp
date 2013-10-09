@@ -1,5 +1,10 @@
 #include "canvassaver.h"
 
+#include "xmlsaver.h"
+#include "utilities.h"
+
+#include <QResource>
+
 namespace Crossword
 {
 

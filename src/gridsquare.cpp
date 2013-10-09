@@ -30,7 +30,9 @@ void GridSquare::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
         // TODO cleanup
         const Editor::Preferences::AppSettings settings;
         QString fontName = settings.getGridShapeFontName();
-        QString fontSize = settings.getGridShapeFontSize();
+        int fontSize = settings.getGridShapeFontSize();
+
+        Q_UNUSED(fontSize);
 
         QFont font;
         font.setFamily(fontName);

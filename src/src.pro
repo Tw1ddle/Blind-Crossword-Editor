@@ -31,7 +31,6 @@ HEADERS += \
     src/crosswordstatisticspage.h \
     src/autoupdater.h \
     src/contributorspage.h \
-    src/contributorspage.h \
     src/preferencespage.h \
     src/crosswordtemplates.h \
     src/newcrosswordpage.h \
@@ -40,7 +39,6 @@ HEADERS += \
     src/gridclue.h \
     src/gridshape.h \
     src/gridfillalgorithm.h \
-    src/wordlist.h \
     src/gridsceneundocommands.h
 
 SOURCES += \

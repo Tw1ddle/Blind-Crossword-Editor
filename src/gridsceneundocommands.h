@@ -47,8 +47,8 @@ public:
 
 private:
     GridShape* const m_Shape;
-    const QString m_OldText;
     const QString m_NewText;
+    const QString m_OldText;
 };
 
 class ClearShapeCommand : public QUndoCommand

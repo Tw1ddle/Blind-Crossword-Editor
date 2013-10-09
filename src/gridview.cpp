@@ -5,7 +5,7 @@
 using namespace Grid;
 
 GridView::GridView(QWidget* parent) :
-    QGraphicsView(parent), m_CurrentZoom(1.0), m_UpperZoomLimit(20.0), m_LowerZoomLimit(0.5)
+    QGraphicsView(parent), m_CurrentZoom(1.0), m_UpperZoomLimit(30.0), m_LowerZoomLimit(0.7)
 {
     setScene(new QGraphicsScene()); // Start with an empty scene
 }
@@ -20,6 +20,7 @@ void GridView::wheelEvent(QWheelEvent* event)
 {
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
+    // Mousewheel zooming with max and min zoom limits
     const double scaleFactor = 1.15;
     const double invScaleFactor = 1.0 / scaleFactor;
 

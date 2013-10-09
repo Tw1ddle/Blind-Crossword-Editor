@@ -32,7 +32,10 @@ void GridClue::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
         // TODO fetch font from settings
         const Editor::Preferences::AppSettings settings;
         QString fontName = settings.getGridShapeFontName();
-        QString fontSize = settings.getGridShapeFontSize();
+
+        int fontSize = settings.getGridShapeFontSize();
+
+        Q_UNUSED(fontSize);
 
         QFont font;
         font.setFamily(fontName);
