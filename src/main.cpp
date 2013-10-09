@@ -30,7 +30,7 @@ namespace Editor
 class CrosswordApplication : public QApplication
 {
 public:
-    CrosswordApplication(int argc, char *argv[]) : QApplication(argc, argv)
+    CrosswordApplication(int& argc, char *argv[]) : QApplication(argc, argv)
     {
     }
 
@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName(AppInfo::getOrganizationName()); // This must be set in order to use native QSettings storage
 
     // Get application arguments
+
     const QStringList arguments = app.arguments();
 
     // Print the arguments
