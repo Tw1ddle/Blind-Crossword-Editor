@@ -2,7 +2,14 @@ TEMPLATE = app
 
 QT += core gui widgets printsupport testlib
 
-CONFIG += x86 x86_64
+# Set build destination directories
+debug: DESTDIR = debug
+release: DESTDIR = release
+
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+UI_DIR = $$DESTDIR/.ui
 
 # Specify extra compiler flags
 
