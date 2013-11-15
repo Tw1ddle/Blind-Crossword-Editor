@@ -19,7 +19,7 @@ class NewCrosswordCluePage : public QDialog
 {
     Q_OBJECT
 public:
-    explicit NewCrosswordCluePage(const Crossword::CrosswordState::ClueState& clueState, const QList<Grid::GridShape*> gridShapes, QWidget* parent = 0);
+    explicit NewCrosswordCluePage(const Crossword::CrosswordState::ClueState& clueState, const std::vector<Grid::GridShape*> gridShapes, QWidget* parent = 0);
     ~NewCrosswordCluePage();
 
     // Get the clue specified by the user
@@ -31,7 +31,7 @@ private:
     void setupContent();
 
     const Crossword::CrosswordState::ClueState& m_ClueState;
-    const QList<Grid::GridShape*> m_GridShapes;
+    const std::vector<Grid::GridShape*> m_GridShapes;
 };
 
 }

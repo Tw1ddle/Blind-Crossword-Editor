@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "crosswordbase.h"
+
 namespace Ui
 {
     class NewCrosswordPage;
@@ -17,11 +19,12 @@ class NewCrosswordPage : public QDialog
 public:
     explicit NewCrosswordPage(QWidget* parent = 0);
     ~NewCrosswordPage();
+
+    std::unique_ptr<Crossword::CrosswordState> getState();
     
 private:
     Ui::NewCrosswordPage* ui;
-
-    void setupContent();
+    std::unique_ptr<Crossword::CrosswordState> m_NewCrossword;
 
 private slots:
     // On crossword template selection

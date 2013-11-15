@@ -17,6 +17,7 @@
 #include "recentfilemanager.h"
 #include "appsettings.h"
 #include "utilities.h"
+#include "gridbase.h"
 #include "gridview.h"
 #include "appinfo.h"
 
@@ -31,7 +32,8 @@ using namespace Crossword;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_Ui(std::unique_ptr<Ui::MainWindow>(new Ui::MainWindow)),
-    m_Crossword(std::unique_ptr<CrosswordBase>(new CrosswordBase))
+    m_Crossword(std::unique_ptr<CrosswordBase>(new CrosswordBase)),
+    m_Grid(std::unique_ptr<Grid::GridBase>(new Grid::GridBase))
 {
     // Set window icon
     setWindowIcon(QIcon(":/icons/icon.ico"));
@@ -78,10 +80,13 @@ void MainWindow::newCrossword()
 {
     NewCrosswordPage newCrosswordPage(this);
 
-    // TODO get a chosen template from this
     if(QDialog::Accepted == newCrosswordPage.exec())
     {
-        // m_Crossword->setState(newCrosswordPage.getState());
+        std::unique_ptr<CrosswordState> newState = newCrosswordPage.getState();
+        auto newCrossword = std::unique_ptr<CrosswordBase>(new CrosswordBase());
+        newCrossword->setState(newState);
+        m_Crossword.swap(newCrossword);
+        m_Grid->setScene(m_Ui->graphicsView, m_Crossword.get());
     }
 }
 
@@ -141,7 +146,7 @@ bool MainWindow::loadCrossword(const QString& filepath)
     // Loading successful so do the setup
     m_Crossword.swap(newCrossword);
     m_RecentFiles->addFile(filepath);
-    m_Crossword->setScene(m_Ui->graphicsView);
+    m_Grid->setScene(m_Ui->graphicsView, m_Crossword.get());
 
     return true;
 }
@@ -334,6 +339,16 @@ void MainWindow::showPreferences()
     preferencesPage.exec();
 }
 
+void MainWindow::undoGridSceneChange()
+{
+    m_Grid->undo();
+}
+
+void MainWindow::redoGridSceneChange()
+{
+    m_Grid->redo();
+}
+
 // View menu implementations
 
 void MainWindow::fitGridSceneInView()
@@ -393,7 +408,17 @@ void MainWindow::showSupportEmail()
 bool MainWindow::showQuitConfirmation()
 {
     QMessageBox msgBox(this);
-    msgBox.setText(tr("Do you want to save changes you made to %1?").arg(m_Crossword->getFilename()));
+
+    QString crosswordFilename = m_Crossword->getFilename();
+    if(crosswordFilename.isEmpty())
+    {
+        msgBox.setText(tr("Do you want to save changes you made to %1?").arg(crosswordFilename));
+    }
+    else
+    {
+        msgBox.setText(tr("Do you want to save your changes?"));
+    }
+
     msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     msgBox.button(QMessageBox::Discard)->setText(tr("Don't Save"));
     msgBox.setDefaultButton(QMessageBox::Save);

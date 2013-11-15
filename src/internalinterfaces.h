@@ -20,6 +20,8 @@ namespace InternalInterface
 
         virtual VectorMath::Vec3i getGridDimensions() const = 0;
         virtual VectorMath::Vec3i getNextCoordinateForDirection(Crossword::Formats::Direction, VectorMath::Vec3i index) const = 0;
+
+        virtual Crossword::CrosswordState::FileFormat& getFileFormat() = 0;
     };
 
     class CrosswordStateToLoader
@@ -32,6 +34,16 @@ namespace InternalInterface
     {
     public:
         virtual const Crossword::CrosswordState& getState() const = 0;
+    };
+
+    class GridSceneToMainWindow
+    {
+    public:
+        virtual bool canRedo() = 0;
+        virtual bool canUndo() = 0;
+
+        virtual void undo() = 0;
+        virtual void redo() = 0;
     };
 }
 

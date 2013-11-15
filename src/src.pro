@@ -39,7 +39,8 @@ HEADERS += \
     src/gridclue.h \
     src/gridshape.h \
     src/gridfillalgorithm.h \
-    src/gridsceneundocommands.h
+    src/gridsceneundocommands.h \
+    src/gridbase.h
 
 SOURCES += \
     src/crosswordstate.cpp \
@@ -73,4 +74,5 @@ SOURCES += \
     src/gridclue.cpp \
     src/gridshape.cpp \
     src/gridfillalgorithm.cpp \
-    src/gridsceneundocommands.cpp
+    src/gridsceneundocommands.cpp \
+    src/gridbase.cpp

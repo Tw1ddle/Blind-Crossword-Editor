@@ -50,6 +50,8 @@ public:
     void addClue(const CrosswordClue& clue) override;
     virtual const Crossword::CrosswordClue& getLastAddedClue() const override;
 
+    virtual Crossword::CrosswordState::FileFormat& getFileFormat() override;
+
     // Given an item in the grid, find the index of the next one along in any given direction
     // If the index would run off the edge of a grid, it loops back around to the opposite side
     virtual VectorMath::Vec3i getNextCoordinateForDirection(Crossword::Formats::Direction, VectorMath::Vec3i coordinate) const override;
@@ -64,8 +66,6 @@ public slots:
     // Replaces the current state with the provided state
     void setState(std::unique_ptr<CrosswordState>& nextState);
 
-    // Set a scene appropriate to the crossword state i.e. file format loaded
-    virtual void setScene(Grid::GridView* view);
     // virtual void setMetadataEditor(); // TODO Set an appropriate metadata editor for the crossword state
     // i.e. the file format loaded... and for other dialogs too...
 

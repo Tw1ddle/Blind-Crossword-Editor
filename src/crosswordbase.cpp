@@ -3,14 +3,6 @@
 #include <QGraphicsView>
 #include <QFileInfo>
 
-#include "gridview.h"
-#include "gridscene2d.h"
-#include "gridscene3d.h"
-#include "gridscenerectangularlayers.h"
-#include "gridscenecombinationlock.h"
-
-#include "crosswordformat.h"
-
 namespace Crossword
 {
 
@@ -90,6 +82,11 @@ void CrosswordBase::addClue(const CrosswordClue& clue)
 const CrosswordClue& CrosswordBase::getLastAddedClue() const
 {
     return m_State->m_ClueState.m_Clues.back();
+}
+
+CrosswordState::FileFormat& CrosswordBase::getFileFormat()
+{
+    return m_State->m_FileFormat;
 }
 
 VectorMath::Vec3i CrosswordBase::getNextCoordinateForDirection(Formats::Direction direction, VectorMath::Vec3i coordinate) const
@@ -186,47 +183,6 @@ void CrosswordBase::resetState()
 void CrosswordBase::setState(std::unique_ptr<CrosswordState>& nextState)
 {
     m_State.swap(nextState);
-}
-
-void CrosswordBase::setScene(Grid::GridView* view)
-{
-    // Create the appropriate scene type based on the puzzle format
-    auto format = m_State->m_FileFormat.m_Extension;
-    auto formats2D = Formats::get2DFormats();
-    auto formats3D = Formats::get3DFormats();
-
-    Grid::GridScene* scene = nullptr;
-
-    if(formats2D.contains(format))
-    {
-        scene = new Grid::GridScene2D(view, this);
-    }
-    else if(formats3D.contains(format))
-    {
-        if(formats3D.find(format).value() == Formats::FormatEnum::XWC3D)
-        {
-            scene = new Grid::GridSceneRectangularLayers(view, this);
-        }
-        else if(formats3D.find(format).value() == Formats::FormatEnum::XWC3DR)
-        {
-            scene = new Grid::GridSceneCombinationLock(view, this);
-        }
-    }
-    else
-    {
-        // If the format isn't one the program has a native loader for but we've got this far anyway, assume it's a 2D puzzle
-        Q_ASSERT(false);
-
-        scene = new Grid::GridScene2D(view, this);
-    }
-
-    if(view->scene() != nullptr)
-    {
-        delete view->scene();
-    }
-
-    view->setScene(scene);
-    view->fitSceneInView();
 }
 
 CrosswordState& CrosswordBase::getState()

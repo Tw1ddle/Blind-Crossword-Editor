@@ -41,6 +41,16 @@ void GridScene::redo()
     m_UndoStack->redo();
 }
 
+bool GridScene::canUndo()
+{
+    return m_UndoStack->canUndo();
+}
+
+bool GridScene::canRedo()
+{
+    return m_UndoStack->canRedo();
+}
+
 InternalInterface::CrosswordStateToGridScene* GridScene::getCrosswordInterface()
 {
     return m_CrosswordState;
@@ -58,7 +68,9 @@ void GridScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
     // Open grid item setting box on right click
     if(Qt::RightButton == event->button())
     {
-        // TODO
+        Editor::NewCrosswordCluePage newCrosswordCluePage(m_CrosswordState->getClues(), getSelectedGridShapes());
+
+        newCrosswordCluePage.exec();
     }
 }
 
@@ -116,7 +128,6 @@ void GridScene::keyPressEvent(QKeyEvent* event)
 
     if(UserState::FILLING_GRID == m_State && !isNavigationKey(key))
     {
-        // Insert the input into the grid
         QString keyText = event->text();
 
         auto shapes = getSelectedGridShapes();
@@ -125,44 +136,27 @@ void GridScene::keyPressEvent(QKeyEvent* event)
         selectNextGridShape();
     }
 
+    // Enter a clue
+    if(Qt::Key_Return == key && UserState::SELECTING_CLUE == m_State)
+    {
+        addClue();
+
+        clearSelection();
+
+        m_State = UserState::FILLING_GRID;
+    }
+
     event->accept();
 }
 
 void GridScene::keyReleaseEvent(QKeyEvent* event)
 {
     QGraphicsScene::keyReleaseEvent(event);
-
-    if(Qt::Key_Control == event->key())
-    {
-        if(UserState::SELECTING_CLUE == m_State)
-        {
-            // TODO wait for an action or choose an appropriate action here
-
-            // addClue();
-            // If the user adds the clue then clear the current selection
-            // clearSelection();
-            // m_State = UserState::FILLING_GRID;
-        }
-    }
 }
 
-QList<Grid::GridShape*> GridScene::getSelectedGridShapes() const
+std::vector<Grid::GridShape*> GridScene::getSelectedGridShapes() const
 {
-    auto items = selectedItems();
-
-    QList<Grid::GridShape*> shapes;
-
-    for(auto& item : items)
-    {
-        auto shape = dynamic_cast<Grid::GridShape*>(item);
-
-        if(shape)
-        {
-            shapes.push_back(shape);
-        }
-    }
-
-    return shapes;
+    return m_GridShapeSelection;
 }
 
 const std::vector<GridShape*>& GridScene::getGridShapes() const
@@ -177,26 +171,27 @@ void GridScene::addGridShape(GridShape* shape)
 
 void GridScene::addClue()
 {
-    const QList<Grid::GridShape*> shapes = getSelectedGridShapes();
+    const std::vector<Grid::GridShape*> shapes = getSelectedGridShapes();
 
     // If there are shapes selected then construct a clue out of them
     if(!shapes.empty())
     {
         Editor::NewCrosswordCluePage newCluePage(getCrosswordInterface()->getClues(), shapes);
 
-        int result = newCluePage.exec();
-        if(QDialog::Accepted == result)
+        if(QDialog::Accepted == newCluePage.exec())
         {
             getCrosswordInterface()->addClue(newCluePage.getClue());
             const Crossword::CrosswordClue& clue = getCrosswordInterface()->getLastAddedClue();
 
             auto gridClue = new Grid::GridClue(clue, 50, 50); // TODO get width and height settings
             gridClue->setParentItem(shapes.at(0));
+
+            // TODO add clue to the clues list
         }
     }
 }
 
-void GridScene::typeInItems(const QString& text, QList<GridShape*>& items)
+void GridScene::typeInItems(const QString& text, std::vector<GridShape*>& items)
 {
     if((!text.isEmpty()) && items.size() == 1)
     {
@@ -213,6 +208,21 @@ void GridScene::typeInItems(const QString& text, QList<GridShape*>& items)
 
 void GridScene::onSelectionChanged()
 {
+    QGraphicsItem* item = qobject_cast<QGraphicsItem*>(sender());
+
+    GridShape* shape = dynamic_cast<GridShape*>(item);
+
+    if(shape)
+    {
+        if(shape->isSelected())
+        {
+            m_GridShapeSelection.push_back(shape);
+        }
+        else
+        {
+            m_GridShapeSelection.push_back(shape);
+        }
+    }
 }
 
 void GridScene::toggleGridShapeVisibility()

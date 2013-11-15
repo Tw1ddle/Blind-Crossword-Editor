@@ -3,6 +3,8 @@
 
 #include <QGraphicsView>
 
+#include "internalinterfaces.h"
+
 namespace Grid
 {
 

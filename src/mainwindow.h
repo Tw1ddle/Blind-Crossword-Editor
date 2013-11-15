@@ -6,6 +6,7 @@
 #include "crosswordbase.h"
 #include "crosswordloadsupportlocator.h"
 #include "crosswordexportsupportlocator.h"
+#include "gridbase.h"
 
 namespace Ui
 {
@@ -70,6 +71,8 @@ private slots:
 
     // Edit
     void showPreferences();
+    void undoGridSceneChange();
+    void redoGridSceneChange();
 
     // View
     void fitGridSceneInView();
@@ -85,6 +88,7 @@ private:
     std::unique_ptr<Editor::RecentFileManager> m_RecentFiles; // To set up and update recently opened crossword file paths
 
     std::unique_ptr<Crossword::CrosswordBase> m_Crossword;
+    std::unique_ptr<Grid::GridBase> m_Grid;
 
     Crossword::Formats::CrosswordLoadSupportLocator m_CrosswordLoadSupport;
     Crossword::Formats::CrosswordExportSupportLocator m_CrosswordExportSupport;

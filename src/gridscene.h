@@ -14,7 +14,7 @@ class GridShape;
 class GridClue;
 
 // Base class for scenes that display the crossword grids
-class GridScene : public QGraphicsScene
+class GridScene : public QGraphicsScene, public InternalInterface::GridSceneToMainWindow
 {
     Q_OBJECT
 public:
@@ -24,6 +24,8 @@ public:
 public slots:
     virtual void undo();
     virtual void redo();
+    virtual bool canUndo();
+    virtual bool canRedo();
 
 protected:
     InternalInterface::CrosswordStateToGridScene* getCrosswordInterface();
@@ -37,12 +39,12 @@ protected:
 
     // Grid getters
     virtual GridShape* getGridShapeForCoordinate(VectorMath::Vec3i coordinate) = 0;
-    QList<Grid::GridShape*> getSelectedGridShapes() const;
+    std::vector<Grid::GridShape*> getSelectedGridShapes() const;
     const std::vector<GridShape*>& getGridShapes() const;
     void addGridShape(GridShape* shape);
 
     // Grid editing
-    virtual void typeInItems(const QString& text, QList<GridShape*>& items);
+    virtual void typeInItems(const QString& text, std::vector<GridShape*>& items);
     virtual void onSelectionChanged();
 
     // Modifying grid visibility
@@ -70,6 +72,8 @@ private:
 
     std::vector<GridShape*> m_GridShapes;
     std::vector<GridClue*> m_GridClues;
+
+    std::vector<GridShape*> m_GridShapeSelection; // The currently selected grid shapes including duplicates (for overlapping clues)
 
     InternalInterface::CrosswordStateToGridScene* m_CrosswordState;
     bool m_LeftMouseDown;

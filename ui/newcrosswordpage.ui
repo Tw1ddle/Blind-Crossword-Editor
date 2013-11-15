@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>657</width>
-    <height>620</height>
+    <height>177</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,9 +15,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="QToolButton" name="toolButton">
+      <widget class="QToolButton" name="Quick2D">
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
        </property>
@@ -27,14 +27,21 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QToolButton" name="toolButton_2">
+      <widget class="QToolButton" name="Combination3D">
        <property name="text">
         <string>3D Combination Lock</string>
        </property>
       </widget>
      </item>
+     <item row="1" column="1">
+      <widget class="QToolButton" name="Barred2D">
+       <property name="text">
+        <string>Barred 2D</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
-      <widget class="QToolButton" name="toolButton_3">
+      <widget class="QToolButton" name="Rectangular3D">
        <property name="text">
         <string>3D Rectangular</string>
        </property>
@@ -46,17 +53,81 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QToolButton" name="toolButton_4">
-       <property name="text">
-        <string>Barred 2D</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>Quick2D</sender>
+   <signal>clicked()</signal>
+   <receiver>NewCrosswordPage</receiver>
+   <slot>quickSelected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>181</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Rectangular3D</sender>
+   <signal>clicked()</signal>
+   <receiver>NewCrosswordPage</receiver>
+   <slot>rectangularSelected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Barred2D</sender>
+   <signal>clicked()</signal>
+   <receiver>NewCrosswordPage</receiver>
+   <slot>barredSelected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>446</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Combination3D</sender>
+   <signal>clicked()</signal>
+   <receiver>NewCrosswordPage</receiver>
+   <slot>combinationLockSelected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>209</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>309</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>quickSelected()</slot>
+  <slot>rectangularSelected()</slot>
+  <slot>combinationLockSelected()</slot>
+  <slot>barredSelected()</slot>
+ </slots>
 </ui>

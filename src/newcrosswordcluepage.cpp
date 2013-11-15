@@ -6,7 +6,7 @@
 namespace Editor
 {
 
-NewCrosswordCluePage::NewCrosswordCluePage(const Crossword::CrosswordState::ClueState& clueState, const QList<Grid::GridShape*> gridShapes, QWidget* parent) :
+NewCrosswordCluePage::NewCrosswordCluePage(const Crossword::CrosswordState::ClueState& clueState, const std::vector<Grid::GridShape*> gridShapes, QWidget* parent) :
     QDialog(parent),
     ui(new Ui::NewCrosswordCluePage),
     m_ClueState(clueState),
@@ -35,11 +35,22 @@ Crossword::CrosswordClue NewCrosswordCluePage::getClue()
 
 void NewCrosswordCluePage::setupContent()
 {
-    // TODO
+    // Coordinates and clue text
+    QString coordinates;
+    QString text;
+    for(auto shape : m_GridShapes)
+    {
+        QString coordinate = VectorMath::toString<VectorMath::Vec3i>(shape->getItem().getCoordinate());
+        coordinates.append(coordinate);
+        coordinate.append("|");
 
-    ui->clueTextLineEdit->setText(tr("Clue text..."));
-    ui->clueIdentifierText->setText("1");
-    ui->clueCoordinatesText->setText("{ 1, 2, 3 }, { 2, 4, 5 }");
+        QString letter = shape->getItem().getText();
+        text.append(letter);
+    }
+
+    ui->gridText->setText(text);
+
+    ui->clueCoordinatesText->setText(coordinates);
     ui->clueDirectionText->setText("Across");
 }
 
