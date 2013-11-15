@@ -5,7 +5,7 @@ PROJECT_PATH=../
 PROJECT_FILE=Blind-Crossword-Editor.pro
 
 # Use qmake to generate makefiles
-qmake $PROJECT_PATH/$PROJECT_FILE -r -spec linux-g++ CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug
+/opt/Qt/5.1.1/gcc_64/bin/qmake $PROJECT_PATH/$PROJECT_FILE -r -spec linux-g++ CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug
 
 # Do the debug build using jom
 make -r -w Makefile.Debug
