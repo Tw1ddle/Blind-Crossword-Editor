@@ -24,34 +24,53 @@ NewCrosswordCluePage::~NewCrosswordCluePage()
 
 Crossword::CrosswordClue NewCrosswordCluePage::getClue()
 {
-    auto number = ui->clueNumberComboBox->itemData(ui->clueNumberComboBox->currentIndex());
-    auto clueText = ui->clueTextLabel->text();
+    auto numberText = ui->clueNumberComboBox->itemData(ui->clueNumberComboBox->currentIndex()).toString();
 
+    auto clueText = ui->clueGuessText->text();
+
+    auto guessText = ui->clueGuessText->text();
+
+    auto componentLengthsText = ui->clueComponentsLengthText->text();
+
+    QString solutionText;
     std::vector<VectorMath::Vec3i> letterPositions;
 
-    // TODO
-    return Crossword::CrosswordClue("2", "", "", clueText, "direction", "", letterPositions);
+    for(int i = 0; i < (int)m_GridShapes.size(); i++)
+    {
+        solutionText.append(m_GridShapes.at(i)->getItem().getText());
+        letterPositions.push_back(m_GridShapes.at(i)->getItem().getCoordinate());
+    }
+
+    auto direction = Crossword::Formats::getDirection(letterPositions);
+    auto directions = Crossword::Formats::Common::getDirections();
+    QString directionText = directions.key(direction);
+
+    return Crossword::CrosswordClue(numberText,
+                                    guessText,
+                                    solutionText,
+                                    clueText,
+                                    directionText,
+                                    componentLengthsText,
+                                    letterPositions);
 }
 
 void NewCrosswordCluePage::setupContent()
 {
-    // Coordinates and clue text
-    QString coordinates;
-    QString text;
-    for(auto shape : m_GridShapes)
-    {
-        QString coordinate = VectorMath::toString<VectorMath::Vec3i>(shape->getItem().getCoordinate());
-        coordinates.append(coordinate);
-        coordinate.append("|");
+    QString solutionText;
+    std::vector<VectorMath::Vec3i> letterPositions;
 
-        QString letter = shape->getItem().getText();
-        text.append(letter);
+    for(int i = 0; i < (int)m_GridShapes.size(); i++)
+    {
+        solutionText.append(m_GridShapes.at(i)->getItem().getText());
+        letterPositions.push_back(m_GridShapes.at(i)->getItem().getCoordinate());
     }
 
-    ui->gridText->setText(text);
+    auto direction = Crossword::Formats::getDirection(letterPositions);
+    auto directions = Crossword::Formats::Common::getDirections();
+    QString directionText = directions.key(direction);
 
-    ui->clueCoordinatesText->setText(coordinates);
-    ui->clueDirectionText->setText("Across");
+    ui->gridText->setText(solutionText);
+    ui->clueDirectionText->setText(directionText);
 }
 
 }

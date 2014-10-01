@@ -9,10 +9,12 @@
 namespace Crossword
 {
 
+// TODO threadsafe method for getting the "next" free clue identifier from a clue state
+
 class CrosswordClue
 {
 public:
-    CrosswordClue(const QString& number, const QString& guess, const QString& solution, const QString& clue, const QString& direction, const QString& componentLengths, const std::vector<VectorMath::Vec3i>& letterPositions);
+    CrosswordClue(const QString& number, const QString& guess, const QString& solution, const QString& clue, const QString& direction, const QString& componentLengths, const std::vector<VectorMath::Vec3i> letterPositions);
 
     const QString& getIdentifier() const;
     const QString& getNumber() const;
